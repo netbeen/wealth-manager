@@ -1,12 +1,10 @@
 'use strict';
 
-module.exports = app => {
-  class HomeController extends app.Controller {
-    * index() {
-      // this.ctx.body = 'hi, egg';
-      yield this.ctx.render('list.tpl', null);
-
-    }
+const Controller = require('egg').Controller;
+class HomeController extends Controller {
+  * create() {
+    yield this.ctx.render('list.tpl');
   }
-  return HomeController;
-};
+}
+
+module.exports = HomeController;
