@@ -17,6 +17,6 @@
     "template": "./src/index.ejs"
   },
   "publicPath": "/public/antDesign/",
-  "disableDynamicImport": true,
+  "disableDynamicImport": false,
   "hash": true
 }
