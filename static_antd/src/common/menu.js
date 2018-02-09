@@ -5,7 +5,7 @@ const menuData = [{
   icon: 'dashboard',
   path: 'dashboard',
   children: [{
-    name: '分析页1',
+    name: '分析页',
     path: 'analysis',
   }, {
     name: '监控页',
