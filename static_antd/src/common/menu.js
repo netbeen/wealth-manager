@@ -1,6 +1,20 @@
 import { isUrl } from '../utils/utils';
 
 const menuData = [{
+  name: '基金投资',
+  icon: 'line-chart',
+  path: 'fund',
+  children: [{
+    name: '概述',
+    path: 'dashboard',
+  }, {
+    name: '交易记录',
+    path: 'transaction',
+  }, {
+    name: '历史战绩',
+    path: 'history',
+  }],
+}, {
   name: 'dashboard',
   icon: 'dashboard',
   path: 'dashboard',
