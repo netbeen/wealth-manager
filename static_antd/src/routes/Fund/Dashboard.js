@@ -6,22 +6,19 @@ import {
   Icon,
   Card,
   Tabs,
-  DatePicker,
   Tooltip,
 } from 'antd';
 import numeral from 'numeral';
+import { Chart, Geom, Axis, Legend } from 'bizcharts';
+
 import {
   ChartCard,
   yuan,
   Field,
-  Bar,
 } from '../../components/Charts';
-import { getTimeDistance } from '../../utils/utils';
-
 import styles from './Dashboard.less';
 
 const { TabPane } = Tabs;
-const { RangePicker } = DatePicker;
 
 const rankingListData = [];
 for (let i = 0; i < 7; i += 1) {
@@ -36,9 +33,7 @@ for (let i = 0; i < 7; i += 1) {
   loading: loading.effects['chart/fetch'],
 }))
 export default class Analysis extends Component {
-  state = {
-    rangePickerValue: getTimeDistance('year'),
-  };
+  state = {};
 
   componentDidMount() {
     this.props.dispatch({
@@ -53,68 +48,30 @@ export default class Analysis extends Component {
     });
   }
 
-  handleRangePickerChange = (rangePickerValue) => {
-    this.setState({
-      rangePickerValue,
-    });
 
-    this.props.dispatch({
-      type: 'chart/fetchSalesData',
-    });
-  };
-
-  selectDate = (type) => {
-    this.setState({
-      rangePickerValue: getTimeDistance(type),
-    });
-
-    this.props.dispatch({
-      type: 'chart/fetchSalesData',
-    });
-  };
-
-  isActive(type) {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
+  registerChartToConnect = (newChart) => {
+    if (!window.chartList || !window.chartList.length || window.chartList.length === 0) {
+      window.chartList = [newChart];
       return;
     }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
-      return styles.currentDate;
+    window.chartList.push(newChart);
+    for (const chartSrc of window.chartList) {
+      for (const chartDest of window.chartList) {
+        if (chartSrc !== chartDest && !chartSrc.destroyed && !chartDest.destroyed) {
+          chartSrc.on('plotmove', (e) => {
+            chartSrc.showTooltip(e);
+            chartDest.showTooltip(e);
+          });
+          chartSrc.on('plotleave', () => {
+            chartDest.hideTooltip();
+          });
+        }
+      }
     }
   }
 
   render() {
-    const { rangePickerValue } = this.state;
     const { loading } = this.props;
-
-    const salesExtra = (
-      <div className={styles.salesExtraWrap}>
-        <div className={styles.salesExtra}>
-          <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
-            今日
-          </a>
-          <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
-            本周
-          </a>
-          <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
-            本月
-          </a>
-          <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
-            全年
-          </a>
-        </div>
-        <RangePicker
-          value={rangePickerValue}
-          onChange={this.handleRangePickerChange}
-          style={{ width: 256 }}
-        />
-      </div>
-    );
-
 
     const topColResponsiveProps = {
       xs: 24,
@@ -124,6 +81,23 @@ export default class Analysis extends Component {
       xl: 6,
       style: { marginBottom: 24 },
     };
+
+
+    // 数据源
+    const data = [
+      { genre: 'Sports', sold: 275, income: 2300 },
+      { genre: 'Strategy', sold: 115, income: 667 },
+      { genre: 'Action', sold: 120, income: 982 },
+      { genre: 'Shooter', sold: 350, income: 5271 },
+      { genre: 'Other', sold: 150, income: 3710 },
+    ];
+
+    // 定义度量
+    const cols = {
+      sold: { alias: '销售量' },
+      genre: { alias: '游戏种类' },
+    };
+
 
     return (
       <Fragment>
@@ -188,13 +162,39 @@ export default class Analysis extends Component {
 
         <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
           <div className={styles.salesCard}>
-            <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
-              <TabPane tab="销售额" key="sales">
+            <Tabs tabBarExtraContent={null} size="large" tabBarStyle={{ marginBottom: 24 }}>
+              <TabPane tab="盈利趋势分析" key="sales">
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      <Bar height={295} title="销售额趋势" data={[{ x: '2018-01-01', y: 1 }, { x: '2018-01-02', y: 2 }, { x: '2018-01-03', y: 4 }]} />
-                      <Bar height={295} title="销售额趋势" data={[{ x: '2018-01-01', y: 1 }, { x: '2018-01-02', y: 2 }, { x: '2018-01-03', y: 4 }]} />
+                      <Chart
+                        width={600}
+                        height={400}
+                        data={data}
+                        scale={cols}
+                        onGetG2Instance={(g2Chart) => {
+                          this.registerChartToConnect(g2Chart);
+                        }}
+                      >
+                        <Axis name="genre" />
+                        <Axis name="sold" />
+                        <Legend position="top" dy={-20} />
+                        <Geom type="interval" position="genre*sold" color="genre" />
+                      </Chart>
+                      <Chart
+                        width={600}
+                        height={400}
+                        data={data}
+                        scale={cols}
+                        onGetG2Instance={(g2Chart) => {
+                          this.registerChartToConnect(g2Chart);
+                        }}
+                      >
+                        <Axis name="genre" />
+                        <Axis name="sold" />
+                        <Legend position="top" dy={-20} />
+                        <Geom type="interval" position="genre*sold" color="genre" />
+                      </Chart>
                     </div>
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
