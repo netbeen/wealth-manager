@@ -98,9 +98,7 @@ export default class Analysis extends Component {
 
     const dropDownMenu = (
       <Dropdown overlay={menu}>
-        <a className="ant-dropdown-link" href="#">
-        Hover me <Icon type="down" />
-        </a>
+        <span>基金名称 <Icon type="down" /></span>
       </Dropdown>
     );
 
@@ -228,10 +226,12 @@ export default class Analysis extends Component {
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
                       <ul className={styles.rankingList}>
-                        <li><span>最高收益率</span><span>{`${12}%`}</span></li>
-                        <li><span>最高年化收益率</span><span>{`${12}%`}</span></li>
-                        <li><span>最低收益率</span><span>{`${12}%`}</span></li>
-                        <li><span>最低年化收益率</span><span>{`${12}%`}</span></li>
+                        <li><span>最高收益率/年化收益率</span><span>{`${-12.1}% / ${-12.1}%`}</span></li>
+                        <li><span>最低收益率/年化收益率</span><span>{`${-12.1}% / ${-12.1}%`}</span></li>
+                        <li><span>当前收益率/年化收益率</span><span>{`${-12.1}% / ${-12.1}%`}</span></li>
+                        <li><span>实时交易中</span><span>是</span></li>
+                        <li><span>实时涨幅</span><span>{`${12}%`}</span></li>
+                        <li><span>实时收益率/年化收益率</span><span>{`${-12.1}% / ${-12.1}%`}</span></li>
                       </ul>
                     </div>
                   </Col>
