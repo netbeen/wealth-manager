@@ -6,7 +6,7 @@ import {
   Icon,
   Card,
   Tabs,
-  Tooltip,
+  Tooltip, Menu, Dropdown,
 } from 'antd';
 import numeral from 'numeral';
 import { Chart, Geom, Axis, Legend, Tooltip as G2Tooltip } from 'bizcharts';
@@ -48,7 +48,7 @@ export default class Analysis extends Component {
     });
   }
 
-
+  // 设置图表联动
   registerChartToConnect = (newChart) => {
     if (!window.chartList || !window.chartList.length || window.chartList.length === 0) {
       window.chartList = [newChart];
@@ -81,6 +81,28 @@ export default class Analysis extends Component {
       xl: 6,
       style: { marginBottom: 24 },
     };
+
+    const menu = (
+      <Menu>
+        <Menu.Item>
+          <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item11111111111111111111111</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">2nd menu item222222222222222222222222</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3rd menu item33333333</a>
+        </Menu.Item>
+      </Menu>
+    );
+
+    const dropDownMenu = (
+      <Dropdown overlay={menu}>
+        <a className="ant-dropdown-link" href="#">
+        Hover me <Icon type="down" />
+        </a>
+      </Dropdown>
+    );
 
 
     // 数据源
@@ -162,7 +184,11 @@ export default class Analysis extends Component {
 
         <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
           <div className={styles.salesCard}>
-            <Tabs tabBarExtraContent={null} size="large" tabBarStyle={{ marginBottom: 24 }}>
+            <Tabs
+              tabBarExtraContent={dropDownMenu}
+              size="large"
+              tabBarStyle={{ marginBottom: 24 }}
+            >
               <TabPane tab="盈利趋势分析" key="sales">
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
@@ -201,15 +227,11 @@ export default class Analysis extends Component {
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
                       <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
+                        <li><span>最高收益率</span><span>{`${12}%`}</span></li>
+                        <li><span>最高年化收益率</span><span>{`${12}%`}</span></li>
+                        <li><span>最低收益率</span><span>{`${12}%`}</span></li>
+                        <li><span>最低年化收益率</span><span>{`${12}%`}</span></li>
                       </ul>
                     </div>
                   </Col>
