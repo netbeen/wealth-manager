@@ -3,7 +3,7 @@
 const { Controller } = require('egg');
 
 class HomeController extends Controller {
-  async create() {
+  async index() {
     await this.ctx.render('index.html');
   }
 
