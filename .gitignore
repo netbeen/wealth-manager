@@ -4,3 +4,4 @@ logs/*
 run/*
 /static_antd/dist/
 /static_antd/node_modules/
+/config/secretConfig.js
