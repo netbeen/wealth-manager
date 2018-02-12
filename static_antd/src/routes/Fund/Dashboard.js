@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from 'antd';
 import numeral from 'numeral';
-import { Chart, Geom, Axis, Legend } from 'bizcharts';
+import { Chart, Geom, Axis, Legend, Tooltip as G2Tooltip } from 'bizcharts';
 
 import {
   ChartCard,
@@ -168,7 +168,7 @@ export default class Analysis extends Component {
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
                       <Chart
-                        width={600}
+                        forceFit="true"
                         height={400}
                         data={data}
                         scale={cols}
@@ -179,10 +179,11 @@ export default class Analysis extends Component {
                         <Axis name="genre" />
                         <Axis name="sold" />
                         <Legend position="top" dy={-20} />
+                        <G2Tooltip />
                         <Geom type="interval" position="genre*sold" color="genre" />
                       </Chart>
                       <Chart
-                        width={600}
+                        forceFit="true"
                         height={400}
                         data={data}
                         scale={cols}
@@ -193,6 +194,7 @@ export default class Analysis extends Component {
                         <Axis name="genre" />
                         <Axis name="sold" />
                         <Legend position="top" dy={-20} />
+                        <G2Tooltip />
                         <Geom type="interval" position="genre*sold" color="genre" />
                       </Chart>
                     </div>
