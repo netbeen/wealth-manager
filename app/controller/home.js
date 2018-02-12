@@ -1,14 +1,16 @@
-'use strict';
 
-const Controller = require('egg').Controller;
+
+const { Controller } = require('egg');
+
 class HomeController extends Controller {
-  * create() {
-    yield this.ctx.render("index.html");
+  async create() {
+    await this.ctx.render('index.html');
   }
 
-  * api() {
-    yield this.ctx.body = {code:200};
+  async api() {
+    this.ctx.body = { code: 200 };
   }
 }
 
 module.exports = HomeController;
+
