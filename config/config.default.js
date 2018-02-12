@@ -1,9 +1,10 @@
+const secretConfig = require('./secretConfig');
 
-module.exports = (appInfo) => {
+module.exports = () => {
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = `${appInfo.name}_1509972889729_4664`;
+  config.keys = `${secretConfig.app.key}`;
 
   // add your config here
   config.middleware = [];
@@ -16,23 +17,13 @@ module.exports = (appInfo) => {
   };
 
   config.mysql = {
-    // database configuration
     client: {
-      // host
-      host: 'mysql.com',
-      // port
-      port: '3306',
-      // username
-      user: 'test_user',
-      // password
-      password: 'test_password',
-      // database
-      database: 'test',
+      host: secretConfig.mysql.host,
+      port: secretConfig.mysql.port,
+      user: secretConfig.mysql.username,
+      password: secretConfig.mysql.password,
+      database: 'wealthManager',
     },
-    // load into app, default is open
-    app: true,
-    // load into agent, default is close
-    agent: false,
   };
 
   return config;
