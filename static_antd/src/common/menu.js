@@ -13,6 +13,7 @@ const menuData = [{
   }, {
     name: '历史战绩',
     path: 'history',
+    hideInMenu: true,
   }],
 }, {
   name: 'dashboard',

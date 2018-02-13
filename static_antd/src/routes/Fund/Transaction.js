@@ -25,6 +25,13 @@ export default class BasicList extends PureComponent {
     });
   }
 
+  onNewTransactionButtonClick = () => {
+    console.log('onNewTransactionButtonClick');
+    this.props.dispatch({
+      type: 'fundPrice/getByIdAndStartDate',
+    });
+  }
+
   render() {
     const { list: { list }, loading } = this.props;
 
@@ -38,10 +45,10 @@ export default class BasicList extends PureComponent {
 
     const extraContent = (
       <div className={styles.extraContent}>
+        <Button type="primary" onClick={this.onNewTransactionButtonClick} >新建</Button>
         <RadioGroup defaultValue="all">
-          <RadioButton value="all">全部</RadioButton>
-          <RadioButton value="progress">进行中</RadioButton>
-          <RadioButton value="waiting">等待中</RadioButton>
+          <RadioButton value="all">当前持仓</RadioButton>
+          <RadioButton value="progress">历史交易</RadioButton>
         </RadioGroup>
         <Search
           className={styles.extraContentSearch}
@@ -99,13 +106,13 @@ export default class BasicList extends PureComponent {
           <Card bordered={false}>
             <Row>
               <Col sm={8} xs={24}>
-                <Info title="我的待办" value="8个任务" bordered />
+                <Info title="持仓盈利" value="8个任务" bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="本周任务平均处理时间" value="32分钟" bordered />
+                <Info title="总盈利" value="32分钟" bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="本周完成任务数" value="24个任务" />
+                <Info title="已结束交易平均年化收益率" value="24个任务" />
               </Col>
             </Row>
           </Card>
