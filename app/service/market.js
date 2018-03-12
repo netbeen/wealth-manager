@@ -35,9 +35,18 @@ class MarketService extends Service {
   async getFundMarket({fundId, startDate, endDate}){
     console.log('fundId',fundId);
     if(fundId && typeof fundId !== 'string'){
-      return {success: false};
+      return {code: 400};
     }
-    return {};
+    const result = await this.ctx.curl('http://fund.eastmoney.com/f10/F10DataApi.aspx?type=lsjz&code=' + fundId + '&page=1&per=20000', { dataType: 'text' });
+    let valueJson = {};
+    for(let elem of result.data.split('<tr><td>').slice(1, -1)){
+      let sliceArray = elem.split('</td><td class=\'tor bold\'>').slice(0, 2);
+      valueJson[sliceArray[0]] = parseFloat(sliceArray[1]);
+    }
+    return {
+      code: 200,
+      results: valueJson,
+    };
   }
 }
 module.exports = MarketService;
