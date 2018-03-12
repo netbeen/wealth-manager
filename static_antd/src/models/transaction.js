@@ -1,15 +1,15 @@
-import { fundTransaction } from '../services/fund';
+import { query } from '../services/transaction';
 
 export default {
-  namespace: 'fundPrice',
+  namespace: 'transaction',
 
   state: {
     list: [],
   },
 
   effects: {
-    *getByIdAndStartDate({ payload }, { call, put }) {
-      const response = yield call(fundTransaction, payload);
+    *fetch({ payload }, { call, put }) {
+      const response = yield call(query, payload);
       yield put({
         type: 'queryList',
         payload: Array.isArray(response) ? response : [],

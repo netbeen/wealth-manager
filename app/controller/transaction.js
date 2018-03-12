@@ -2,7 +2,7 @@
 
 const { Controller } = require('egg');
 
-class FundTransactionController extends Controller {
+class TransactionController extends Controller {
   async index() {
     this.ctx.body = { code: 1234567 };
   }
@@ -27,5 +27,5 @@ class FundTransactionController extends Controller {
   }
 }
 
-module.exports = FundTransactionController;
+module.exports = TransactionController;
 

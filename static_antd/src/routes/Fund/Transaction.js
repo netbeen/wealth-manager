@@ -26,9 +26,8 @@ export default class BasicList extends PureComponent {
   }
 
   onNewTransactionButtonClick = () => {
-    console.log('onNewTransactionButtonClick');
     this.props.dispatch({
-      type: 'fundPrice/getByIdAndStartDate',
+      type: 'transaction/fetch',
     });
   }
 
