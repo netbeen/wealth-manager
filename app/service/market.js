@@ -32,7 +32,7 @@ class MarketService extends Service {
     return result.data;
   }
 
-  async getFundMarket({fundId, startDate, endDate}){
+  async getFundMarket({fundId}){
     console.log('fundId',fundId);
     if(fundId && typeof fundId !== 'string'){
       return {code: 400};
