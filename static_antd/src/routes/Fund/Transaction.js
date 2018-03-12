@@ -1,7 +1,13 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { List, Card, Row, Col, Radio, Input, Progress, Button, Icon, Dropdown, Menu, Avatar } from 'antd';
+import {
+  List,
+  Card,
+  Row,
+  Modal,
+  Col, Radio, Input, Progress, Button, Icon, Dropdown, Menu, Avatar,
+} from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -16,6 +22,12 @@ const { Search } = Input;
   loading: loading.models.list,
 }))
 export default class BasicList extends PureComponent {
+  state = {
+    ModalText: 'Content of the modal',
+    // visible: false,
+    confirmLoading: false,
+  }
+
   componentDidMount() {
     this.props.dispatch({
       type: 'list/fetch',
@@ -33,6 +45,7 @@ export default class BasicList extends PureComponent {
 
   render() {
     const { list: { list }, loading } = this.props;
+    const { confirmLoading, ModalText } = this.state;
 
     const Info = ({ title, value, bordered }) => (
       <div className={styles.headerInfo}>
@@ -44,7 +57,7 @@ export default class BasicList extends PureComponent {
 
     const extraContent = (
       <div className={styles.extraContent}>
-        <Button type="primary" onClick={this.onNewTransactionButtonClick} >新建</Button>
+        <Button type="primary" onClick={this.onNewTransactionButtonClick}>新建</Button>
         <RadioGroup defaultValue="all">
           <RadioButton value="all">当前持仓</RadioButton>
           <RadioButton value="progress">历史交易</RadioButton>
@@ -147,6 +160,15 @@ export default class BasicList extends PureComponent {
               )}
             />
           </Card>
+          <Modal
+            title="Title"
+            visible
+            onOk={this.handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={this.handleCancel}
+          >
+            <p>{ModalText}</p>
+          </Modal>
         </div>
       </PageHeaderLayout>
     );
