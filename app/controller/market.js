@@ -16,10 +16,8 @@ const getParams = (query) => {
 class MarketController extends Controller {
   async show() {
     const [queryCode] = this.ctx.req._parsedUrl.pathname.split('/').reverse();
-    console.log('queryCode',queryCode);
     const params = getParams(this.ctx.req._parsedUrl.query);
-    console.log('params',params);
-    const result = await this.ctx.service.market.getFundMarket({fundId:queryCode});
+    const result = await this.ctx.service.market.getFundMarket({...{fundId:queryCode},...params});
     this.ctx.body = result;
   }
 }
