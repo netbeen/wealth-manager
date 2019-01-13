@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    .container {
+        position:relative;
+        width:980px;
+        height:500px;
+        background: yellow;
+    }
+    /* content在left之上，left浮动，content不浮动*/
+    .left {
+        float:left;
+        width:300px;
+        height:100%;
+        background:blue;
+    }
+    .content {
+        height:100%;
+        margin-left:300px;
+        background:red;
+    }
+</style>
+<div class="container clearfix"><span style="font-family: Arial, Helvetica, sans-serif;"><div class="left"></div>  <div
+        class="content"></div></div>
+<div class="footer"></div>
+</body>
+</html>

@@ -8,12 +8,19 @@ const menuData = [{
     name: '概述',
     path: 'dashboard',
   }, {
-    name: '交易记录',
+    name: '交易记录(建设中)',
     path: 'transaction',
   }, {
-    name: '历史战绩',
+    name: '历史战绩(建设中)',
     path: 'history',
-    hideInMenu: true,
+  }],
+}, {
+  name: '财富管理',
+  icon: 'dashboard',
+  path: 'wealth',
+  children: [{
+    name: '概述(建设中)',
+    path: 'dashboard',
   }],
 }, {
   name: 'dashboard',
