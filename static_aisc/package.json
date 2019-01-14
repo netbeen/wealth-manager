@@ -1,0 +1,79 @@
+{
+  "name": "static_aisc",
+  "main": "src/app.js",
+  "author": {
+    "name": "舒达",
+    "email": "shuda.yy@alibaba-inc.com"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.config.js --port 9000 --host 0.0.0.0 --env.development",
+    "build": "./node_modules/.bin/webpack --config ./webpack.config.js --env.production",
+    "publish": "./node_modules/webpack/bin/webpack.js  --config ./webpack.config.js",
+    "eslint-check": "./node_modules/eslint/bin/eslint.js",
+    "eslint-fix": "./node_modules/eslint/bin/eslint.js --fix --ext .jsx,.js ./src/",
+    "eslint-output": "./node_modules/eslint/bin/eslint.js -f html --ext .jsx,.js ./src/ > eslint-result.html",
+    "ci-eslint": "./node_modules/.bin/eslint -o eslint.json -f json ./",
+    "ci-log:eslint": "./node_modules/.bin/ci-log -r eslint -p ./eslint.json",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": "eslint-check"
+  },
+  "dependencies": {
+    "@alife/aisc-i18n": "^0.1.1",
+    "@alife/aone-core": "^0.1.0",
+    "@alife/aoneNav": "^0.2.0",
+    "@alife/aonec-layout": "^0.1.2",
+    "classnames": "^2.2.5",
+    "core-decorators": "^0.19.0",
+    "exceed": "1",
+    "lodash": "^4.17.2",
+    "query-string": "^4.2.3",
+    "react-cookie": "^0.4.8",
+    "redux-logger": "^2.7.4"
+  },
+  "devDependencies": {
+    "@ali/ci-log": "*",
+    "babel-cli": "~6.7.5",
+    "babel-core": "~6.7.6",
+    "babel-eslint": "^8.1.1",
+    "babel-loader": "~6.2.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "~6.5.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "browser-sync": "^2.18.6",
+    "browser-sync-webpack-plugin": "^1.1.3",
+    "css-loader": "^0.24.0",
+    "eslint": "^4.1.1",
+    "eslint-config-ali": "^2.0.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-react": "^7.1.0",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "fs-extra": "^0.30.0",
+    "html-loader": "^0.5.1",
+    "husky": "^0.14.2",
+    "lint-staged": "^4.0.0",
+    "node-sass": "^4.5.3",
+    "raw-loader": "^0.5.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0",
+    "sass-loader": "^6.0.6",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "url-loader": "^0.5.9",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5",
+    "webpack-notifier": "^1.5.0"
+  },
+  "optionalDependencies": {
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "0.48.0"
+  }
+}
