@@ -8,8 +8,13 @@ exports.nunjucks = {
   package: 'egg-view-nunjucks',
 };
 
-// 使用 mysql 插件
-exports.mysql = {
+// // 使用 mysql 插件
+// exports.mysql = {
+//   enable: true,
+//   package: 'egg-mysql',
+// };
+
+exports.sequelize = {
   enable: true,
-  package: 'egg-mysql',
+  package: 'egg-sequelize',
 };

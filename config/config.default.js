@@ -16,14 +16,23 @@ module.exports = () => {
     },
   };
 
-  config.mysql = {
-    client: {
-      host: secretConfig.mysql.host,
-      port: secretConfig.mysql.port,
-      user: secretConfig.mysql.username,
-      password: secretConfig.mysql.password,
-      database: 'wealthManager',
-    },
+  // config.mysql = {
+  //   client: {
+  //     host: secretConfig.mysql.host,
+  //     port: secretConfig.mysql.port,
+  //     user: secretConfig.mysql.username,
+  //     password: secretConfig.mysql.password,
+  //     database: 'wealthManager',
+  //   },
+  // };
+
+  config.sequelize = {
+    dialect: 'mysql',
+    host: '47.88.175.208',
+    port: 3306,
+    username: 'yangyang',
+    password: 'yangyang',
+    database: 'wealthManager',
   };
 
   config.security = {

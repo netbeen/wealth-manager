@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "yangyang",
+    "password": "yangyang",
+    "database": "wealthManager",
+    "host": "47.88.175.208",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "yangyang",
+    "password": "yangyang",
+    "database": "wealthManager",
+    "host": "47.88.175.208",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "yangyang",
+    "password": "yangyang",
+    "database": "wealthManager",
+    "host": "47.88.175.208",
+    "dialect": "mysql"
+  }
+}
