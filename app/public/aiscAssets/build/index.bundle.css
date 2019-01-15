@@ -2,6 +2,8 @@
 /**
  * 项目级样式文件
  */
+.nav-bar-top {
+  height: 45px; }
 @charset "UTF-8";
 /**
  * 页面级样式文件

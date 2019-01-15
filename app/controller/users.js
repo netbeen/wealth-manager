@@ -1,5 +1,5 @@
 // app/controller/users.js
-const Controller = require('egg').Controller;
+const { Controller } = require('egg');
 
 function toInt(str) {
   if (typeof str === 'number') return str;
@@ -9,19 +9,18 @@ function toInt(str) {
 
 class UserController extends Controller {
   async index() {
-    const ctx = this.ctx;
+    const { ctx } = this;
     const query = { limit: toInt(ctx.query.limit), offset: toInt(ctx.query.offset) };
     ctx.body = await ctx.model.User.findAll(query);
   }
 
   async show() {
-    const ctx = this.ctx;
+    const { ctx } = this;
     ctx.body = await ctx.model.User.findById(toInt(ctx.params.id));
   }
 
   async create() {
-    const ctx = this.ctx;
-    console.log('this.ctx',this.ctx);
+    const { ctx } = this;
     const { nickname, uuid } = ctx.request.body;
     const user = await ctx.model.User.create({ nickname, uuid });
     ctx.status = 201;
