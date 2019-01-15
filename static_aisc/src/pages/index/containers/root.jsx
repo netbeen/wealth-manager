@@ -22,10 +22,7 @@ class Root extends Component {
     breadcrumb: [],
   };
 
-  componentDidMount() {
-    // 组件加载完成后，获取数据
-    this.props.getBreadcrumb();
-  }
+  componentDidMount() {}
 
   @autobind
   onSearch(searchParams) {
@@ -137,7 +134,4 @@ class Root extends Component {
   }
 }
 
-export default connect(
-  ({ index, ...others }) => ({ ...index, ...others }),
-  dispatch => bindActionCreators(actions, dispatch)
-)(Root);
+export default Root;
