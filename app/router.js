@@ -5,6 +5,8 @@ module.exports = (app) => {
   router.resources('/api/v1/fund/transaction', controller.transaction);
   router.resources('/api/v1/fund/market', controller.market);
   router.get('/api/*', controller.home.api);
-  router.resources('users', '/users', controller.users);
-  router.resources('/*', controller.home);
+  router.resources('/users', '/users', controller.users);
+  router.get('/login/compete', controller.loginCompete.index);
+  router.get('/login/logout', controller.loginCompete.logout);
+  router.get('*', controller.home.index);
 };

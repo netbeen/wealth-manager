@@ -1,11 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-// import { connect } from 'react-redux';
+import Nav from '../../../components/nav';
 import { Section, Card, Breadcrumb, Button, Search, Select, Dropdown, Menu, Notice } from '@alife/aisc';
-// import Layout from '@alife/aonec-layout';
-// import { Translate } from '@alife/aisc-i18n'; // 国际化方法
-
-// 布局相关组件从aonec-layout中引用，文档见：http://web.npm.alibaba-inc.com/package/@alife/aonec-layout
-// const { Nav, Card, Section, Toolbar } = Layout;
 
 const ButtonGroup = Button.Group;
 const { Option } = Select;
@@ -35,29 +30,10 @@ class Root extends Component {
 
   render() {
     const { breadcrumb } = this.props;
-    const subNavData = {
-      navs: [
-        {
-          key: 'home',
-          text: '导航操作区',
-          active: true,
-          link: '#',
-        },
-        {
-          key: 'permit',
-          text: '权限',
-          link: '#',
-        },
-        {
-          key: 'favorite',
-          text: '常用链接',
-          link: '#',
-        },
-      ],
-    };
 
     return (
       <div>
+        <Nav />
         <div>
           <Breadcrumb dataSource={breadcrumb} />
         </div>
@@ -105,7 +81,7 @@ class Root extends Component {
           </div>
         </div>
         <Section>
-          <Card title="详细内容展示区（Card组件）" extra={<a href="#">更多操作</a>}>
+          <Card title="详细内容展示区（Card组件）" extra={<div href="#">更多操作</div>}>
             <p>
               <a
                 href="https://udemo.alibaba-inc.com/system/extracted/f8/91/54/d2/6986a985c7a85f6e20b9a8d0/index.html"
@@ -116,8 +92,7 @@ class Root extends Component {
               </a>
             </p>
             <p>
-              <Button type="primary" onClick={this.props.changeLang}>
-              </Button>
+              <Button type="primary" />
             </p>
           </Card>
         </Section>

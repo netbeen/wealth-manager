@@ -7,7 +7,7 @@ module.exports = () => {
   config.keys = `${secretConfig.app.key}`;
 
   // add your config here
-  config.middleware = [];
+  config.middleware = ['getUser'];
 
   config.view = {
     defaultViewEngine: 'nunjucks',
@@ -40,8 +40,7 @@ module.exports = () => {
       enable: false, // 暂时关闭csrf
       ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
     },
-  }
+  };
 
   return config;
 };
-
