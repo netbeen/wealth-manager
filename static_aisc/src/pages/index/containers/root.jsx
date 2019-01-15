@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
-import { Breadcrumb, Button, Search, Select, Dropdown, Menu, Notice } from '@alife/aisc';
-import Layout from '@alife/aonec-layout';
-import { Translate } from '@alife/aisc-i18n'; // 国际化方法
+// import { connect } from 'react-redux';
+import { Section, Card, Breadcrumb, Button, Search, Select, Dropdown, Menu, Notice } from '@alife/aisc';
+// import Layout from '@alife/aonec-layout';
+// import { Translate } from '@alife/aisc-i18n'; // 国际化方法
 
 // 布局相关组件从aonec-layout中引用，文档见：http://web.npm.alibaba-inc.com/package/@alife/aonec-layout
-const { Nav, Card, Section, Toolbar } = Layout;
+// const { Nav, Card, Section, Toolbar } = Layout;
 
 const ButtonGroup = Button.Group;
 const { Option } = Select;
@@ -57,23 +57,22 @@ class Root extends Component {
     };
 
     return (
-      <Layout>
-        <Nav data={subNavData} />
-        <Section>
+      <div>
+        <div>
           <Breadcrumb dataSource={breadcrumb} />
-        </Section>
-        <Section>
+        </div>
+        <div>
           <Notice title="提示：" type="info">
             页面提示信息区（Notice组件）
           </Notice>
-        </Section>
-        <Section>
-          <Toolbar>
-            <Toolbar.Left>
-              <Toolbar.Item>
+        </div>
+        <div>
+          <div>
+            <div>
+              <div>
                 <Button type="primary">页面操作区</Button>
-              </Toolbar.Item>
-              <Toolbar.Item>
+              </div>
+              <div>
                 <ButtonGroup>
                   <Dropdown triggerButton={<Button type="normal">批量操作</Button>} triggerType="click">
                     <Menu onClick={this.onMenuClick}>
@@ -89,22 +88,22 @@ class Root extends Component {
                     </Menu>
                   </Dropdown>
                 </ButtonGroup>
-              </Toolbar.Item>
-            </Toolbar.Left>
-            <Toolbar.Right>
-              <Toolbar.Item>
+              </div>
+            </div>
+            <div>
+              <div>
                 <Select onChange={this.onSelectChange} defaultValue="default">
                   <Option value="default">默认排序</Option>
                   <Option value="gmt_create|DESC">按创建时间降序</Option>
                   <Option value="gmt_create|ASC">按创建时间升序</Option>
                 </Select>
-              </Toolbar.Item>
-              <Toolbar.Item>
+              </div>
+              <div>
                 <Search placeholder="请输入关键词搜索" onSearch={this.onSearch} />
-              </Toolbar.Item>
-            </Toolbar.Right>
-          </Toolbar>
-        </Section>
+              </div>
+            </div>
+          </div>
+        </div>
         <Section>
           <Card title="详细内容展示区（Card组件）" extra={<a href="#">更多操作</a>}>
             <p>
@@ -118,12 +117,11 @@ class Root extends Component {
             </p>
             <p>
               <Button type="primary" onClick={this.props.changeLang}>
-                <Translate value="buttonText" />
               </Button>
             </p>
           </Card>
         </Section>
-      </Layout>
+      </div>
     );
   }
 }
