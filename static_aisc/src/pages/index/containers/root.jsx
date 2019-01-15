@@ -1,11 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { autobind } from 'core-decorators';
 import { Breadcrumb, Button, Search, Select, Dropdown, Menu, Notice } from '@alife/aisc';
 import Layout from '@alife/aonec-layout';
 import { Translate } from '@alife/aisc-i18n'; // 国际化方法
-import * as actions from '../actions/index';
 
 // 布局相关组件从aonec-layout中引用，文档见：http://web.npm.alibaba-inc.com/package/@alife/aonec-layout
 const { Nav, Card, Section, Toolbar } = Layout;
@@ -24,18 +21,15 @@ class Root extends Component {
 
   componentDidMount() {}
 
-  @autobind
-  onSearch(searchParams) {
+  onSearch = (searchParams) => {
     console.log(searchParams);
   }
 
-  @autobind
-  onSelectChange(value, data) {
+  onSelectChange = (value, data) => {
     console.log(value, data);
   }
 
-  @autobind
-  onMenuClick(selectedKeys, menuItem, meta) {
+  onMenuClick = (selectedKeys, menuItem, meta) => {
     console.log(selectedKeys, menuItem, meta);
   }
 
