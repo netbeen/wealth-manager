@@ -13,7 +13,7 @@ class Nav extends Component {
         className="nav-bar-top"
       >
         <Link to="/wealth">资产管理</Link>
-        <a href="/login/logout">退出登录</a>
+        <a href="/login/logout">{`退出${window.WM_GLOBAL.user.nickname}的登录`}</a>
       </div>
     );
   }
