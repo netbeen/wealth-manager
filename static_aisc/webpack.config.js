@@ -88,7 +88,7 @@ module.exports = function (env) {
       'redux-thunk': 'var window.ReduxThunk.default',
       redux: 'Redux',
       '@alife/aisc': 'var Aisc',
-      '@alife/aisc-p2charts': 'var AiscP2charts',
+      '@alife/aisc-widgets': 'var AiscWidgets',
     },
     plugins: [
       new ExtractTextPlugin({

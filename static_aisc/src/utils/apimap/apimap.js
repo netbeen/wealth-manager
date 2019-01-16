@@ -3,10 +3,18 @@
  * 可根据模块拆分为多个文件
  */
 
+const HTTP_METHOD = {
+  POST: 'POST',
+  GET: 'GET',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+};
+
 const apimap = [
   {
-    id: 'Layout.breadcrumb',
-    url: './mock/breadcrumb.json',
+    id: 'getWealthCategory',
+    url: '/wealthCategory',
+    method: HTTP_METHOD.GET,
   },
 ];
 

@@ -1,3 +1,31 @@
 .nav-bar-top{
   height: 45px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(35,37,49);
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  z-index: 9;
+  .nav-button{
+    color: #969696;
+    font-size: 16px;
+    &.highlight{
+      color: white;
+    }
+    &:hover{
+      color: white;
+    }
+  }
+  .nav-button-right{
+    color: #969696;
+    font-size: 14px;
+    &:hover{
+      color: white;
+    }
+  }
+  .placeholder{
+    flex-grow: 1;
+  }
 }

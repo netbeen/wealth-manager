@@ -2,5 +2,7 @@
   "extends": "eslint-config-ali/react",
   "parser": "babel-eslint",
   "rules": {
+    "react/destructuring-assignment": 0,
+    "no-return-assign": 0
   }
 }

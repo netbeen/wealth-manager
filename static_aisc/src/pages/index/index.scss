@@ -1,3 +1,49 @@
 /**
  * 页面级样式文件
  */
+.top-area{
+  height: 32px;
+  display: flex;
+}
+
+.page-wealth-wrap{
+  margin: 45px 0 0 0;
+  padding: 20px;
+  .chart-title{
+    font-size: 14px;
+    margin-top: 20px;
+  }
+}
+
+.page-wealth-create-wrap{
+  margin: 45px auto 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  .category-type{
+    font-size: 14px;
+    display: flex;
+    height: 24px;
+    align-items: center;
+  }
+}
+
+.page-login-wrap{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .text{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin: 0 0 20px 0;
+  }
+  .button-area{
+    margin-left: -6px;
+    button{
+      margin: 0 0 0 12px;
+    }
+  }
+}

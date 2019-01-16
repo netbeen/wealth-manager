@@ -7,22 +7,22 @@ function toInt(str) {
   return parseInt(str, 10) || 0;
 }
 
-class UserController extends Controller {
+class WealthCategoryController extends Controller {
   async index() {
     const { ctx } = this;
     const query = { limit: toInt(ctx.query.limit), offset: toInt(ctx.query.offset) };
-    ctx.body = await ctx.model.User.findAll(query);
+    ctx.body = await ctx.model.WealthCategory.findAll(query);
   }
 
   // async show() {
   //   const { ctx } = this;
   //   ctx.body = await ctx.model.User.findById(toInt(ctx.params.id));
   // }
-
+  //
   async create() {
     const { ctx } = this;
-    const { nickname, uuid } = ctx.request.body;
-    const user = await ctx.model.User.create({ nickname, uuid });
+    const { name, parentId, type } = ctx.request.body;
+    const user = await ctx.model.WealthCategory.create({ name, parent_id: parentId, type });
     ctx.status = 201;
     ctx.body = user;
   }
@@ -55,4 +55,4 @@ class UserController extends Controller {
   // }
 }
 
-module.exports = UserController;
+module.exports = WealthCategoryController;
