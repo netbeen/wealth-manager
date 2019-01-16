@@ -4,11 +4,18 @@ const loginWhitelist = [
 ];
 
 module.exports = () => async function login(ctx, next) {
-  await next();
-
-
-  console.log('ctx.originalUrl', ctx.path);
-  if (!ctx.cookies.get('uuid') && !loginWhitelist.includes(ctx.path)) {
-    ctx.redirect('/login');
+  const cookieUuid = ctx.cookies.get('uuid');
+  if (loginWhitelist.includes(ctx.path)) {
+    return await next();
   }
+  if (!cookieUuid) {
+    return ctx.redirect('/login');
+  }
+
+  const userInfo = await ctx.service.user.getByUuid(cookieUuid);
+  ctx.locals.user = {
+    uuid: userInfo.uuid,
+    nickname: userInfo.nickname,
+  };
+  return await next();
 };

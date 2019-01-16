@@ -4,7 +4,9 @@ const { Controller } = require('egg');
 
 class HomeController extends Controller {
   async index() {
-    await this.ctx.render('index.html');
+    await this.ctx.render('index.html', {
+      user: this.ctx.locals.user,
+    });
   }
 
   async api() {
@@ -13,4 +15,3 @@ class HomeController extends Controller {
 }
 
 module.exports = HomeController;
-

@@ -12,19 +12,9 @@ module.exports = () => {
   config.view = {
     defaultViewEngine: 'nunjucks',
     mapping: {
-      '.tpl': 'nunjucks',
+      '.html': 'nunjucks',
     },
   };
-
-  // config.mysql = {
-  //   client: {
-  //     host: secretConfig.mysql.host,
-  //     port: secretConfig.mysql.port,
-  //     user: secretConfig.mysql.username,
-  //     password: secretConfig.mysql.password,
-  //     database: 'wealthManager',
-  //   },
-  // };
 
   config.sequelize = {
     dialect: 'mysql',

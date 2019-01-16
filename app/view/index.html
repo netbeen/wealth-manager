@@ -14,6 +14,14 @@
 <link rel="stylesheet" href="https://g.alicdn.com/aisc/aisc-widgets/2.3.7/dark.css"/>
 <link rel="stylesheet" href="/public/aiscAssets/build/index.bundle.css"/>
 <div id="container"></div>
+<script>
+    window.WM_GLOBAL = {
+      user: {
+        uuid: '{{ user.uuid }}',
+        nickname: '{{ user.nickname }}',
+      },
+    };
+</script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/babel-polyfill/6.16.0/polyfill.min.js"></script>
