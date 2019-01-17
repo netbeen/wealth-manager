@@ -18,7 +18,7 @@ class Wealth extends Component {
       api: 'getWealthCategory',
       data: {},
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.setState({
         flatCategory: res,
       });
@@ -27,17 +27,16 @@ class Wealth extends Component {
         return { ...item, children: [] };
       });
       categoryWithChildren.forEach((item) => {
-        if (item.parent_id !== -1) {
-          console.log(item);
+        if (item.parentId !== -1) {
+          // console.log(item);
           categoryWithChildren.filter(
-            (searchParentItem) => { return searchParentItem.id === item.parent_id; }
+            (searchParentItem) => { return searchParentItem.id === item.parentId; }
           )[0].children.push(item);
         }
       });
 
-      console.log('asset', categoryWithChildren.filter(item => item.parent_id === -1 && item.type === 'asset'));
       this.setState({
-        treeCategory: categoryWithChildren.filter(item => item.parent_id === -1),
+        treeCategory: categoryWithChildren.filter(item => item.parentId === -1),
       });
     });
   }

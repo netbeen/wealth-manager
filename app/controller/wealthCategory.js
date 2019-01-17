@@ -22,7 +22,7 @@ class WealthCategoryController extends Controller {
   async create() {
     const { ctx } = this;
     const { name, parentId, type } = ctx.request.body;
-    const user = await ctx.model.WealthCategory.create({ name, parent_id: parentId, type });
+    const user = await ctx.model.WealthCategory.create({ name, parentId, type });
     ctx.status = 201;
     ctx.body = user;
   }
