@@ -136,12 +136,15 @@ class Wealth extends Component {
       // 把出现过的类目放入数组
       item.wealthRecordItems.forEach((wealthRecordItem) => {
         if (!distributionData.map((distributionDataItem) => distributionDataItem.categoryId).includes(wealthRecordItem.categoryId)) {
-          distributionData.push({
-            categoryId: wealthRecordItem.categoryId,
-            categoryType: categoryOrder.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId)[0].type,
-            categoryName: categoryOrder.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId)[0].name,
-            values: Array(wealthRecord.length).fill(0),
-          });
+          const categoryInfo = categoryOrder.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId);
+          if (categoryInfo.length > 0) {
+            distributionData.push({
+              categoryId: wealthRecordItem.categoryId,
+              categoryType: categoryInfo[0].type,
+              categoryName: categoryInfo[0].name,
+              values: Array(wealthRecord.length).fill(0),
+            });
+          }
         }
       });
     });
