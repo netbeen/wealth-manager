@@ -1,17 +1,27 @@
 // app/controller/users.js
 const { Controller } = require('egg');
 
-function toInt(str) {
-  if (typeof str === 'number') return str;
-  if (!str) return str;
-  return parseInt(str, 10) || 0;
-}
-
-class WealthCategoryController extends Controller {
+class WealthRecord extends Controller {
   async index() {
     const { ctx } = this;
-    const query = { limit: toInt(ctx.query.limit), offset: toInt(ctx.query.offset) };
-    ctx.body = await ctx.model.WealthRecord.findAll(query);
+    const wealthRecords = await ctx.model.WealthRecord.findAll({
+      where: {
+        userId: ctx.locals.user.id,
+      },
+    });
+    const wealthRecordsWithItems = [];
+    for (const wealthRecord of wealthRecords) {
+      const wealthRecordItems = await ctx.model.WealthRecordItem.findAll({
+        where: {
+          recordId: wealthRecord.dataValues.id,
+        },
+      });
+      wealthRecordsWithItems.push({
+        ...wealthRecord.dataValues,
+        wealthRecordItems: wealthRecordItems.map(item => item.dataValues),
+      });
+    }
+    ctx.body = wealthRecordsWithItems;
   }
 
   // async show() {
@@ -62,4 +72,4 @@ class WealthCategoryController extends Controller {
   // }
 }
 
-module.exports = WealthCategoryController;
+module.exports = WealthRecord;
