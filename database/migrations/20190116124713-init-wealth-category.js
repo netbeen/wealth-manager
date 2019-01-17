@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.createTable('wealthCategories', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true }, // 类目ID
       name: STRING(256), // 类目名称
-      parentId: INTEGER, // 父类目ID，-1为根类目
+      parent_id: INTEGER, // 父类目ID，-1为根类目
       type: STRING(256), // 类目类型，asset or debt
       created_at: DATE,
       updated_at: DATE,

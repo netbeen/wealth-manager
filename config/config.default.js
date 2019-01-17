@@ -23,6 +23,7 @@ module.exports = () => {
     username: 'yangyang',
     password: 'yangyang',
     database: 'wealthManager',
+    timezone: '+08:00', // 东八时区
   };
 
   config.security = {
