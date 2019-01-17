@@ -4,7 +4,7 @@ module.exports = () => {
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
-  // config.keys = `${secretConfig.app.key}`;
+  config.keys = 'wealth-manager-key';
 
   // add your config here
   config.middleware = ['getUser'];
