@@ -15,6 +15,10 @@ const apimap = [
     id: 'getWealthCategory',
     url: '/wealthCategory',
     method: HTTP_METHOD.GET,
+  }, {
+    id: 'postWealthRecord',
+    url: '/wealthRecord',
+    method: HTTP_METHOD.POST,
   },
 ];
 

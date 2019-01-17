@@ -172,6 +172,15 @@ class Wealth extends Component {
             <Button
               type="primary"
               onClick={() => {
+                exceed.fetch({
+                  api: 'postWealthRecord',
+                  data: {
+                    date: formatTimeStampToYYYYMMDD(selectedDate),
+                    recordItemList: wealthRecordData,
+                  },
+                }).then((res) => {
+                  console.log(res);
+                });
                 console.log({
                   selectedDate: formatTimeStampToYYYYMMDD(selectedDate),
                   wealthRecordData,
