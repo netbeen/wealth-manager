@@ -66,12 +66,22 @@ class Wealth extends Component {
         <div className="page-wealth-wrap">
           <div className="top-area">
             <Button
+              style={{ marginRight: 12 }}
               type="primary"
               onClick={() => {
                 this.props.history.push('/wealth/record/create');
               }}
             >
               财务盘点
+            </Button>
+
+            <Button
+              type="normal"
+              onClick={() => {
+                this.props.history.push('/wealth/record');
+              }}
+            >
+              历史明细
             </Button>
           </div>
           <div>
