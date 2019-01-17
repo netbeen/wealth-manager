@@ -41,6 +41,15 @@
     font-size: 14px;
     margin-top: 20px; }
 
+.page-wealth-record-list-wrap {
+  margin: 45px auto 0 auto;
+  padding: 20px; }
+  .page-wealth-record-list-wrap .next-icon {
+    visibility: hidden;
+    cursor: pointer; }
+  .page-wealth-record-list-wrap .row-hover .next-icon {
+    visibility: visible; }
+
 .page-wealth-create-wrap {
   margin: 45px auto 0 auto;
   padding: 20px;

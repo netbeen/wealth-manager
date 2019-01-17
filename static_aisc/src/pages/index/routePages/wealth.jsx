@@ -3,34 +3,32 @@ import Nav from '../../../components/nav';
 import { Button } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
+import exceed from 'utils/apimap';
 
 const data = [
   {
     name: '机房1',
-    data: [[1483372800000, 1892], [1483459200000, 7292], [1483545600000, 5714], [1483632000000, 5354], [1483718400000, 2014], [1483804800000, 22], [1483891200000, 11023], [1483977600000, 5218], [1484064000000, 8759], [1484150400000, 9981], [1484236800000, 4533], [1484323200000, 11398], [1484409600000, 1064], [1484496000000, 6494]],
+    data: [[1483459200000, 1892], [1483372800000, 7292], [1483545600000, 5714], [1483632000000, 5354], [1483718400000, 2014], [1483804800000, 22], [1483891200000, 11023], [1483977600000, 5218], [1484064000000, 8759], [1484150400000, 9981], [1484236800000, 4533], [1484323200000, 11398], [1484409600000, 1064], [1484496000000, 6494]],
   }, {
     name: '机房2',
     data: [[1483372800000, 11751], [1483459200000, 4078], [1483545600000, 2175], [1483632000000, 12048], [1483718400000, 1748], [1483804800000, 10494], [1483891200000, 9597], [1483977600000, 4788], [1484064000000, 2085], [1484150400000, 492], [1484236800000, 2965], [1484323200000, 4246], [1484409600000, 2160], [1484496000000, 11877]],
   },
 ];
 
-const options = {
-  padding: [40, 5, 24, 44],
-  xAxis: {
-    type: 'time',
-    mask: 'YYYY-MM-DD',
-  },
-};
-
 class Wealth extends Component {
-  static propTypes = {
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      wealthRecord: [],
+      treeCategory: [],
+      flatCategory: [],
+    };
+  }
 
-  static defaultProps = {
-    breadcrumb: [],
-  };
-
-  componentDidMount() {}
+  componentDidMount() {
+    this.fetchWealthRecord();
+    this.fetchWealthCategory();
+  }
 
   componentWillMount() {
     this.event1 = {
@@ -41,6 +39,43 @@ class Wealth extends Component {
       plotmove: this.handleMove.bind(this, '2'),
       plotleave: this.handleLeave.bind(this, '2'),
     };
+  }
+
+  fetchWealthRecord = () => {
+    exceed.fetch({
+      api: 'getWealthRecord',
+      data: {},
+    }).then((res) => {
+      console.log(res);
+      this.setState({
+        wealthRecord: res,
+      });
+    });
+  }
+
+  fetchWealthCategory = () => {
+    exceed.fetch({
+      api: 'getWealthCategory',
+      data: {},
+    }).then((res) => {
+      this.setState({
+        flatCategory: res,
+      });
+      const categoryWithChildren = res.map((item) => {
+        return { ...item, children: [] };
+      });
+      categoryWithChildren.forEach((item) => {
+        if (item.parentId !== -1) {
+          // console.log(item);
+          categoryWithChildren.filter(
+            (searchParentItem) => { return searchParentItem.id === item.parentId; }
+          )[0].children.push(item);
+        }
+      });
+      this.setState({
+        treeCategory: categoryWithChildren.filter(item => item.parentId === -1),
+      });
+    });
   }
 
   handleMove(key, e) {
@@ -59,7 +94,75 @@ class Wealth extends Component {
     }
   }
 
+  breadthFirstTraversal = (treeCategory) => {
+    const result = [];
+    treeCategory.forEach((categoryLevel1) => {
+      result.push(...categoryLevel1.children);
+    });
+    return result;
+  }
+
+  calcNetAsset = (wealthRecord) => {
+    const { flatCategory } = this.state;
+    const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
+      if (flatCategory.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
+        return sum + parseFloat(wealthRecordItems.value);
+      } else {
+        return sum - parseFloat(wealthRecordItems.value);
+      }
+    }, 0);
+    return netAsset;
+  }
+
+  calcTotalAsset = (wealthRecord) => {
+    const { flatCategory } = this.state;
+    const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
+      if (flatCategory.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
+        return sum + parseFloat(wealthRecordItems.value);
+      } else {
+        return sum;
+      }
+    }, 0);
+    return netAsset;
+  }
+
   render() {
+    const { wealthRecord, treeCategory } = this.state;
+
+    const categoryOrder = this.breadthFirstTraversal(treeCategory);
+    const categoryOrderIds = categoryOrder.map(item => item.id);
+    console.log('categoryOrder', categoryOrder);
+    console.log('categoryOrderIds', categoryOrderIds);
+
+    const distributionData = [];
+
+    wealthRecord.forEach((item) => {
+      item.netAsset = this.calcNetAsset(item); // 净资产
+      item.totalAsset = this.calcTotalAsset(item); // 总资产
+
+      // 把出现过的类目放入数组
+      item.wealthRecordItems.forEach((wealthRecordItem) => {
+        if (!distributionData.map((distributionDataItem) => distributionDataItem.categoryId).includes(wealthRecordItem.categoryId)) {
+          distributionData.push({
+            categoryId: wealthRecordItem.categoryId,
+            categoryType: categoryOrder.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId)[0].type,
+            categoryName: categoryOrder.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId)[0].name,
+            values: Array(wealthRecord.length).fill(0),
+          });
+        }
+      });
+    });
+
+    wealthRecord.forEach((item, index) => {
+      item.wealthRecordItems.forEach((wealthRecordItem) => {
+        distributionData.filter(distributionDataItem => distributionDataItem.categoryId === wealthRecordItem.categoryId)[0].values[index] = parseFloat(wealthRecordItem.value);
+      });
+    });
+    distributionData.sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); });
+    console.log('render wealthRecord', wealthRecord);
+    console.log('render distributionData', distributionData);
+
+
     return (
       <div>
         <Nav />
@@ -92,12 +195,18 @@ class Wealth extends Component {
               height="300"
               config={{
                 padding: [40, 5, 24, 'auto'],
+                spline: true,
                 xAxis: {
                   type: 'time',
                   mask: 'YYYY-MM-DD',
                 },
               }}
-              data={data}
+              data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
+                name: `${distributionDataItem.categoryName}%`,
+                data: distributionDataItem.values.map((value, index) => {
+                  return [new Date(wealthRecord[index].date).valueOf(), (value / wealthRecord[index].totalAsset / 0.01).toFixed(2)];
+                }),
+              }))}
             />
             <div className="chart-title">资产总量</div>
             <Wline
@@ -106,12 +215,21 @@ class Wealth extends Component {
               height="300"
               config={{
                 padding: [40, 5, 24, 'auto'],
+                spline: true,
                 xAxis: {
                   type: 'time',
                   mask: 'YYYY-MM-DD',
                 },
               }}
-              data={data}
+              data={[
+                {
+                  name: '总资产',
+                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.totalAsset]; }),
+                }, {
+                  name: '净资产',
+                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.netAsset]; }),
+                },
+              ]}
             />
           </div>
           <div style={{ display: 'flex' }}>
@@ -119,7 +237,9 @@ class Wealth extends Component {
               <div className="chart-title">资产明细</div>
               <Wpie
                 height="300"
-                config={{}}
+                config={{
+                  cycle: true,
+                }}
                 data={[
                   {
                     name: '浏览器占比',
@@ -139,7 +259,9 @@ class Wealth extends Component {
               <div className="chart-title">负债明细</div>
               <Wpie
                 height="300"
-                config={{}}
+                config={{
+                  cycle: true,
+                }}
                 data={[
                   {
                     name: '浏览器占比',

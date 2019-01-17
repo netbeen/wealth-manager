@@ -178,12 +178,17 @@ class Wealth extends Component {
                     date: formatTimeStampToYYYYMMDD(selectedDate),
                     recordItemList: wealthRecordData,
                   },
-                }).then((res) => {
-                  console.log(res);
-                });
-                console.log({
-                  selectedDate: formatTimeStampToYYYYMMDD(selectedDate),
-                  wealthRecordData,
+                }).then(() => {
+                  Feedback.toast.setConfig({
+                    hasMask: true,
+                  });
+                  Feedback.toast.success({
+                    content: '操作成功',
+                    duration: 1000,
+                  });
+                  setTimeout(() => {
+                    this.props.history.push('/wealth');
+                  }, 1100);
                 });
               }}
             >
