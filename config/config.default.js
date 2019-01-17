@@ -1,10 +1,10 @@
-const secretConfig = require('./secretConfig');
+// const secretConfig = require('./secretConfig');
 
 module.exports = () => {
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = `${secretConfig.app.key}`;
+  // config.keys = `${secretConfig.app.key}`;
 
   // add your config here
   config.middleware = ['getUser'];
