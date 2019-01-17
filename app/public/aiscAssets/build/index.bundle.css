@@ -48,8 +48,23 @@
   .page-wealth-create-wrap .category-type {
     font-size: 14px;
     display: flex;
+    height: 30px;
+    align-items: center;
+    font-weight: bold; }
+  .page-wealth-create-wrap .record-item {
+    font-size: 14px;
+    display: flex;
     height: 24px;
-    align-items: center; }
+    align-items: center;
+    margin: 2px 0; }
+    .page-wealth-create-wrap .record-item:hover .record-item-operate-area {
+      visibility: visible; }
+    .page-wealth-create-wrap .record-item .record-item-operate-area {
+      visibility: hidden; }
+    .page-wealth-create-wrap .record-item .placeholder {
+      flex-grow: 1; }
+    .page-wealth-create-wrap .record-item input {
+      text-align: right; }
 
 .page-login-wrap {
   display: flex;

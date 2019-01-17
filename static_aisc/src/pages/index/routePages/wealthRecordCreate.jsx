@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button, Dropdown, Menu, DatePicker, Card } from '@alife/aisc';
+import { Button, Dropdown, Menu, DatePicker, Card, Feedback, Input } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import exceed from 'utils/apimap';
+import { formatTimeStampToYYYYMMDD } from 'utils';
 
 class Wealth extends Component {
   constructor(props) {
@@ -10,10 +11,16 @@ class Wealth extends Component {
     this.state = {
       flatCategory: [],
       treeCategory: [],
+      wealthRecordData: [],
+      selectedDate: new Date(),
     };
   }
 
   componentDidMount() {
+    this.fetchWealthCategory();
+  }
+
+  fetchWealthCategory = () => {
     exceed.fetch({
       api: 'getWealthCategory',
       data: {},
@@ -57,8 +64,48 @@ class Wealth extends Component {
       </Menu>);
   }
 
+  renderRecordItems = (type) => {
+    const { wealthRecordData } = this.state;
+    return wealthRecordData
+      .filter((wealthRecordDataItem) => { return wealthRecordDataItem.category.type === type; })
+      .map((wealthRecordDataItem) => {
+        return (
+          <div className="record-item">
+            <span className="record-item-category">{wealthRecordDataItem.category.name}</span>
+            <span className="record-item-operate-area">
+              <Button
+                shape="text"
+                size="small"
+                onClick={() => {
+                  this.setState({
+                    wealthRecordData: wealthRecordData.filter(item => item.categoryId !== wealthRecordDataItem.categoryId),
+                  });
+                }}
+              >
+                删除类目
+              </Button>
+            </span>
+            <span className="placeholder" />
+            <Input
+              onChange={(value) => {
+                if (value === '') {
+                  value = 0;
+                } else if (!/^[0-9]+\.?[0-9]*$/.test(value)) {
+                  return Feedback.toast.error('金额错误');
+                }
+                wealthRecordDataItem.value = parseFloat(value);
+                this.setState({ wealthRecordData });
+              }}
+              autoComplete={false}
+              placeholder={`${wealthRecordDataItem.category.name}`}
+              size="small"
+            />
+          </div>);
+      });
+  }
+
   render() {
-    const { treeCategory } = this.state;
+    const { treeCategory, wealthRecordData, flatCategory, selectedDate } = this.state;
     return (
       <div>
         <Nav />
@@ -70,14 +117,27 @@ class Wealth extends Component {
               triggerType="click"
             >
               <Menu
-                onClick={(selectedKeys, menuItem, meta, e) => {
-                  console.log(selectedKeys, menuItem, meta, e);
+                onClick={(selectedKeys, menuItem, meta) => {
+                  if (meta.keyPath.includes(String(selectedKeys))) {
+                    return Feedback.toast.prompt('仅允许添加三级类目');
+                  }
+                  if (wealthRecordData.filter(item => item.categoryId === parseInt(selectedKeys)).length > 0) {
+                    return Feedback.toast.prompt('类目不可以重复添加哦');
+                  }
+                  const categoryDetail = flatCategory.filter(item => item.id === parseInt(selectedKeys))[0];
+                  this.setState({
+                    wealthRecordData: [...wealthRecordData, {
+                      categoryId: parseInt(selectedKeys),
+                      value: 0,
+                      category: categoryDetail,
+                    }],
+                  });
                 }}
               >
-                <Menu.PopupItem label="资产" key="assets">
+                <Menu.PopupItem label="资产" key={-1}>
                   {this.generateMenus(treeCategory.filter(item => item.type === 'asset'))}
                 </Menu.PopupItem>
-                <Menu.PopupItem label="负债" key="debt">
+                <Menu.PopupItem label="负债" key={-2}>
                   {this.generateMenus(treeCategory.filter(item => item.type === 'debt'))}
                 </Menu.PopupItem>
               </Menu>
@@ -85,19 +145,41 @@ class Wealth extends Component {
             <DatePicker
               defaultValue={new Date()}
               hasClear={false}
+              onChange={(date) => {
+                this.setState({ selectedDate: date });
+              }}
             />
           </div>
           <Card style={{ marginTop: 20, width: '100%' }}>
             <div className="category-type">资产：</div>
+            {this.renderRecordItems('asset')}
             <div className="category-type">负债：</div>
+            {this.renderRecordItems('debt')}
             <div style={{ width: '100%', borderTop: '1px dashed #404354' }} />
             <div className="category-type">
               <div style={{ flexGrow: 1 }}>净资产：</div>
-              <div>￥88888</div>
+              <div>
+                {`￥${wealthRecordData.reduce((accumulator, item) => {
+                  if (item.category.type === 'debt') {
+                    return accumulator - item.value;
+                  }
+                  return accumulator + item.value;
+                }, 0)}`}
+              </div>
             </div>
           </Card>
           <div className="category-type" style={{ marginTop: 20, flexDirection: 'row-reverse' }}>
-            <Button type="primary">确定</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                console.log({
+                  selectedDate: formatTimeStampToYYYYMMDD(selectedDate),
+                  wealthRecordData,
+                });
+              }}
+            >
+              确定
+            </Button>
           </div>
         </div>
       </div>

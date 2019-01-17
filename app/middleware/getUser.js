@@ -16,6 +16,7 @@ module.exports = () => async function login(ctx, next) {
   ctx.locals.user = {
     uuid: userInfo.uuid,
     nickname: userInfo.nickname,
+    id: userInfo.id,
   };
   return await next();
 };

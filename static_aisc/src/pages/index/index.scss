@@ -22,8 +22,30 @@
   .category-type{
     font-size: 14px;
     display: flex;
+    height: 30px;
+    align-items: center;
+    font-weight: bold;
+  }
+  .record-item{
+    font-size: 14px;
+    display: flex;
     height: 24px;
     align-items: center;
+    margin: 2px 0;
+    &:hover{
+      .record-item-operate-area{
+        visibility: visible;
+      }
+    }
+    .record-item-operate-area{
+      visibility: hidden;
+    }
+    .placeholder{
+      flex-grow: 1;
+    }
+    input{
+      text-align: right;
+    }
   }
 }
 

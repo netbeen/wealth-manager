@@ -26,5 +26,19 @@ const tools = {
   },
 };
 
+export function formatTimeStampToYYYYMMDD(timeStamp) {
+  const date = new Date(timeStamp);
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  let day = date.getDate();
+  if (day < 10) {
+    day = `0${day}`;
+  }
+  return `${year}-${month}-${day}`;
+}
+
 export const NameSpace = tools.namespace.bind(tools);
 export default tools;
