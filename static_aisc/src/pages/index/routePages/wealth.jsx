@@ -151,7 +151,10 @@ class Wealth extends Component {
 
     wealthRecord.forEach((item, index) => {
       item.wealthRecordItems.forEach((wealthRecordItem) => {
-        distributionData.filter(distributionDataItem => distributionDataItem.categoryId === wealthRecordItem.categoryId)[0].values[index] = parseFloat(wealthRecordItem.value);
+        const searchTarget = distributionData.filter(distributionDataItem => distributionDataItem.categoryId === wealthRecordItem.categoryId);
+        if (searchTarget.length > 0) {
+          searchTarget[0].values[index] = parseFloat(wealthRecordItem.value);
+        }
       });
     });
     distributionData.sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); });
