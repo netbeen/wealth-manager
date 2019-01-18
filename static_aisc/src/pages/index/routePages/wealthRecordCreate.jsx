@@ -11,7 +11,7 @@ class Wealth extends Component {
     this.state = {
       flatCategory: [],
       treeCategory: [],
-      wealthRecordData: [],
+      currentEditWealthRecordData: [],
       selectedDate: new Date(),
     };
   }
@@ -65,8 +65,8 @@ class Wealth extends Component {
   }
 
   renderRecordItems = (type) => {
-    const { wealthRecordData } = this.state;
-    return wealthRecordData
+    const { currentEditWealthRecordData } = this.state;
+    return currentEditWealthRecordData
       .filter((wealthRecordDataItem) => { return wealthRecordDataItem.category.type === type; })
       .map((wealthRecordDataItem) => {
         return (
@@ -78,7 +78,7 @@ class Wealth extends Component {
                 size="small"
                 onClick={() => {
                   this.setState({
-                    wealthRecordData: wealthRecordData.filter(item => item.categoryId !== wealthRecordDataItem.categoryId),
+                    currentEditWealthRecordData: currentEditWealthRecordData.filter(item => item.categoryId !== wealthRecordDataItem.categoryId),
                   });
                 }}
               >
@@ -94,7 +94,7 @@ class Wealth extends Component {
                   return Feedback.toast.error('金额错误');
                 }
                 wealthRecordDataItem.value = parseFloat(value);
-                this.setState({ wealthRecordData });
+                this.setState({ currentEditWealthRecordData });
               }}
               autoComplete={false}
               placeholder={`${wealthRecordDataItem.category.name}`}
@@ -105,7 +105,7 @@ class Wealth extends Component {
   }
 
   render() {
-    const { treeCategory, wealthRecordData, flatCategory, selectedDate } = this.state;
+    const { treeCategory, currentEditWealthRecordData, flatCategory, selectedDate } = this.state;
     return (
       <div>
         <Nav />
@@ -121,12 +121,12 @@ class Wealth extends Component {
                   if (meta.keyPath.includes(String(selectedKeys))) {
                     return Feedback.toast.prompt('仅允许添加三级类目');
                   }
-                  if (wealthRecordData.filter(item => item.categoryId === parseInt(selectedKeys)).length > 0) {
+                  if (currentEditWealthRecordData.filter(item => item.categoryId === parseInt(selectedKeys)).length > 0) {
                     return Feedback.toast.prompt('类目不可以重复添加哦');
                   }
                   const categoryDetail = flatCategory.filter(item => item.id === parseInt(selectedKeys))[0];
                   this.setState({
-                    wealthRecordData: [...wealthRecordData, {
+                    currentEditWealthRecordData: [...currentEditWealthRecordData, {
                       categoryId: parseInt(selectedKeys),
                       value: 0,
                       category: categoryDetail,
@@ -159,7 +159,7 @@ class Wealth extends Component {
             <div className="category-type">
               <div style={{ flexGrow: 1 }}>净资产：</div>
               <div>
-                {`￥${wealthRecordData.reduce((accumulator, item) => {
+                {`￥${currentEditWealthRecordData.reduce((accumulator, item) => {
                   if (item.category.type === 'debt') {
                     return accumulator - item.value;
                   }
@@ -176,7 +176,7 @@ class Wealth extends Component {
                   api: 'postWealthRecord',
                   data: {
                     date: formatTimeStampToYYYYMMDD(selectedDate),
-                    recordItemList: wealthRecordData,
+                    recordItemList: currentEditWealthRecordData,
                   },
                 }).then(() => {
                   Feedback.toast.setConfig({
