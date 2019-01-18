@@ -194,7 +194,7 @@ class Wealth extends Component {
                     return accumulator - item.value;
                   }
                   return accumulator + item.value;
-                }, 0)}`}
+                }, 0).toFixed(2)}`}
               </div>
             </div>
           </Card>

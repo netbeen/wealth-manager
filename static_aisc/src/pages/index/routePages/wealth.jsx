@@ -153,7 +153,7 @@ class Wealth extends Component {
       item.wealthRecordItems.forEach((wealthRecordItem) => {
         const searchTarget = distributionData.filter(distributionDataItem => distributionDataItem.categoryId === wealthRecordItem.categoryId);
         if (searchTarget.length > 0) {
-          searchTarget[0].values[index] = parseFloat(wealthRecordItem.value);
+          searchTarget[0].values[index] = parseFloat(wealthRecordItem.value).toFixed(2);
         }
       });
     });
@@ -220,10 +220,10 @@ class Wealth extends Component {
               data={[
                 {
                   name: '总资产',
-                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.totalAsset]; }),
+                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.totalAsset.toFixed(2)]; }),
                 }, {
                   name: '净资产',
-                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.netAsset]; }),
+                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.netAsset.toFixed(2)]; }),
                 },
               ]}
             />
