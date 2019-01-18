@@ -13,11 +13,25 @@ class Wealth extends Component {
       treeCategory: [],
       currentEditWealthRecordData: [],
       selectedDate: new Date(),
+      wealthRecords: [],
     };
   }
 
   componentDidMount() {
     this.fetchWealthCategory();
+    this.fetchWealthRecords();
+  }
+
+  fetchWealthRecords = () => {
+    exceed.fetch({
+      api: 'getWealthRecord',
+      data: {},
+    }).then((res) => {
+      // console.log(res);
+      this.setState({
+        wealthRecords: res,
+      });
+    });
   }
 
   fetchWealthCategory = () => {
@@ -104,6 +118,21 @@ class Wealth extends Component {
       });
   }
 
+  importLastRecordCategory = () => {
+    const { wealthRecords, flatCategory } = this.state;
+    if (wealthRecords.length > 0) {
+      this.setState({
+        currentEditWealthRecordData: wealthRecords[wealthRecords.length - 1].wealthRecordItems.map(item => {
+          return {
+            categoryId: item.categoryId,
+            value: 0,
+            category: flatCategory.filter(category => category.id === item.categoryId)[0],
+          };
+        }),
+      });
+    }
+  }
+
   render() {
     const { treeCategory, currentEditWealthRecordData, flatCategory, selectedDate } = this.state;
     return (
@@ -142,6 +171,7 @@ class Wealth extends Component {
                 </Menu.PopupItem>
               </Menu>
             </Dropdown>
+            <Button type="normal" onClick={this.importLastRecordCategory} style={{ marginRight: 20 }}>导入历史类目</Button>
             <DatePicker
               defaultValue={new Date()}
               hasClear={false}

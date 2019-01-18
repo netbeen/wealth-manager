@@ -24,7 +24,7 @@ class Wealth extends Component {
       api: 'getWealthRecord',
       data: {},
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.setState({
         wealthRecord: res,
       });
@@ -79,7 +79,7 @@ class Wealth extends Component {
   render() {
     const { wealthRecord, treeCategory } = this.state;
 
-    console.log('treeCategory', treeCategory);
+    // console.log('treeCategory', treeCategory);
     const categories = this.breadthFirstTraversal(treeCategory);
     return (
       <div>

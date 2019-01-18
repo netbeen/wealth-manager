@@ -36,7 +36,7 @@ class Wealth extends Component {
       api: 'getWealthRecord',
       data: {},
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.setState({
         wealthRecord: res,
       });
