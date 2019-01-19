@@ -86,7 +86,7 @@ class Wealth extends Component {
         <Nav />
         <div className="page-wealth-record-list-wrap">
           <Table
-            maxBodyHeight={800}
+            maxBodyHeight={window.innerHeight - 100}
             dataSource={wealthRecord}
             fixedHeader
           >
