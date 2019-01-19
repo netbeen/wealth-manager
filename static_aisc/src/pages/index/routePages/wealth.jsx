@@ -4,6 +4,7 @@ import { Button } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import exceed from 'utils/apimap';
+
 // import { datePlus } from 'utils';
 
 class Wealth extends Component {
@@ -59,7 +60,9 @@ class Wealth extends Component {
         if (item.parentId !== -1) {
           // console.log(item);
           categoryWithChildren.filter(
-            (searchParentItem) => { return searchParentItem.id === item.parentId; }
+            (searchParentItem) => {
+              return searchParentItem.id === item.parentId;
+            }
           )[0].children.push(item);
         }
       });
@@ -99,7 +102,9 @@ class Wealth extends Component {
       return 0;
     }
     const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (flatCategory.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
+      if (flatCategory.filter((category) => {
+        return category.id === wealthRecordItems.categoryId;
+      })[0].type === 'asset') {
         return sum + parseFloat(wealthRecordItems.value);
       } else {
         return sum - parseFloat(wealthRecordItems.value);
@@ -114,7 +119,9 @@ class Wealth extends Component {
       return 0;
     }
     const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (flatCategory.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
+      if (flatCategory.filter((category) => {
+        return category.id === wealthRecordItems.categoryId;
+      })[0].type === 'asset') {
         return sum + parseFloat(wealthRecordItems.value);
       } else {
         return sum;
@@ -158,7 +165,9 @@ class Wealth extends Component {
         }
       });
     });
-    distributionData.sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); });
+    distributionData.sort((a, b) => {
+      return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId);
+    });
 
 
     const guideAreas = [];
@@ -177,14 +186,11 @@ class Wealth extends Component {
     }
 
     const lineChartConfig = {
-      padding: [40, 30, 24, 50],
+      padding: [40, 30, 24, 35],
       spline: true,
       xAxis: {
         type: 'time',
         mask: 'YYYY-MM-DD',
-      },
-      yAxis: {
-        min: 0,
       },
       guide: {
         area: guideAreas,
@@ -221,7 +227,17 @@ class Wealth extends Component {
               ref={line => this.line1 = line}
               event={this.event1}
               height="300"
-              config={lineChartConfig}
+              config={
+                {
+                  ...lineChartConfig,
+                  yAxis: {
+                    min: 0,
+                    labelFormatter: (input) => {
+                      return `${Math.round(input)}%`;
+                    },
+                  },
+                }
+              }
               data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
                 name: `${distributionDataItem.categoryName}%`,
                 data: distributionDataItem.values.map((value, index) => {
@@ -234,14 +250,28 @@ class Wealth extends Component {
               ref={line => this.line2 = line}
               event={this.event2}
               height="300"
-              config={lineChartConfig}
+              config={
+                {
+                  ...lineChartConfig,
+                  yAxis: {
+                    min: 0,
+                    labelFormatter: (input) => {
+                      return `${Math.round(input / 1000)}K`;
+                    },
+                  },
+                }
+              }
               data={[
                 {
                   name: '总资产',
-                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.totalAsset.toFixed(2)]; }),
+                  data: wealthRecord.map((item) => {
+                    return [new Date(item.date).valueOf(), item.totalAsset.toFixed(2)];
+                  }),
                 }, {
                   name: '净资产',
-                  data: wealthRecord.map((item) => { return [new Date(item.date).valueOf(), item.netAsset.toFixed(2)]; }),
+                  data: wealthRecord.map((item) => {
+                    return [new Date(item.date).valueOf(), item.netAsset.toFixed(2)];
+                  }),
                 },
               ]}
             />
