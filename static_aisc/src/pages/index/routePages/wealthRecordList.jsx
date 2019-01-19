@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Table, Button, Icon } from '@alife/aisc';
+import { Table, Icon } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import exceed from 'utils/apimap';
 import { formatTimeStampToYYYYMMDD } from 'utils';
@@ -76,6 +76,31 @@ class Wealth extends Component {
     return netAsset;
   }
 
+  currencyFormatDiv = (value) => {
+    if (typeof value === 'undefined' || value === 0) {
+      return <div />;
+    }
+    let color = '#969696';
+    if (value >= 1000 && value < 10000) {
+      color = '#ffffff';
+    } else if (value >= 10000 && value < 100000) {
+      color = '#4AD051';
+    } else if (value >= 100000 && value < 1000000) {
+      color = '#2E85FF';
+    } else if (value >= 1000000 && value < 10000000) {
+      color = '#FAB34F';
+    } else if (value >= 10000000 && value < 100000000) {
+      color = '#FF656B';
+    }
+    let currencyString = parseFloat(value.toFixed(2)).toLocaleString('en-US');
+    if (!currencyString.includes('.')) {
+      currencyString += '.00';
+    } else if (currencyString.length - currencyString.indexOf('.') === 2) {
+      currencyString += '0';
+    }
+    return <div style={{ color }}>{currencyString}</div>;
+  }
+
   render() {
     const { wealthRecord, treeCategory } = this.state;
 
@@ -94,8 +119,8 @@ class Wealth extends Component {
               lock
               title=""
               align="center"
-              width={100}
-              cell={(value, index, record) => {
+              width={80}
+              cell={() => {
                 return (
                   <div>
                     <Icon style={{ marginRight: 12 }} size="small" type="ashbin" />
@@ -119,7 +144,7 @@ class Wealth extends Component {
               align="center"
               width={100}
               cell={(value, index, record) => {
-                return <div>{this.calcNetAsset(record).toFixed(2)}</div>;
+                return this.currencyFormatDiv(this.calcNetAsset(record));
               }}
             />
             {categories.map((category) => (<Table.Column
@@ -130,7 +155,7 @@ class Wealth extends Component {
                 const relativeRecordItem = record.wealthRecordItems
                   .filter(item => item.categoryId === category.id);
                 if (relativeRecordItem.length > 0) {
-                  return <div>{relativeRecordItem[0].value}</div>;
+                  return this.currencyFormatDiv(parseFloat(relativeRecordItem[0].value));
                 }
                 return <div />;
               }}
