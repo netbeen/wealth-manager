@@ -15,6 +15,7 @@ class Wealth extends Component {
       selectedDate: new Date(),
       wealthRecords: [],
       categoryOrderIds: [],
+      submitButtonLoading: false,
     };
   }
 
@@ -145,7 +146,8 @@ class Wealth extends Component {
   }
 
   render() {
-    const { treeCategory, currentEditWealthRecordData, flatCategory, selectedDate } = this.state;
+    const { submitButtonLoading,
+      treeCategory, currentEditWealthRecordData, flatCategory, selectedDate } = this.state;
     return (
       <div>
         <Nav />
@@ -212,7 +214,11 @@ class Wealth extends Component {
           <div className="category-type" style={{ marginTop: 20, flexDirection: 'row-reverse' }}>
             <Button
               type="primary"
+              loading={submitButtonLoading}
               onClick={() => {
+                this.setState({
+                  submitButtonLoading: true,
+                });
                 exceed.fetch({
                   api: 'postWealthRecord',
                   data: {
@@ -226,6 +232,9 @@ class Wealth extends Component {
                   Feedback.toast.success({
                     content: '操作成功',
                     duration: 1000,
+                  });
+                  this.setState({
+                    submitButtonLoading: false,
                   });
                   setTimeout(() => {
                     this.props.history.push('/wealth');

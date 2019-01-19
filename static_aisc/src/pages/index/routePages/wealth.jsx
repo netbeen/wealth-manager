@@ -164,17 +164,20 @@ class Wealth extends Component {
     const guideAreas = [];
     const earliestDateValue = Math.min(...(wealthRecord.map(item => new Date(item.date).valueOf()) || [0]));
     if (Number.isSafeInteger(earliestDateValue)) {
-      const earliestDate = new Date(earliestDateValue);
-      earliestDate.setFullYear(earliestDate.getFullYear() + 1);
-      guideAreas.push({
-        status: 'normal',
-        axis: 'x',
-        value: [new Date(`${earliestDate.getFullYear()}-01-01`).valueOf(), new Date(`${earliestDate.getFullYear()}-12-31`).valueOf()],
-      });
+      const currentDate = new Date(earliestDateValue);
+      while (currentDate < new Date()) {
+        currentDate.setFullYear(currentDate.getFullYear() + 1);
+        guideAreas.push({
+          status: 'normal',
+          axis: 'x',
+          value: [new Date(`${currentDate.getFullYear()}-01-01`).valueOf(), new Date(`${currentDate.getFullYear()}-12-31`).valueOf()],
+        });
+        currentDate.setFullYear(currentDate.getFullYear() + 1);
+      }
     }
 
     const lineChartConfig = {
-      padding: [40, 5, 24, 50],
+      padding: [40, 30, 24, 50],
       spline: true,
       xAxis: {
         type: 'time',
