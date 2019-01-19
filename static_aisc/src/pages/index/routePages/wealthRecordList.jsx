@@ -147,19 +147,28 @@ class Wealth extends Component {
                 return this.currencyFormatDiv(this.calcNetAsset(record));
               }}
             />
-            {categories.map((category) => (<Table.Column
-              title={category.name}
-              align="center"
-              width={100}
-              cell={(value, index, record) => {
-                const relativeRecordItem = record.wealthRecordItems
-                  .filter(item => item.categoryId === category.id);
-                if (relativeRecordItem.length > 0) {
-                  return this.currencyFormatDiv(parseFloat(relativeRecordItem[0].value));
-                }
-                return <div />;
-              }}
-            />))}
+            {categories.map((category) => {
+              const allRecordItems = [];
+              wealthRecord.forEach(singleWealthRecord => {
+                allRecordItems.push(...singleWealthRecord.wealthRecordItems);
+              });
+              if (allRecordItems.filter(recordItem => recordItem.categoryId === category.id).length === 0) {
+                return null;
+              }
+              return (<Table.Column
+                title={category.name}
+                align="center"
+                width={100}
+                cell={(value, index, record) => {
+                  const relativeRecordItem = record.wealthRecordItems
+                    .filter(item => item.categoryId === category.id);
+                  if (relativeRecordItem.length > 0) {
+                    return this.currencyFormatDiv(parseFloat(relativeRecordItem[0].value));
+                  }
+                  return <div />;
+                }}
+              />);
+            })}
           </Table>
         </div>
       </div>
