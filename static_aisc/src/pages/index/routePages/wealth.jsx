@@ -4,6 +4,7 @@ import { Button } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import exceed from 'utils/apimap';
+// import { datePlus } from 'utils';
 
 class Wealth extends Component {
   constructor(props) {
@@ -159,6 +160,34 @@ class Wealth extends Component {
     });
     distributionData.sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); });
 
+
+    const guideAreas = [];
+    const earliestDateValue = Math.min(...(wealthRecord.map(item => new Date(item.date).valueOf()) || [0]));
+    if (Number.isSafeInteger(earliestDateValue)) {
+      const earliestDate = new Date(earliestDateValue);
+      earliestDate.setFullYear(earliestDate.getFullYear() + 1);
+      guideAreas.push({
+        status: 'normal',
+        axis: 'x',
+        value: [new Date(`${earliestDate.getFullYear()}-01-01`).valueOf(), new Date(`${earliestDate.getFullYear()}-12-31`).valueOf()],
+      });
+    }
+
+    const lineChartConfig = {
+      padding: [40, 5, 24, 40],
+      spline: true,
+      xAxis: {
+        type: 'time',
+        mask: 'YYYY-MM-DD',
+      },
+      yAxis: {
+        min: 0,
+      },
+      guide: {
+        area: guideAreas,
+      },
+    };
+
     return (
       <div>
         <Nav />
@@ -189,14 +218,7 @@ class Wealth extends Component {
               ref={line => this.line1 = line}
               event={this.event1}
               height="300"
-              config={{
-                padding: [40, 5, 24, 'auto'],
-                spline: true,
-                xAxis: {
-                  type: 'time',
-                  mask: 'YYYY-MM-DD',
-                },
-              }}
+              config={lineChartConfig}
               data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
                 name: `${distributionDataItem.categoryName}%`,
                 data: distributionDataItem.values.map((value, index) => {
@@ -209,14 +231,7 @@ class Wealth extends Component {
               ref={line => this.line2 = line}
               event={this.event2}
               height="300"
-              config={{
-                padding: [40, 5, 24, 'auto'],
-                spline: true,
-                xAxis: {
-                  type: 'time',
-                  mask: 'YYYY-MM-DD',
-                },
-              }}
+              config={lineChartConfig}
               data={[
                 {
                   name: '总资产',

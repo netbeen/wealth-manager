@@ -40,5 +40,11 @@ export function formatTimeStampToYYYYMMDD(timeStamp) {
   return `${year}-${month}-${day}`;
 }
 
+export const datePlus = (inputDate, diff) => {
+  const result = new Date(inputDate);
+  result.setDate(result.getDate() + diff);
+  return result;
+};
+
 export const NameSpace = tools.namespace.bind(tools);
 export default tools;
