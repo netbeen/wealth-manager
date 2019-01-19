@@ -9,18 +9,16 @@ class WealthRecord extends Controller {
         userId: ctx.locals.user.id,
       },
     });
-    const wealthRecordsWithItems = [];
-    for (const wealthRecord of wealthRecords) {
-      const wealthRecordItems = await ctx.model.WealthRecordItem.findAll({
-        where: {
-          recordId: wealthRecord.dataValues.id,
-        },
-      });
-      wealthRecordsWithItems.push({
+    const wealthRecordsWithItems = await Promise.all(
+      wealthRecords.map(async wealthRecord => ({
         ...wealthRecord.dataValues,
-        wealthRecordItems: wealthRecordItems.map(item => item.dataValues),
-      });
-    }
+        wealthRecordItems: await ctx.model.WealthRecordItem.findAll({
+          where: {
+            recordId: wealthRecord.dataValues.id,
+          },
+        }),
+      })),
+    );
     ctx.body = wealthRecordsWithItems;
   }
 
