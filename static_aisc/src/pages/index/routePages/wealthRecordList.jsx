@@ -86,7 +86,7 @@ class Wealth extends Component {
     } else if (value >= 10000 && value < 100000) {
       color = '#4AD051';
     } else if (value >= 100000 && value < 1000000) {
-      color = '#2E85FF';
+      color = '#52D7FF';
     } else if (value >= 1000000 && value < 10000000) {
       color = '#FAB34F';
     } else if (value >= 10000000 && value < 100000000) {
