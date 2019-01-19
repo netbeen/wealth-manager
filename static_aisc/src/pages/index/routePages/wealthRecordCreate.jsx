@@ -14,6 +14,7 @@ class Wealth extends Component {
       currentEditWealthRecordData: [],
       selectedDate: new Date(),
       wealthRecords: [],
+      categoryOrderIds: [],
     };
   }
 
@@ -56,8 +57,10 @@ class Wealth extends Component {
         }
       });
 
+      const treeCategory = categoryWithChildren.filter(item => item.parentId === -1);
       this.setState({
-        treeCategory: categoryWithChildren.filter(item => item.parentId === -1),
+        treeCategory,
+        categoryOrderIds: this.breadthFirstTraversal(treeCategory).map(item => item.id),
       });
     });
   }
@@ -119,7 +122,7 @@ class Wealth extends Component {
   }
 
   importLastRecordCategory = () => {
-    const { wealthRecords, flatCategory } = this.state;
+    const { wealthRecords, flatCategory, categoryOrderIds } = this.state;
     if (wealthRecords.length > 0) {
       this.setState({
         currentEditWealthRecordData: wealthRecords[wealthRecords.length - 1].wealthRecordItems.map(item => {
@@ -128,9 +131,17 @@ class Wealth extends Component {
             value: 0,
             category: flatCategory.filter(category => category.id === item.categoryId)[0],
           };
-        }),
+        }).sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); }),
       });
     }
+  }
+
+  breadthFirstTraversal = (treeCategory) => {
+    const result = [];
+    treeCategory.forEach((categoryLevel1) => {
+      result.push(...categoryLevel1.children);
+    });
+    return result;
   }
 
   render() {
