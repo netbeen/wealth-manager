@@ -6,7 +6,7 @@ const loginWhitelist = [
 module.exports = () => async function login(ctx, next) {
   const cookieUuid = ctx.cookies.get('uuid');
   if (loginWhitelist.includes(ctx.path)) {
-    return await next();
+    return next();
   }
   if (!cookieUuid) {
     return ctx.redirect('/login');
@@ -18,5 +18,5 @@ module.exports = () => async function login(ctx, next) {
     nickname: userInfo.nickname,
     id: userInfo.id,
   };
-  return await next();
+  return next();
 };

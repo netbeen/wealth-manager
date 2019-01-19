@@ -19,13 +19,13 @@ class WealthCategoryController extends Controller {
   //   ctx.body = await ctx.model.User.findById(toInt(ctx.params.id));
   // }
   //
-  async create() {
-    const { ctx } = this;
-    const { name, parentId, type } = ctx.request.body;
-    const user = await ctx.model.WealthCategory.create({ name, parentId, type });
-    ctx.status = 201;
-    ctx.body = user;
-  }
+  // async create() {
+  //   const { ctx } = this;
+  //   const { name, parentId, type } = ctx.request.body;
+  //   const user = await ctx.model.WealthCategory.create({ name, parentId, type });
+  //   ctx.status = 201;
+  //   ctx.body = user;
+  // }
 
   // async update() {
   //   const ctx = this.ctx;

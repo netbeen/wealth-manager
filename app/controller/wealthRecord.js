@@ -9,7 +9,7 @@ class WealthRecord extends Controller {
         userId: ctx.locals.user.id,
       },
     });
-    const wealthRecordsWithItems = await Promise.all(
+    ctx.body = await Promise.all(
       wealthRecords.map(async wealthRecord => ({
         ...wealthRecord.dataValues,
         wealthRecordItems: await ctx.model.WealthRecordItem.findAll({
@@ -19,7 +19,6 @@ class WealthRecord extends Controller {
         }),
       })),
     );
-    ctx.body = wealthRecordsWithItems;
   }
 
   // async show() {
