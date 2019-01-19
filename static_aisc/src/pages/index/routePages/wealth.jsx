@@ -174,7 +174,7 @@ class Wealth extends Component {
     }
 
     const lineChartConfig = {
-      padding: [40, 5, 24, 40],
+      padding: [40, 5, 24, 50],
       spline: true,
       xAxis: {
         type: 'time',
