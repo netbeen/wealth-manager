@@ -1,10 +1,10 @@
-// const secretConfig = require('./secretConfig');
+const secretConfig = require('./secretConfig');
 
 module.exports = () => {
   const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = 'wealth-manager-key';
+  config.keys = secretConfig.app.key;
 
   // add your config here
   config.middleware = ['getUser'];
@@ -16,15 +16,7 @@ module.exports = () => {
     },
   };
 
-  config.sequelize = {
-    dialect: 'mysql',
-    host: '47.88.175.208',
-    port: 3306,
-    username: 'yangyang',
-    password: 'yangyang',
-    database: 'wealthManager',
-    timezone: '+08:00', // 东八时区
-  };
+  config.sequelize = secretConfig.sequelize;
 
   config.security = {
     csrf: {
