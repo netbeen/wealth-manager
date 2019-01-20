@@ -44,7 +44,7 @@ self.addEventListener('unhandledrejection', (e) => {
 
 importScripts('https://g.alicdn.com/kg/workbox/3.3.0/workbox-sw.js');
 workbox.setConfig({
-  debug: true,
+  debug: false,
   modulePathPrefix: 'https://g.alicdn.com/kg/workbox/3.3.0/',
 });
 workbox.skipWaiting();
@@ -85,7 +85,6 @@ const staleWhileRevalidateRegList = [
 
 workbox.routing.registerRoute(
   ({ url }) => {
-    console.log('url', url);
     return staleWhileRevalidateRegList.filter(reg => reg.test(url) === true).length > 0;
   },
   workbox.strategies.staleWhileRevalidate(),

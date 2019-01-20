@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button } from '@alife/aisc';
+import { Button, Card } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import exceed from 'utils/apimap';
@@ -197,6 +197,26 @@ class Wealth extends Component {
       },
     };
 
+    const debtDistributionData = [];
+    const assetDistributionData = [];
+
+    distributionData
+      .filter(item => item.categoryType === 'asset')
+      .forEach(categoryWithValues => {
+        if (parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1]) !== 0) {
+          assetDistributionData.push([categoryWithValues.categoryName, parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1])]);
+        }
+      });
+
+    distributionData
+      .filter(item => item.categoryType === 'debt')
+      .forEach(categoryWithValues => {
+        if (parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1]) !== 0) {
+          debtDistributionData.push([categoryWithValues.categoryName, parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1])]);
+        }
+      });
+
+
     return (
       <div>
         <Nav />
@@ -278,48 +298,38 @@ class Wealth extends Component {
           </div>
           <div style={{ display: 'flex' }}>
             <div style={{ width: '50%' }}>
-              <div className="chart-title">资产明细</div>
-              <Wpie
-                height="300"
-                config={{
-                  cycle: true,
-                }}
-                data={[
-                  {
-                    name: '浏览器占比',
-                    data: [
-                      ['Firefox', 45.0],
-                      ['IE', 26.8],
-                      ['Chrome', 12.8],
-                      ['Safari', 8.5],
-                      ['Opera', 6.2],
-                      ['Others', 0.7],
-                    ],
-                  },
-                ]}
-              />
+              <Card style={{ display: 'block', margin: '20px 10px 0 0' }}>
+                <div style={{ fontSize: 14 }}>资产比例</div>
+                <Wpie
+                  height="300"
+                  config={{
+                    cycle: true,
+                  }}
+                  data={[
+                    {
+                      name: '浏览器占比',
+                      data: assetDistributionData,
+                    },
+                  ]}
+                />
+              </Card>
             </div>
             <div style={{ width: '50%' }}>
-              <div className="chart-title">负债明细</div>
-              <Wpie
-                height="300"
-                config={{
-                  cycle: true,
-                }}
-                data={[
-                  {
-                    name: '浏览器占比',
-                    data: [
-                      ['Firefox', 45.0],
-                      ['IE', 26.8],
-                      ['Chrome', 12.8],
-                      ['Safari', 8.5],
-                      ['Opera', 6.2],
-                      ['Others', 0.7],
-                    ],
-                  },
-                ]}
-              />
+              <Card style={{ display: 'block', margin: '20px 10px 0 0' }}>
+                <div style={{ fontSize: 14 }}>负债比例</div>
+                <Wpie
+                  height="300"
+                  config={{
+                    cycle: true,
+                  }}
+                  data={[
+                    {
+                      name: '浏览器占比',
+                      data: debtDistributionData,
+                    },
+                  ]}
+                />
+              </Card>
             </div>
           </div>
         </div>
