@@ -1,10 +1,13 @@
 
 module.exports = {
-  mysql: {
+  sequelize: {
+    dialect: '',
     host: '',
-    port: null,
+    port: 0,
     username: '',
     password: '',
+    database: '',
+    timezone: '', // 东八时区
   },
   app: {
     key: '',
