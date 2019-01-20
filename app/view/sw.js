@@ -89,10 +89,10 @@ workbox.routing.registerRoute(
   },
   workbox.strategies.staleWhileRevalidate(),
 );
-workbox.routing.registerRoute(
-  '/',
-  workbox.strategies.staleWhileRevalidate(),
-);
+// workbox.routing.registerRoute(
+//   '/',
+//   workbox.strategies.staleWhileRevalidate(),
+// );
 
 // // pages
 // workbox.routing.registerRoute(

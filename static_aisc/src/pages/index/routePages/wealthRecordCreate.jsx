@@ -27,7 +27,9 @@ class Wealth extends Component {
   fetchWealthRecords = () => {
     exceed.fetch({
       api: 'getWealthRecord',
-      data: {},
+      data: {
+        uuid: window.WM_GLOBAL.user.uuid,
+      },
     }).then((res) => {
       // console.log(res);
       this.setState({
@@ -39,7 +41,9 @@ class Wealth extends Component {
   fetchWealthCategory = () => {
     exceed.fetch({
       api: 'getWealthCategory',
-      data: {},
+      data: {
+        uuid: window.WM_GLOBAL.user.uuid,
+      },
     }).then((res) => {
       // console.log(res);
       this.setState({
