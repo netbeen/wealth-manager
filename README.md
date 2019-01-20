@@ -32,7 +32,7 @@ $ npm stop
 
 ### Release Note
 
-- 3.0 开发中 [项目地址](https://github.com/netbeen/wealth-manager)
+- 3.0 开发于 2019-01-20 [项目地址](https://github.com/netbeen/wealth-manager)
     - 技术栈：Node.js、React
     - 框架/库：Egg、Sequelize、React Router、AISC、G2
     - 新功能/改进点：
