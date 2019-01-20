@@ -77,16 +77,14 @@ workbox.clientsClaim();
 // ];
 
 const staleWhileRevalidateRegList = [
-  /wealth/,
+  // /wealth/,
 
   /wealthCategory/,
   /wealthRecord/,
 ];
 
 workbox.routing.registerRoute(
-  ({ url }) => {
-    return staleWhileRevalidateRegList.filter(reg => reg.test(url) === true).length > 0;
-  },
+  ({ url }) => staleWhileRevalidateRegList.filter(reg => reg.test(url) === true).length > 0,
   workbox.strategies.staleWhileRevalidate(),
 );
 // workbox.routing.registerRoute(
