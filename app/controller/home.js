@@ -2,11 +2,18 @@
 
 const { Controller } = require('egg');
 
+// import
+
 class HomeController extends Controller {
   async index() {
     await this.ctx.render('index.html', {
       user: this.ctx.locals.user,
     });
+  }
+
+  async sw() {
+    this.ctx.set('Content-Type', 'text/javascript');
+    await this.ctx.render('sw.js');
   }
 
   async api() {

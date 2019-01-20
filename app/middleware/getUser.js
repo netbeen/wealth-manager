@@ -1,6 +1,7 @@
 const loginWhitelist = [
   '/login',
   '/login/compete',
+  '/sw.js',
 ];
 
 module.exports = () => async function login(ctx, next) {

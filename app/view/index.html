@@ -22,19 +22,29 @@
       },
     };
 </script>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/babel-polyfill/6.16.0/polyfill.min.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/react-redux/4.4.5/react-redux.min.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/redux/3.6.0/redux.min.js"></script>
 <script type="text/javascript" src="https://f.alicdn.com/redux-thunk/2.2.0/redux-thunk.min.js"></script>
-
 <script type="text/javascript" src="https://g.alicdn.com/aisc/aisc/2.8.14/aisc.min.js"></script>
 <script type="text/javascript" src="https://g.alicdn.com/aisc/aisc-widgets/2.3.7/dark.js"></script>
 <script type="text/javascript" src="/public/aiscAssets/build/vendor.js"></script>
 <script type="text/javascript" src="/public/aiscAssets/build/index.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(registration => {
+        console.log('service worker registration: ', registration);
+      }).catch(function (registrationError) {
+        console.warn('service worker registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
 </body>
 
 </html>
