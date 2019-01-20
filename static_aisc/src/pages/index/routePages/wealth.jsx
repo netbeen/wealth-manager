@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button, Card } from '@alife/aisc';
+import { Button, Card, Grid } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import exceed from 'utils/apimap';
 
 // import { datePlus } from 'utils';
+const { Row, Col } = Grid;
+
 
 class Wealth extends Component {
   constructor(props) {
@@ -225,83 +227,91 @@ class Wealth extends Component {
       <div>
         <Nav />
         <div className="page-wealth-wrap">
-          <div className="top-area">
-            <Button
-              style={{ marginRight: 12 }}
-              type="primary"
-              onClick={() => {
-                this.props.history.push('/wealth/record/create');
-              }}
-            >
-              财务盘点
-            </Button>
+          <Row type="wrap">
+            <div className="top-area">
+              <Button
+                style={{ marginRight: 12 }}
+                type="primary"
+                onClick={() => {
+                  this.props.history.push('/wealth/record/create');
+                }}
+              >
+                财务盘点
+              </Button>
 
-            <Button
-              type="normal"
-              onClick={() => {
-                this.props.history.push('/wealth/record');
-              }}
-            >
-              历史明细
-            </Button>
-          </div>
-          <div>
-            <div className="chart-title">资产分布</div>
-            <Wline
-              ref={line => this.line1 = line}
-              event={this.event1}
-              height="300"
-              config={
-                {
-                  ...lineChartConfig,
-                  yAxis: {
-                    min: 0,
-                    labelFormatter: (input) => {
-                      return `${Math.round(input)}%`;
+              <Button
+                type="normal"
+                onClick={() => {
+                  this.props.history.push('/wealth/record');
+                }}
+              >
+                历史明细
+              </Button>
+            </div>
+          </Row>
+          <Row type="wrap">
+            <Col span="24">
+              <div className="chart-title">资产分布</div>
+              <Wline
+                ref={line => this.line1 = line}
+                event={this.event1}
+                height="300"
+                config={
+                  {
+                    ...lineChartConfig,
+                    yAxis: {
+                      min: 0,
+                      labelFormatter: (input) => {
+                        return `${Math.round(input)}%`;
+                      },
                     },
-                  },
+                  }
                 }
-              }
-              data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
-                name: `${distributionDataItem.categoryName}%`,
-                data: distributionDataItem.values.map((value, index) => {
-                  return [new Date(wealthRecord[index].date).valueOf(), (value / wealthRecord[index].totalAsset / 0.01).toFixed(2)];
-                }),
-              }))}
-            />
-            <div className="chart-title">资产总量</div>
-            <Wline
-              ref={line => this.line2 = line}
-              event={this.event2}
-              height="300"
-              config={
-                {
-                  ...lineChartConfig,
-                  yAxis: {
-                    min: 0,
-                    labelFormatter: (input) => {
-                      return `${Math.round(input / 1000)}K`;
+                data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
+                  name: `${distributionDataItem.categoryName}%`,
+                  data: distributionDataItem.values.map((value, index) => {
+                    return [new Date(wealthRecord[index].date).valueOf(), (value / wealthRecord[index].totalAsset / 0.01).toFixed(2)];
+                  }),
+                }))}
+              />
+            </Col>
+          </Row>
+          <Row type="wrap">
+            <Col span="24">
+              <div className="chart-title">资产总量</div>
+              <Wline
+                ref={line => this.line2 = line}
+                event={this.event2}
+                height="300"
+                config={
+                  {
+                    ...lineChartConfig,
+                    yAxis: {
+                      min: 0,
+                      labelFormatter: (input) => {
+                        return `${Math.round(input / 1000)}K`;
+                      },
                     },
-                  },
+                  }
                 }
-              }
-              data={[
-                {
-                  name: '总资产',
-                  data: wealthRecord.map((item) => {
-                    return [new Date(item.date).valueOf(), item.totalAsset.toFixed(2)];
-                  }),
-                }, {
-                  name: '净资产',
-                  data: wealthRecord.map((item) => {
-                    return [new Date(item.date).valueOf(), item.netAsset.toFixed(2)];
-                  }),
-                },
-              ]}
-            />
-          </div>
-          <div style={{ display: 'flex' }}>
-            <div style={{ width: '50%' }}>
+                data={[
+                  {
+                    name: '总资产',
+                    data: wealthRecord.map((item) => {
+                      return [new Date(item.date).valueOf(), item.totalAsset.toFixed(2)];
+                    }),
+                  }, {
+                    name: '净资产',
+                    data: wealthRecord.map((item) => {
+                      return [new Date(item.date).valueOf(), item.netAsset.toFixed(2)];
+                    }),
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
+          <Row type="wrap">
+            <Col xl="12" l="12" m="12" s="24" xs="24" xxs="24">
               <Card style={{ display: 'block', margin: '20px 10px 0 0' }}>
                 <div style={{ fontSize: 14 }}>资产比例</div>
                 <Wpie
@@ -317,8 +327,8 @@ class Wealth extends Component {
                   ]}
                 />
               </Card>
-            </div>
-            <div style={{ width: '50%' }}>
+            </Col>
+            <Col xl="12" l="12" m="12" s="24" xs="24" xxs="24">
               <Card style={{ display: 'block', margin: '20px 10px 0 0' }}>
                 <div style={{ fontSize: 14 }}>负债比例</div>
                 <Wpie
@@ -334,6 +344,11 @@ class Wealth extends Component {
                   ]}
                 />
               </Card>
+            </Col>
+          </Row>
+          <div style={{ display: 'flex' }}>
+            <div style={{ width: '50%' }} />
+            <div style={{ width: '50%' }}>
             </div>
           </div>
         </div>
