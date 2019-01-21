@@ -7,7 +7,7 @@ module.exports = () => {
   config.keys = secretConfig.app.key;
 
   // add your config here
-  config.middleware = ['getUser'];
+  config.middleware = ['gzip', 'getUser'];
 
   config.view = {
     defaultViewEngine: 'nunjucks',

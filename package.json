@@ -11,6 +11,7 @@
     "egg-static": "^2.1.1",
     "egg-view-nunjucks": "^2.2.0",
     "eslint-config-ali": "^5.0.1",
+    "koa-is-json": "^1.0.0",
     "mysql2": "^1.6.4"
   },
   "devDependencies": {
