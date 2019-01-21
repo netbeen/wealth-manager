@@ -47,6 +47,12 @@ workbox.setConfig({
   debug: false,
   modulePathPrefix: 'https://g.alicdn.com/kg/workbox/3.3.0/',
 });
+workbox.core.setCacheNameDetails({
+  prefix: 'wm',
+  suffix: 'v1',
+  precache: 'precache',
+  runtime: 'runtime',
+});
 workbox.skipWaiting();
 workbox.clientsClaim();
 // const runtimeCacheName = workbox.core.cacheNames.runtime;
@@ -77,7 +83,7 @@ workbox.clientsClaim();
 // ];
 
 const staleWhileRevalidateRegList = [
-  // /wealth/,
+  /wealth/,
 
   /wealthCategory/,
   /wealthRecord/,
@@ -87,10 +93,10 @@ workbox.routing.registerRoute(
   ({ url }) => staleWhileRevalidateRegList.filter(reg => reg.test(url) === true).length > 0,
   workbox.strategies.staleWhileRevalidate(),
 );
-// workbox.routing.registerRoute(
-//   '/',
-//   workbox.strategies.staleWhileRevalidate(),
-// );
+workbox.routing.registerRoute(
+  '/',
+  workbox.strategies.staleWhileRevalidate(),
+);
 
 // // pages
 // workbox.routing.registerRoute(

@@ -6,12 +6,9 @@ const { Controller } = require('egg');
 
 class HomeController extends Controller {
   async index() {
-    if (this.ctx.path === '/') {
-      this.ctx.redirect('/wealth');
-    }
     await this.ctx.render('index.html', {
       user: this.ctx.locals.user,
-      feVersion: '1.2',
+      feVersion: '1.3',
     });
   }
 
