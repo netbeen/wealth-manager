@@ -13,5 +13,6 @@ module.exports = (app) => {
   router.get('/sw.js', controller.home.sw);
   router.get('/robots.txt', controller.home.robots);
   router.get('/google7fece503f68ef17f.html', controller.home.googleVerify);
+  router.get('/sitemap.xml', controller.home.sitemap);
   router.get('*', controller.home.index);
 };

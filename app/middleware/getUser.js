@@ -4,6 +4,7 @@ const loginWhitelist = [
   '/sw.js',
   '/robots.txt',
   '/google7fece503f68ef17f.html',
+  '/sitemap.xml',
 ];
 
 module.exports = () => async function login(ctx, next) {

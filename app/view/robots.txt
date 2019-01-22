@@ -39,3 +39,4 @@ User-agent: psbot
 Disallow:
 User-agent: *
 Disallow:
+Sitemap: https://wealth.netbeen.top/sitemap.xml

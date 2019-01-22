@@ -29,6 +29,12 @@ class HomeController extends Controller {
     await this.ctx.render('google7fece503f68ef17f.html');
   }
 
+  async sitemap() {
+    // console.log('robots');
+    // this.ctx.set('Content-Type', 'text/javascript');
+    await this.ctx.render('sitemap.xml');
+  }
+
   async api() {
     this.ctx.body = { code: 200 };
   }
