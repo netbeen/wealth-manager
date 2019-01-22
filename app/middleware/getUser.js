@@ -3,6 +3,7 @@ const loginWhitelist = [
   '/login/compete',
   '/sw.js',
   '/robots.txt',
+  '/google7fece503f68ef17f.html',
 ];
 
 module.exports = () => async function login(ctx, next) {
