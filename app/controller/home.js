@@ -17,6 +17,12 @@ class HomeController extends Controller {
     await this.ctx.render('sw.js');
   }
 
+  async robots() {
+    // console.log('robots');
+    // this.ctx.set('Content-Type', 'text/javascript');
+    await this.ctx.render('robots.txt');
+  }
+
   async api() {
     this.ctx.body = { code: 200 };
   }

@@ -11,5 +11,6 @@ module.exports = (app) => {
   router.get('/login/compete', controller.loginCompete.index);
   router.get('/login/logout', controller.loginCompete.logout);
   router.get('/sw.js', controller.home.sw);
+  router.get('/robots.txt', controller.home.robots);
   router.get('*', controller.home.index);
 };
