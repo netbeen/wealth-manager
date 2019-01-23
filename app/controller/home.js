@@ -29,6 +29,12 @@ class HomeController extends Controller {
     await this.ctx.render('google7fece503f68ef17f.html');
   }
 
+  async baiduVerify() {
+    // console.log('robots');
+    // this.ctx.set('Content-Type', 'text/javascript');
+    await this.ctx.render('baidu_verify_h1H0l9l1y3.html');
+  }
+
   async sitemap() {
     // console.log('robots');
     // this.ctx.set('Content-Type', 'text/javascript');

@@ -4,6 +4,7 @@ const loginWhitelist = [
   '/sw.js',
   '/robots.txt',
   '/google7fece503f68ef17f.html',
+  '/baidu_verify_h1H0l9l1y3.html',
   '/sitemap.xml',
 ];
 
