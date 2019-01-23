@@ -20,7 +20,7 @@ class WealthRecordDetail extends Component {
       wealthRecords: [],
       categoryOrderIds: [],
       submitButtonLoading: false,
-      currentRecordId: props.match.params.recordId,
+      currentRecordId: props.match.params.recordId && parseInt(props.match.params.recordId),
     };
   }
 
@@ -30,6 +30,7 @@ class WealthRecordDetail extends Component {
   }
 
   fetchWealthRecords = () => {
+    const { currentRecordId } = this.state;
     exceed.fetch({
       api: 'getWealthRecord',
       data: {
@@ -38,6 +39,10 @@ class WealthRecordDetail extends Component {
     }).then((res) => {
       this.setState({
         wealthRecords: res,
+      }, () => {
+        setTimeout(() => {
+          currentRecordId && this.loadTargetRecord();
+        }, 500);
       });
     });
   }
@@ -111,6 +116,7 @@ class WealthRecordDetail extends Component {
             </span>
             <span className="placeholder" />
             <Input
+              defaultValue={wealthRecordDataItem.value}
               onChange={(value) => {
                 if (value === '') {
                   value = 0;
@@ -143,6 +149,23 @@ class WealthRecordDetail extends Component {
     }
   }
 
+  loadTargetRecord = () => {
+    const { wealthRecords, flatCategory, categoryOrderIds, currentRecordId } = this.state;
+    const targetRecord = wealthRecords.filter(item => item.id === currentRecordId)[0];
+    if (wealthRecords.length > 0) {
+      this.setState({
+        selectedDate: new Date(targetRecord.date),
+        currentEditWealthRecordData: targetRecord.wealthRecordItems.map(item => {
+          return {
+            categoryId: item.categoryId,
+            value: parseFloat(item.value),
+            category: flatCategory.filter(category => category.id === item.categoryId)[0],
+          };
+        }).sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); }),
+      });
+    }
+  }
+
   breadthFirstTraversal = (treeCategory) => {
     const result = [];
     treeCategory.forEach((categoryLevel1) => {
@@ -153,9 +176,8 @@ class WealthRecordDetail extends Component {
 
   render() {
     const { submitButtonLoading,
-      treeCategory, currentEditWealthRecordData, flatCategory, selectedDate } = this.state;
+      treeCategory, currentEditWealthRecordData, flatCategory, selectedDate, currentRecordId } = this.state;
 
-    console.log('currentRecordId',this.state.currentRecordId);
     return (
       <div>
         <Nav />
@@ -194,7 +216,7 @@ class WealthRecordDetail extends Component {
             </Dropdown>
             <Button type="normal" onClick={this.importLastRecordCategory} style={{ marginRight: 20 }}>导入历史类目</Button>
             <DatePicker
-              defaultValue={new Date()}
+              value={selectedDate}
               hasClear={false}
               onChange={(date) => {
                 this.setState({ selectedDate: date });
@@ -228,7 +250,7 @@ class WealthRecordDetail extends Component {
                   submitButtonLoading: true,
                 });
                 exceed.fetch({
-                  api: 'postWealthRecord',
+                  api: currentRecordId ? '' : 'postWealthRecord',
                   data: {
                     date: formatTimeStampToYYYYMMDD(selectedDate),
                     recordItemList: currentEditWealthRecordData,
@@ -242,7 +264,7 @@ class WealthRecordDetail extends Component {
                     submitButtonLoading: false,
                   });
                   setTimeout(() => {
-                    this.props.history.push('/wealth');
+                    this.props.history.push(currentRecordId ? '/wealth/record' : '/wealth');
                   }, 1100);
                 });
               }}
