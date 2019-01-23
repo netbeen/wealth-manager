@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import exceed from 'utils/apimap';
 import { formatTimeStampToYYYYMMDD } from 'utils';
 
-class Wealth extends Component {
+class WealthRecordDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -255,4 +255,4 @@ class Wealth extends Component {
   }
 }
 
-export default withRouter(Wealth);
+export default withRouter(WealthRecordDetail);
