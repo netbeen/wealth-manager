@@ -124,11 +124,17 @@ class Wealth extends Component {
               title=""
               align="center"
               width={80}
-              cell={() => {
+              cell={(value, index, record) => {
                 return (
                   <div>
                     <Icon style={{ marginRight: 12 }} size="small" type="ashbin" />
-                    <Icon size="small" type="edit" />
+                    <Icon
+                      onClick={() => {
+                        this.props.history.push(`/wealth/record/${record.id}`);
+                      }}
+                      size="small"
+                      type="edit"
+                    />
                   </div>
                 );
               }}

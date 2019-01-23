@@ -17,6 +17,7 @@ ReactDom.render(
         <Route exact path="/wealth" component={Wealth} />
         <Route exact path="/wealth/record" component={WealthRecordList} />
         <Route exact path="/wealth/record/create" component={WealthRecordDetail} />
+        <Route exact path="/wealth/record/:recordId" component={WealthRecordDetail} />
         <Route exact path="/login" component={Login} />
         <Route component={Error404} />
       </Switch>

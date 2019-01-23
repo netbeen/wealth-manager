@@ -5,6 +5,10 @@ import { withRouter } from 'react-router-dom';
 import exceed from 'utils/apimap';
 import { formatTimeStampToYYYYMMDD } from 'utils';
 
+Feedback.toast.setConfig({
+  hasMask: true,
+});
+
 class WealthRecordDetail extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +20,7 @@ class WealthRecordDetail extends Component {
       wealthRecords: [],
       categoryOrderIds: [],
       submitButtonLoading: false,
+      currentRecordId: props.match.params.recordId,
     };
   }
 
@@ -31,7 +36,6 @@ class WealthRecordDetail extends Component {
         uuid: window.WM_GLOBAL.user.uuid,
       },
     }).then((res) => {
-      // console.log(res);
       this.setState({
         wealthRecords: res,
       });
@@ -45,7 +49,6 @@ class WealthRecordDetail extends Component {
         uuid: window.WM_GLOBAL.user.uuid,
       },
     }).then((res) => {
-      // console.log(res);
       this.setState({
         flatCategory: res,
       });
@@ -55,7 +58,6 @@ class WealthRecordDetail extends Component {
       });
       categoryWithChildren.forEach((item) => {
         if (item.parentId !== -1) {
-          // console.log(item);
           categoryWithChildren.filter(
             (searchParentItem) => { return searchParentItem.id === item.parentId; }
           )[0].children.push(item);
@@ -152,6 +154,8 @@ class WealthRecordDetail extends Component {
   render() {
     const { submitButtonLoading,
       treeCategory, currentEditWealthRecordData, flatCategory, selectedDate } = this.state;
+
+    console.log('currentRecordId',this.state.currentRecordId);
     return (
       <div>
         <Nav />
@@ -230,9 +234,6 @@ class WealthRecordDetail extends Component {
                     recordItemList: currentEditWealthRecordData,
                   },
                 }).then(() => {
-                  Feedback.toast.setConfig({
-                    hasMask: true,
-                  });
                   Feedback.toast.success({
                     content: '操作成功',
                     duration: 1000,
