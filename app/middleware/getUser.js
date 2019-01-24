@@ -1,4 +1,5 @@
 const loginWhitelist = [
+  '/',
   '/login',
   '/login/compete',
   '/sw.js',

@@ -83,3 +83,24 @@
     }
   }
 }
+
+.page-index-wrap{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .text{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin: 0 0 20px 0;
+  }
+  .button-area{
+    margin-left: -6px;
+    button{
+      margin: 0 0 0 12px;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import Wealth from './routePages/wealth';
 import Login from './routePages/login';
 import WealthRecordDetail from './routePages/wealthRecordDetail';
 import WealthRecordList from './routePages/wealthRecordList';
+import Index from './routePages/index';
 import Error404 from './routePages/error404';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './index.scss';
@@ -13,7 +14,7 @@ ReactDom.render(
   <BrowserRouter>
     <div>
       <Switch>
-        <Route exact path="/" component={Wealth} />
+        <Route exact path="/" component={Index} />
         <Route exact path="/wealth" component={Wealth} />
         <Route exact path="/wealth/record" component={WealthRecordList} />
         <Route exact path="/wealth/record/create" component={WealthRecordDetail} />

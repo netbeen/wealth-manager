@@ -92,3 +92,20 @@
     margin-left: -6px; }
     .page-login-wrap .button-area button {
       margin: 0 0 0 12px; }
+
+.page-index-wrap {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; }
+  .page-index-wrap .text {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin: 0 0 20px 0; }
+  .page-index-wrap .button-area {
+    margin-left: -6px; }
+    .page-index-wrap .button-area button {
+      margin: 0 0 0 12px; }
