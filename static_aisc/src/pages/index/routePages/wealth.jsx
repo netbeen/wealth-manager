@@ -4,6 +4,11 @@ import { Button, Card, Grid } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import exceed from 'utils/apimap';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as actions from '../actions/index';
+
 
 // import { datePlus } from 'utils';
 const { Row, Col } = Grid;
@@ -13,15 +18,15 @@ class Wealth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      wealthRecord: [],
       treeCategory: [],
       flatCategory: [],
     };
   }
 
   componentDidMount() {
-    this.fetchWealthRecord();
+    // this.fetchWealthRecord();
     this.fetchWealthCategory();
+    this.props.fetchWealthRecordArray();
   }
 
   componentWillMount() {
@@ -33,20 +38,6 @@ class Wealth extends Component {
       plotmove: this.handleMove.bind(this, '2'),
       plotleave: this.handleLeave.bind(this, '2'),
     };
-  }
-
-  fetchWealthRecord = () => {
-    exceed.fetch({
-      api: 'getWealthRecord',
-      data: {
-        uuid: window.WM_GLOBAL.user.uuid,
-      },
-    }).then((res) => {
-      // console.log(res);
-      this.setState({
-        wealthRecord: res,
-      });
-    });
   }
 
   fetchWealthCategory = () => {
@@ -137,13 +128,14 @@ class Wealth extends Component {
   }
 
   render() {
-    const { wealthRecord, treeCategory } = this.state;
+    const { treeCategory } = this.state;
+    const { wealthRecordArray } = this.props;
 
     const categoryOrder = this.breadthFirstTraversal(treeCategory);
     const categoryOrderIds = categoryOrder.map(item => item.id);
     const distributionData = [];
 
-    wealthRecord.forEach((item) => {
+    wealthRecordArray.forEach((item) => {
       item.netAsset = this.calcNetAsset(item); // 净资产
       item.totalAsset = this.calcTotalAsset(item); // 总资产
 
@@ -156,14 +148,14 @@ class Wealth extends Component {
               categoryId: wealthRecordItem.categoryId,
               categoryType: categoryInfo[0].type,
               categoryName: categoryInfo[0].name,
-              values: Array(wealthRecord.length).fill(0),
+              values: Array(wealthRecordArray.length).fill(0),
             });
           }
         }
       });
     });
 
-    wealthRecord.forEach((item, index) => {
+    wealthRecordArray.forEach((item, index) => {
       item.wealthRecordItems.forEach((wealthRecordItem) => {
         const searchTarget = distributionData.filter(distributionDataItem => distributionDataItem.categoryId === wealthRecordItem.categoryId);
         if (searchTarget.length > 0) {
@@ -177,7 +169,7 @@ class Wealth extends Component {
 
 
     const guideAreas = [];
-    const earliestDateValue = Math.min(...(wealthRecord.map(item => new Date(item.date).valueOf()) || [0]));
+    const earliestDateValue = Math.min(...(wealthRecordArray.map(item => new Date(item.date).valueOf()) || [0]));
     if (Number.isSafeInteger(earliestDateValue)) {
       const currentDate = new Date(earliestDateValue);
       while (currentDate < new Date()) {
@@ -270,7 +262,7 @@ class Wealth extends Component {
                 data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
                   name: `${distributionDataItem.categoryName}%`,
                   data: distributionDataItem.values.map((value, index) => {
-                    return [new Date(wealthRecord[index].date).valueOf(), (value / wealthRecord[index].totalAsset / 0.01).toFixed(2)];
+                    return [new Date(wealthRecordArray[index].date).valueOf(), (value / wealthRecordArray[index].totalAsset / 0.01).toFixed(2)];
                   }),
                 }))}
               />
@@ -297,12 +289,12 @@ class Wealth extends Component {
                 data={[
                   {
                     name: '总资产',
-                    data: wealthRecord.map((item) => {
+                    data: wealthRecordArray.map((item) => {
                       return [new Date(item.date).valueOf(), item.totalAsset.toFixed(2)];
                     }),
                   }, {
                     name: '净资产',
-                    data: wealthRecord.map((item) => {
+                    data: wealthRecordArray.map((item) => {
                       return [new Date(item.date).valueOf(), item.netAsset.toFixed(2)];
                     }),
                   },
@@ -348,8 +340,7 @@ class Wealth extends Component {
           </Row>
           <div style={{ display: 'flex' }}>
             <div style={{ width: '50%' }} />
-            <div style={{ width: '50%' }}>
-            </div>
+            <div style={{ width: '50%' }} />
           </div>
         </div>
       </div>
@@ -357,4 +348,7 @@ class Wealth extends Component {
   }
 }
 
-export default withRouter(Wealth);
+export default connect(
+  ({ index, ...others }) => ({ ...index, ...others }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(withRouter(Wealth));
