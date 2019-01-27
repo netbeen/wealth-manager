@@ -8,7 +8,7 @@ class HomeController extends Controller {
   async index() {
     await this.ctx.render('index.html', {
       user: this.ctx.locals.user,
-      feVersion: '1.5',
+      feVersion: '1.6',
     });
   }
 
