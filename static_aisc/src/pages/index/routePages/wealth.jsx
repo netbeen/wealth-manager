@@ -3,7 +3,6 @@ import Nav from '../../../components/nav';
 import { Button, Card, Grid } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
-import exceed from 'utils/apimap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -17,16 +16,12 @@ const { Row, Col } = Grid;
 class Wealth extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      treeCategory: [],
-      flatCategory: [],
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    // this.fetchWealthRecord();
-    this.fetchWealthCategory();
     this.props.fetchWealthRecordArray();
+    this.props.fetchWealthCategoryArray();
   }
 
   componentWillMount() {
@@ -38,35 +33,6 @@ class Wealth extends Component {
       plotmove: this.handleMove.bind(this, '2'),
       plotleave: this.handleLeave.bind(this, '2'),
     };
-  }
-
-  fetchWealthCategory = () => {
-    exceed.fetch({
-      api: 'getWealthCategory',
-      data: {
-        uuid: window.WM_GLOBAL.user.uuid,
-      },
-    }).then((res) => {
-      this.setState({
-        flatCategory: res,
-      });
-      const categoryWithChildren = res.map((item) => {
-        return { ...item, children: [] };
-      });
-      categoryWithChildren.forEach((item) => {
-        if (item.parentId !== -1) {
-          // console.log(item);
-          categoryWithChildren.filter(
-            (searchParentItem) => {
-              return searchParentItem.id === item.parentId;
-            }
-          )[0].children.push(item);
-        }
-      });
-      this.setState({
-        treeCategory: categoryWithChildren.filter(item => item.parentId === -1),
-      });
-    });
   }
 
   handleMove(key, e) {
@@ -94,12 +60,12 @@ class Wealth extends Component {
   }
 
   calcNetAsset = (wealthRecord) => {
-    const { flatCategory } = this.state;
-    if (flatCategory.length === 0) {
+    const { wealthCategoryFlatArray } = this.props;
+    if (wealthCategoryFlatArray.length === 0) {
       return 0;
     }
     const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (flatCategory.filter((category) => {
+      if (wealthCategoryFlatArray.filter((category) => {
         return category.id === wealthRecordItems.categoryId;
       })[0].type === 'asset') {
         return sum + parseFloat(wealthRecordItems.value);
@@ -111,12 +77,12 @@ class Wealth extends Component {
   }
 
   calcTotalAsset = (wealthRecord) => {
-    const { flatCategory } = this.state;
-    if (flatCategory.length === 0) {
+    const { wealthCategoryFlatArray } = this.props;
+    if (wealthCategoryFlatArray.length === 0) {
       return 0;
     }
     const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (flatCategory.filter((category) => {
+      if (wealthCategoryFlatArray.filter((category) => {
         return category.id === wealthRecordItems.categoryId;
       })[0].type === 'asset') {
         return sum + parseFloat(wealthRecordItems.value);
@@ -128,10 +94,9 @@ class Wealth extends Component {
   }
 
   render() {
-    const { treeCategory } = this.state;
-    const { wealthRecordArray } = this.props;
+    const { wealthRecordArray, wealthCategoryTreeArray } = this.props;
 
-    const categoryOrder = this.breadthFirstTraversal(treeCategory);
+    const categoryOrder = this.breadthFirstTraversal(wealthCategoryTreeArray);
     const categoryOrderIds = categoryOrder.map(item => item.id);
     const distributionData = [];
 
