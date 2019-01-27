@@ -23,6 +23,10 @@ const apimap = [
     id: 'getWealthRecord',
     url: '/wealthRecord',
     method: HTTP_METHOD.GET,
+  }, {
+    id: 'putWealthRecord',
+    url: '/wealthRecord/{{id}}',
+    method: HTTP_METHOD.PUT,
   },
 ];
 

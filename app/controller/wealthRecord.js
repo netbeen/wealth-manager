@@ -26,6 +26,7 @@ class WealthRecord extends Controller {
   //   ctx.body = await ctx.model.User.findById(toInt(ctx.params.id));
   // }
   //
+
   async create() {
     const { ctx } = this;
     const { date, recordItemList } = ctx.request.body;
@@ -41,19 +42,34 @@ class WealthRecord extends Controller {
     ctx.body = wealthRecord;
   }
 
-  // async update() {
-  //   const ctx = this.ctx;
-  //   const id = toInt(ctx.params.id);
-  //   const user = await ctx.model.User.findById(id);
-  //   if (!user) {
-  //     ctx.status = 404;
-  //     return;
-  //   }
-  //
-  //   const { name, age } = ctx.request.body;
-  //   await user.update({ name, age });
-  //   ctx.body = user;
-  // }
+  async update() {
+    const { ctx } = this;
+    const recordId = parseInt(ctx.params.id, 10);
+    const { date, recordItemList } = ctx.request.body;
+
+    const targetRecord = await ctx.model.WealthRecord.findOne({
+      where: {
+        id: recordId,
+      },
+    });
+    const targetRecordItems = await ctx.model.WealthRecordItem.findAll({
+      where: {
+        recordId,
+      },
+    });
+    targetRecordItems.forEach(async (targetRecordItem) => {
+      await targetRecordItem.destroy();
+    });
+    recordItemList.forEach(async (recordItem) => {
+      await ctx.model.WealthRecordItem.create({
+        recordId,
+        categoryId: parseInt(recordItem.category.id, 10),
+        value: parseFloat(recordItem.value),
+      });
+    });
+    await targetRecord.update({ date: new Date(date) });
+    ctx.body = '1111';
+  }
   //
   // async destroy() {
   //   const ctx = this.ctx;

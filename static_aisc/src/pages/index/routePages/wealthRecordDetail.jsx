@@ -216,13 +216,11 @@ class WealthRecordDetail extends Component {
                 this.setState({
                   submitButtonLoading: true,
                 });
-                currentRecordId && console.log({
-                  id: currentRecordId,
-                  date: formatTimeStampToYYYYMMDD(selectedDate),
-                  recordItemList: currentEditWealthRecordData,
-                });
                 exceed.fetch({
-                  api: currentRecordId ? '' : 'postWealthRecord',
+                  api: currentRecordId ? 'putWealthRecord' : 'postWealthRecord',
+                  params: {
+                    id: currentRecordId,
+                  },
                   data: {
                     date: formatTimeStampToYYYYMMDD(selectedDate),
                     recordItemList: currentEditWealthRecordData,
