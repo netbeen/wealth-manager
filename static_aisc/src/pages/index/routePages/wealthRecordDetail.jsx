@@ -18,7 +18,6 @@ class WealthRecordDetail extends Component {
     this.state = {
       currentEditWealthRecordData: [],
       selectedDate: new Date(),
-      categoryOrderIds: [],
       submitButtonLoading: false,
       currentRecordId: props.match.params.recordId && parseInt(props.match.params.recordId),
     };
@@ -34,11 +33,6 @@ class WealthRecordDetail extends Component {
       this.state.currentRecordId && setTimeout(() => {
         this.loadTargetRecord();
       }, 500);
-    }
-    if (nextProps.wealthCategoryTreeArray.length !== 0) {
-      this.setState({
-        categoryOrderIds: this.breadthFirstTraversal(this.props.wealthCategoryTreeArray).map(item => item.id),
-      });
     }
   }
 
@@ -102,8 +96,8 @@ class WealthRecordDetail extends Component {
   }
 
   importLastRecordCategory = () => {
-    const { categoryOrderIds } = this.state;
-    const { wealthRecordArray, wealthCategoryFlatArray } = this.props;
+    const { wealthRecordArray, wealthCategoryFlatArray, wealthCategoryOrderArray } = this.props;
+    const categoryOrderIds = wealthCategoryOrderArray.map(item => item.id);
     if (wealthRecordArray.length > 0) {
       this.setState({
         currentEditWealthRecordData: wealthRecordArray[wealthRecordArray.length - 1].wealthRecordItems.map(item => {
@@ -120,8 +114,9 @@ class WealthRecordDetail extends Component {
   }
 
   loadTargetRecord = () => {
-    const { categoryOrderIds, currentRecordId } = this.state;
-    const { wealthRecordArray, wealthCategoryFlatArray } = this.props;
+    const { currentRecordId } = this.state;
+    const { wealthRecordArray, wealthCategoryFlatArray, wealthCategoryOrderArray } = this.props;
+    const categoryOrderIds = wealthCategoryOrderArray.map(item => item.id);
     const targetRecord = wealthRecordArray.filter(item => item.id === currentRecordId)[0];
     if (wealthRecordArray.length > 0) {
       this.setState({
@@ -137,14 +132,6 @@ class WealthRecordDetail extends Component {
         }),
       });
     }
-  }
-
-  breadthFirstTraversal = (treeCategory) => {
-    const result = [];
-    treeCategory.forEach((categoryLevel1) => {
-      result.push(...categoryLevel1.children);
-    });
-    return result;
   }
 
   render() {

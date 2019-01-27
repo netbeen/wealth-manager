@@ -19,14 +19,6 @@ class WealthRecordList extends Component {
     this.props.fetchWealthCategoryArray();
   }
 
-  breadthFirstTraversal = (treeCategory) => {
-    const result = [];
-    treeCategory.forEach((categoryLevel1) => {
-      result.push(...categoryLevel1.children);
-    });
-    return result;
-  }
-
   calcNetAsset = (wealthRecord) => {
     const { wealthCategoryFlatArray } = this.props;
     const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
@@ -65,10 +57,8 @@ class WealthRecordList extends Component {
   }
 
   render() {
-    const { wealthRecordArray, wealthCategoryTreeArray } = this.props;
+    const { wealthRecordArray, wealthCategoryOrderArray } = this.props;
 
-    // console.log('treeCategory', treeCategory);
-    const categories = this.breadthFirstTraversal(wealthCategoryTreeArray);
     return (
       <div>
         <Nav />
@@ -116,7 +106,7 @@ class WealthRecordList extends Component {
                 return this.currencyFormatDiv(this.calcNetAsset(record));
               }}
             />
-            {categories.map((category) => {
+            {wealthCategoryOrderArray.map((category) => {
               const allRecordItems = [];
               wealthRecordArray.forEach(singleWealthRecord => {
                 allRecordItems.push(...singleWealthRecord.wealthRecordItems);

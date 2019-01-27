@@ -5,6 +5,7 @@ const initialState = {
   wealthRecordArray: [],
   wealthCategoryFlatArray: [],
   wealthCategoryTreeArray: [],
+  wealthCategoryOrderArray: [],
 };
 const defaultAction = {
   type: 'doNothing',
@@ -18,6 +19,8 @@ export default function index(state = initialState, action = defaultAction) {
       return { ...state, wealthCategoryFlatArray: action.data };
     case actions.SET_WEALTH_CATEGORY_TREE_ARRAY:
       return { ...state, wealthCategoryTreeArray: action.data };
+    case actions.SET_WEALTH_CATEGORY_ORDER_ARRAY:
+      return { ...state, wealthCategoryOrderArray: action.data };
     default:
       return state;
   }

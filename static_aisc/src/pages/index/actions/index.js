@@ -3,6 +3,15 @@ import exceed from 'utils/apimap';
 export const SET_WEALTH_RECORD_ARRAY = 'SET_WEALTH_RECORD_ARRAY';
 export const SET_WEALTH_CATEGORY_FLAT_ARRAY = 'SET_WEALTH_CATEGORY_FLAT_ARRAY';
 export const SET_WEALTH_CATEGORY_TREE_ARRAY = 'SET_WEALTH_CATEGORY_TREE_ARRAY';
+export const SET_WEALTH_CATEGORY_ORDER_ARRAY = 'SET_WEALTH_CATEGORY_ORDER_ARRAY';
+
+const breadthFirstTraversal = (inputTree) => {
+  const result = [];
+  inputTree.forEach((childNode) => {
+    result.push(...childNode.children);
+  });
+  return result;
+};
 
 export const fetchWealthRecordArray = () => {
   return (dispatch) => {
@@ -45,9 +54,14 @@ export const fetchWealthCategoryArray = () => {
           )[0].children.push(item);
         }
       });
+      const tree = categoryWithChildren.filter(item => item.parentId === -1);
       dispatch({
         type: SET_WEALTH_CATEGORY_TREE_ARRAY,
-        data: categoryWithChildren.filter(item => item.parentId === -1),
+        data: tree,
+      });
+      dispatch({
+        type: SET_WEALTH_CATEGORY_ORDER_ARRAY,
+        data: breadthFirstTraversal(tree),
       });
     });
   };

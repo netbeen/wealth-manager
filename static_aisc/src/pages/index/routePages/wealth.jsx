@@ -51,14 +51,6 @@ class Wealth extends Component {
     }
   }
 
-  breadthFirstTraversal = (treeCategory) => {
-    const result = [];
-    treeCategory.forEach((categoryLevel1) => {
-      result.push(...categoryLevel1.children);
-    });
-    return result;
-  }
-
   calcNetAsset = (wealthRecord) => {
     const { wealthCategoryFlatArray } = this.props;
     if (wealthCategoryFlatArray.length === 0) {
@@ -94,10 +86,9 @@ class Wealth extends Component {
   }
 
   render() {
-    const { wealthRecordArray, wealthCategoryTreeArray } = this.props;
+    const { wealthRecordArray, wealthCategoryOrderArray } = this.props;
 
-    const categoryOrder = this.breadthFirstTraversal(wealthCategoryTreeArray);
-    const categoryOrderIds = categoryOrder.map(item => item.id);
+    const categoryOrderIds = wealthCategoryOrderArray.map(item => item.id);
     const distributionData = [];
 
     wealthRecordArray.forEach((item) => {
@@ -107,7 +98,7 @@ class Wealth extends Component {
       // 把出现过的类目放入数组
       item.wealthRecordItems.forEach((wealthRecordItem) => {
         if (!distributionData.map((distributionDataItem) => distributionDataItem.categoryId).includes(wealthRecordItem.categoryId)) {
-          const categoryInfo = categoryOrder.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId);
+          const categoryInfo = wealthCategoryOrderArray.filter(categoryOrderItem => categoryOrderItem.id === wealthRecordItem.categoryId);
           if (categoryInfo.length > 0) {
             distributionData.push({
               categoryId: wealthRecordItem.categoryId,
