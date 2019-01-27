@@ -4,6 +4,9 @@ import { Button, Dropdown, Menu, DatePicker, Card, Feedback, Input } from '@alif
 import { withRouter } from 'react-router-dom';
 import exceed from 'utils/apimap';
 import { formatTimeStampToYYYYMMDD } from 'utils';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../actions';
 
 Feedback.toast.setConfig({
   hasMask: true,
@@ -13,11 +16,8 @@ class WealthRecordDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flatCategory: [],
-      treeCategory: [],
       currentEditWealthRecordData: [],
       selectedDate: new Date(),
-      wealthRecords: [],
       categoryOrderIds: [],
       submitButtonLoading: false,
       currentRecordId: props.match.params.recordId && parseInt(props.match.params.recordId),
@@ -25,56 +25,21 @@ class WealthRecordDetail extends Component {
   }
 
   componentDidMount() {
-    this.fetchWealthCategory();
-    this.fetchWealthRecords();
+    this.props.fetchWealthRecordArray();
+    this.props.fetchWealthCategoryArray();
   }
 
-  fetchWealthRecords = () => {
-    const { currentRecordId } = this.state;
-    exceed.fetch({
-      api: 'getWealthRecord',
-      data: {
-        uuid: window.WM_GLOBAL.user.uuid,
-      },
-    }).then((res) => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.wealthRecordArray.length !== 0) {
+      this.state.currentRecordId && setTimeout(() => {
+        this.loadTargetRecord();
+      }, 500);
+    }
+    if (nextProps.wealthCategoryTreeArray.length !== 0) {
       this.setState({
-        wealthRecords: res,
-      }, () => {
-        setTimeout(() => {
-          currentRecordId && this.loadTargetRecord();
-        }, 500);
+        categoryOrderIds: this.breadthFirstTraversal(this.props.wealthCategoryTreeArray).map(item => item.id),
       });
-    });
-  }
-
-  fetchWealthCategory = () => {
-    exceed.fetch({
-      api: 'getWealthCategory',
-      data: {
-        uuid: window.WM_GLOBAL.user.uuid,
-      },
-    }).then((res) => {
-      this.setState({
-        flatCategory: res,
-      });
-
-      const categoryWithChildren = res.map((item) => {
-        return { ...item, children: [] };
-      });
-      categoryWithChildren.forEach((item) => {
-        if (item.parentId !== -1) {
-          categoryWithChildren.filter(
-            (searchParentItem) => { return searchParentItem.id === item.parentId; }
-          )[0].children.push(item);
-        }
-      });
-
-      const treeCategory = categoryWithChildren.filter(item => item.parentId === -1);
-      this.setState({
-        treeCategory,
-        categoryOrderIds: this.breadthFirstTraversal(treeCategory).map(item => item.id),
-      });
-    });
+    }
   }
 
   generateMenus = (inputCategory) => {
@@ -96,7 +61,9 @@ class WealthRecordDetail extends Component {
   renderRecordItems = (type) => {
     const { currentEditWealthRecordData } = this.state;
     return currentEditWealthRecordData
-      .filter((wealthRecordDataItem) => { return wealthRecordDataItem.category.type === type; })
+      .filter((wealthRecordDataItem) => {
+        return wealthRecordDataItem.category.type === type;
+      })
       .map((wealthRecordDataItem) => {
         return (
           <div className="record-item">
@@ -135,33 +102,39 @@ class WealthRecordDetail extends Component {
   }
 
   importLastRecordCategory = () => {
-    const { wealthRecords, flatCategory, categoryOrderIds } = this.state;
-    if (wealthRecords.length > 0) {
+    const { categoryOrderIds } = this.state;
+    const { wealthRecordArray, wealthCategoryFlatArray } = this.props;
+    if (wealthRecordArray.length > 0) {
       this.setState({
-        currentEditWealthRecordData: wealthRecords[wealthRecords.length - 1].wealthRecordItems.map(item => {
+        currentEditWealthRecordData: wealthRecordArray[wealthRecordArray.length - 1].wealthRecordItems.map(item => {
           return {
             categoryId: item.categoryId,
             value: 0,
-            category: flatCategory.filter(category => category.id === item.categoryId)[0],
+            category: wealthCategoryFlatArray.filter(category => category.id === item.categoryId)[0],
           };
-        }).sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); }),
+        }).sort((a, b) => {
+          return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId);
+        }),
       });
     }
   }
 
   loadTargetRecord = () => {
-    const { wealthRecords, flatCategory, categoryOrderIds, currentRecordId } = this.state;
-    const targetRecord = wealthRecords.filter(item => item.id === currentRecordId)[0];
-    if (wealthRecords.length > 0) {
+    const { categoryOrderIds, currentRecordId } = this.state;
+    const { wealthRecordArray, wealthCategoryFlatArray } = this.props;
+    const targetRecord = wealthRecordArray.filter(item => item.id === currentRecordId)[0];
+    if (wealthRecordArray.length > 0) {
       this.setState({
         selectedDate: new Date(targetRecord.date),
         currentEditWealthRecordData: targetRecord.wealthRecordItems.map(item => {
           return {
             categoryId: item.categoryId,
             value: parseFloat(item.value),
-            category: flatCategory.filter(category => category.id === item.categoryId)[0],
+            category: wealthCategoryFlatArray.filter(category => category.id === item.categoryId)[0],
           };
-        }).sort((a, b) => { return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId); }),
+        }).sort((a, b) => {
+          return categoryOrderIds.indexOf(a.categoryId) - categoryOrderIds.indexOf(b.categoryId);
+        }),
       });
     }
   }
@@ -175,8 +148,15 @@ class WealthRecordDetail extends Component {
   }
 
   render() {
-    const { submitButtonLoading,
-      treeCategory, currentEditWealthRecordData, flatCategory, selectedDate, currentRecordId } = this.state;
+    const {
+      submitButtonLoading,
+      currentEditWealthRecordData,
+      selectedDate, currentRecordId,
+    } = this.state;
+    const {
+      wealthCategoryTreeArray,
+      wealthCategoryFlatArray,
+    } = this.props;
 
     return (
       <div>
@@ -196,7 +176,7 @@ class WealthRecordDetail extends Component {
                   if (currentEditWealthRecordData.filter(item => item.categoryId === parseInt(selectedKeys)).length > 0) {
                     return Feedback.toast.prompt('类目不可以重复添加哦');
                   }
-                  const categoryDetail = flatCategory.filter(item => item.id === parseInt(selectedKeys))[0];
+                  const categoryDetail = wealthCategoryFlatArray.filter(item => item.id === parseInt(selectedKeys))[0];
                   this.setState({
                     currentEditWealthRecordData: [...currentEditWealthRecordData, {
                       categoryId: parseInt(selectedKeys),
@@ -207,10 +187,10 @@ class WealthRecordDetail extends Component {
                 }}
               >
                 <Menu.PopupItem label="资产" key={-1}>
-                  {this.generateMenus(treeCategory.filter(item => item.type === 'asset'))}
+                  {this.generateMenus(wealthCategoryTreeArray.filter(item => item.type === 'asset'))}
                 </Menu.PopupItem>
                 <Menu.PopupItem label="负债" key={-2}>
-                  {this.generateMenus(treeCategory.filter(item => item.type === 'debt'))}
+                  {this.generateMenus(wealthCategoryTreeArray.filter(item => item.type === 'debt'))}
                 </Menu.PopupItem>
               </Menu>
             </Dropdown>
@@ -278,4 +258,7 @@ class WealthRecordDetail extends Component {
   }
 }
 
-export default withRouter(WealthRecordDetail);
+export default connect(
+  ({ index, ...others }) => ({ ...index, ...others }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(withRouter(WealthRecordDetail));

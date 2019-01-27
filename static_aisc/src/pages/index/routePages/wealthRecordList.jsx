@@ -2,62 +2,21 @@ import React, { Component } from 'react';
 import Nav from '../../../components/nav';
 import { Table, Icon } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
-import exceed from 'utils/apimap';
 import { formatTimeStampToYYYYMMDD } from 'utils';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../actions';
 
-class Wealth extends Component {
+class WealthRecordList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      treeCategory: [],
-      wealthRecord: [],
     };
   }
 
   componentDidMount() {
-    this.fetchWealthRecord();
-    this.fetchWealthCategory();
-  }
-
-  fetchWealthRecord = () => {
-    exceed.fetch({
-      api: 'getWealthRecord',
-      data: {
-        uuid: window.WM_GLOBAL.user.uuid,
-      },
-    }).then((res) => {
-      // console.log(res);
-      this.setState({
-        wealthRecord: res,
-      });
-    });
-  }
-
-  fetchWealthCategory = () => {
-    exceed.fetch({
-      api: 'getWealthCategory',
-      data: {
-        uuid: window.WM_GLOBAL.user.uuid,
-      },
-    }).then((res) => {
-      this.setState({
-        flatCategory: res,
-      });
-      const categoryWithChildren = res.map((item) => {
-        return { ...item, children: [] };
-      });
-      categoryWithChildren.forEach((item) => {
-        if (item.parentId !== -1) {
-          // console.log(item);
-          categoryWithChildren.filter(
-            (searchParentItem) => { return searchParentItem.id === item.parentId; }
-          )[0].children.push(item);
-        }
-      });
-      this.setState({
-        treeCategory: categoryWithChildren.filter(item => item.parentId === -1),
-      });
-    });
+    this.props.fetchWealthRecordArray();
+    this.props.fetchWealthCategoryArray();
   }
 
   breadthFirstTraversal = (treeCategory) => {
@@ -69,9 +28,9 @@ class Wealth extends Component {
   }
 
   calcNetAsset = (wealthRecord) => {
-    const { flatCategory } = this.state;
+    const { wealthCategoryFlatArray } = this.props;
     const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (flatCategory.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
+      if (wealthCategoryFlatArray.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
         return sum + parseFloat(wealthRecordItems.value);
       } else {
         return sum - parseFloat(wealthRecordItems.value);
@@ -106,17 +65,17 @@ class Wealth extends Component {
   }
 
   render() {
-    const { wealthRecord, treeCategory } = this.state;
+    const { wealthRecordArray, wealthCategoryTreeArray } = this.props;
 
     // console.log('treeCategory', treeCategory);
-    const categories = this.breadthFirstTraversal(treeCategory);
+    const categories = this.breadthFirstTraversal(wealthCategoryTreeArray);
     return (
       <div>
         <Nav />
         <div className="page-wealth-record-list-wrap">
           <Table
             maxBodyHeight={window.innerHeight - 100}
-            dataSource={wealthRecord}
+            dataSource={wealthRecordArray}
             fixedHeader
           >
             <Table.Column
@@ -159,7 +118,7 @@ class Wealth extends Component {
             />
             {categories.map((category) => {
               const allRecordItems = [];
-              wealthRecord.forEach(singleWealthRecord => {
+              wealthRecordArray.forEach(singleWealthRecord => {
                 allRecordItems.push(...singleWealthRecord.wealthRecordItems);
               });
               if (allRecordItems.filter(recordItem => recordItem.categoryId === category.id).length === 0) {
@@ -186,4 +145,7 @@ class Wealth extends Component {
   }
 }
 
-export default withRouter(Wealth);
+export default connect(
+  ({ index, ...others }) => ({ ...index, ...others }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(withRouter(WealthRecordList));
