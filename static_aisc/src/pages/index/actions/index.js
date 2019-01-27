@@ -5,6 +5,11 @@ export const SET_WEALTH_CATEGORY_FLAT_ARRAY = 'SET_WEALTH_CATEGORY_FLAT_ARRAY';
 export const SET_WEALTH_CATEGORY_TREE_ARRAY = 'SET_WEALTH_CATEGORY_TREE_ARRAY';
 export const SET_WEALTH_CATEGORY_ORDER_ARRAY = 'SET_WEALTH_CATEGORY_ORDER_ARRAY';
 
+/**
+ * 广度优先遍历树，获得展开顺序
+ * @param inputTree
+ * @returns {Array}
+ */
 const breadthFirstTraversal = (inputTree) => {
   const result = [];
   inputTree.forEach((childNode) => {
