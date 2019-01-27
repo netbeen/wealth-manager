@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { wealthUtils } from 'utils';
 
 import * as actions from '../actions/index';
 
@@ -51,49 +52,15 @@ class Wealth extends Component {
     }
   }
 
-  calcNetAsset = (wealthRecord) => {
-    const { wealthCategoryFlatArray } = this.props;
-    if (wealthCategoryFlatArray.length === 0) {
-      return 0;
-    }
-    const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (wealthCategoryFlatArray.filter((category) => {
-        return category.id === wealthRecordItems.categoryId;
-      })[0].type === 'asset') {
-        return sum + parseFloat(wealthRecordItems.value);
-      } else {
-        return sum - parseFloat(wealthRecordItems.value);
-      }
-    }, 0);
-    return netAsset;
-  }
-
-  calcTotalAsset = (wealthRecord) => {
-    const { wealthCategoryFlatArray } = this.props;
-    if (wealthCategoryFlatArray.length === 0) {
-      return 0;
-    }
-    const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (wealthCategoryFlatArray.filter((category) => {
-        return category.id === wealthRecordItems.categoryId;
-      })[0].type === 'asset') {
-        return sum + parseFloat(wealthRecordItems.value);
-      } else {
-        return sum;
-      }
-    }, 0);
-    return netAsset;
-  }
-
   render() {
-    const { wealthRecordArray, wealthCategoryOrderArray } = this.props;
+    const { wealthRecordArray, wealthCategoryOrderArray, wealthCategoryFlatArray } = this.props;
 
     const categoryOrderIds = wealthCategoryOrderArray.map(item => item.id);
     const distributionData = [];
 
     wealthRecordArray.forEach((item) => {
-      item.netAsset = this.calcNetAsset(item); // 净资产
-      item.totalAsset = this.calcTotalAsset(item); // 总资产
+      item.netAsset = wealthUtils.sumAsset(item, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.NET_ASSET);
+      item.totalAsset = wealthUtils.sumAsset(item, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.TOTAL_ASSET);
 
       // 把出现过的类目放入数组
       item.wealthRecordItems.forEach((wealthRecordItem) => {

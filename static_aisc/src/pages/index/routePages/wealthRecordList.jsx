@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Nav from '../../../components/nav';
 import { Table, Icon } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
-import { formatTimeStampToYYYYMMDD } from 'utils';
+import { formatTimeStampToYYYYMMDD, wealthUtils } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
@@ -17,18 +17,6 @@ class WealthRecordList extends Component {
   componentDidMount() {
     this.props.fetchWealthRecordArray();
     this.props.fetchWealthCategoryArray();
-  }
-
-  calcNetAsset = (wealthRecord) => {
-    const { wealthCategoryFlatArray } = this.props;
-    const netAsset = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
-      if (wealthCategoryFlatArray.filter((category) => { return category.id === wealthRecordItems.categoryId; })[0].type === 'asset') {
-        return sum + parseFloat(wealthRecordItems.value);
-      } else {
-        return sum - parseFloat(wealthRecordItems.value);
-      }
-    }, 0);
-    return netAsset;
   }
 
   currencyFormatDiv = (value) => {
@@ -57,7 +45,7 @@ class WealthRecordList extends Component {
   }
 
   render() {
-    const { wealthRecordArray, wealthCategoryOrderArray } = this.props;
+    const { wealthRecordArray, wealthCategoryOrderArray, wealthCategoryFlatArray } = this.props;
 
     return (
       <div>
@@ -103,7 +91,9 @@ class WealthRecordList extends Component {
               align="center"
               width={100}
               cell={(value, index, record) => {
-                return this.currencyFormatDiv(this.calcNetAsset(record));
+                return this.currencyFormatDiv(
+                  wealthUtils.sumAsset(record, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.NET_ASSET),
+                );
               }}
             />
             {wealthCategoryOrderArray.map((category) => {

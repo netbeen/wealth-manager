@@ -46,5 +46,29 @@ export const datePlus = (inputDate, diff) => {
   return result;
 };
 
+export const wealthUtils = {
+  SUM_TYPE: {
+    NET_ASSET: Symbol('netAsset'),
+    TOTAL_ASSET: Symbol('totalAsset'),
+  },
+  sumAsset: (wealthRecord, wealthCategoryFlatArray, sumType = wealthUtils.SUM_TYPE.TOTAL_ASSET) => {
+    if (wealthCategoryFlatArray.length === 0) {
+      return 0;
+    }
+    const result = wealthRecord.wealthRecordItems.reduce((sum, wealthRecordItems) => {
+      if (wealthCategoryFlatArray.filter((category) => {
+        return category.id === wealthRecordItems.categoryId;
+      })[0].type === 'asset') {
+        return sum + parseFloat(wealthRecordItems.value);
+      } else {
+        return sumType === wealthUtils.SUM_TYPE.NET_ASSET
+          ? sum - parseFloat(wealthRecordItems.value)
+          : sum;
+      }
+    }, 0);
+    return result;
+  },
+};
+
 export const NameSpace = tools.namespace.bind(tools);
 export default tools;
