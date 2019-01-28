@@ -70,19 +70,27 @@ class WealthRecord extends Controller {
     await targetRecord.update({ date: new Date(date) });
     ctx.body = '1111';
   }
-  //
-  // async destroy() {
-  //   const ctx = this.ctx;
-  //   const id = toInt(ctx.params.id);
-  //   const user = await ctx.model.User.findById(id);
-  //   if (!user) {
-  //     ctx.status = 404;
-  //     return;
-  //   }
-  //
-  //   await user.destroy();
-  //   ctx.status = 200;
-  // }
+
+  async destroy() {
+    const { ctx } = this;
+    const recordId = parseInt(ctx.params.id, 10);
+
+    const targetRecordItems = await ctx.model.WealthRecordItem.findAll({
+      where: {
+        recordId,
+      },
+    });
+    targetRecordItems.forEach(async (targetRecordItem) => {
+      await targetRecordItem.destroy();
+    });
+    const targetRecord = await ctx.model.WealthRecord.findOne({
+      where: {
+        id: recordId,
+      },
+    });
+    await targetRecord.destroy();
+    ctx.body = '1111';
+  }
 }
 
 module.exports = WealthRecord;

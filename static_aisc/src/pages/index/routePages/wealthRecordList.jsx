@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Table, Icon } from '@alife/aisc';
+import { Table, Icon, Dialog } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { formatTimeStampToYYYYMMDD, wealthUtils } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import exceed from 'utils/apimap';
 import * as actions from '../actions';
 
 class WealthRecordList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      deleteRecordDialogVisible: false,
+      deletingRecordId: -1,
     };
   }
 
@@ -44,8 +47,20 @@ class WealthRecordList extends Component {
     return <div style={{ color }}>{currencyString}</div>;
   }
 
+  deleteRecord = (id) => {
+    exceed.fetch({
+      api: 'deleteWealthRecord',
+      params: {
+        id,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+  }
+
   render() {
     const { wealthRecordArray, wealthCategoryOrderArray, wealthCategoryFlatArray } = this.props;
+    const { deleteRecordDialogVisible, deletingRecordId } = this.state;
 
     return (
       <div>
@@ -64,7 +79,17 @@ class WealthRecordList extends Component {
               cell={(value, index, record) => {
                 return (
                   <div>
-                    <Icon style={{ marginRight: 12 }} size="small" type="ashbin" />
+                    <Icon
+                      onClick={() => {
+                        this.setState({
+                          deleteRecordDialogVisible: true,
+                          deletingRecordId: record.id,
+                        });
+                      }}
+                      style={{ marginRight: 12 }}
+                      size="small"
+                      type="ashbin"
+                    />
                     <Icon
                       onClick={() => {
                         this.props.history.push(`/wealth/record/${record.id}`);
@@ -120,6 +145,19 @@ class WealthRecordList extends Component {
             })}
           </Table>
         </div>
+        <Dialog
+          visible={deleteRecordDialogVisible}
+          onOk={() => {
+            this.deleteRecord(deletingRecordId);
+            this.setState({ deleteRecordDialogVisible: false });
+          }}
+          onCancel={() => { this.setState({ deleteRecordDialogVisible: false }); }}
+          size="normal"
+          onClose={() => { this.setState({ deleteRecordDialogVisible: false }); }}
+          title="确认删除记录"
+        >
+          <div>确认删除该条记录？</div>
+        </Dialog>
       </div>
     );
   }
