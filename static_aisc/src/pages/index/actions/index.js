@@ -42,11 +42,14 @@ export const fetchWealthCategoryArray = () => {
         uuid: window.WM_GLOBAL.user.uuid,
       },
     }).then((res) => {
+      if (res.code !== 200) {
+        return console.error('getWealthCategory 接口出错', res);
+      }
       dispatch({
         type: SET_WEALTH_CATEGORY_FLAT_ARRAY,
-        data: res,
+        data: res.result,
       });
-      const categoryWithChildren = res.map((item) => {
+      const categoryWithChildren = res.result.map((item) => {
         return { ...item, children: [] };
       });
       categoryWithChildren.forEach((item) => {

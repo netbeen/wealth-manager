@@ -21,12 +21,6 @@ class WealthRecord extends Controller {
     );
   }
 
-  // async show() {
-  //   const { ctx } = this;
-  //   ctx.body = await ctx.model.User.findById(toInt(ctx.params.id));
-  // }
-  //
-
   async create() {
     const { ctx } = this;
     const { date, recordItemList } = ctx.request.body;
