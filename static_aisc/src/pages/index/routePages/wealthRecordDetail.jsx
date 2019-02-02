@@ -103,7 +103,7 @@ class WealthRecordDetail extends Component {
         currentEditWealthRecordData: wealthRecordArray[wealthRecordArray.length - 1].wealthRecordItems.map(item => {
           return {
             categoryId: item.categoryId,
-            value: 0,
+            value: parseFloat(item.value) || null,
             category: wealthCategoryFlatArray.filter(category => category.id === item.categoryId)[0],
           };
         }).sort((a, b) => {
@@ -181,7 +181,7 @@ class WealthRecordDetail extends Component {
                 </Menu.PopupItem>
               </Menu>
             </Dropdown>
-            <Button type="normal" onClick={this.importLastRecordCategory} style={{ marginRight: 20 }}>导入历史类目</Button>
+            <Button type="normal" onClick={this.importLastRecordCategory} style={{ marginRight: 20 }}>导入历史记录</Button>
             <DatePicker
               value={selectedDate}
               hasClear={false}
