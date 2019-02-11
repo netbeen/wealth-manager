@@ -40,7 +40,7 @@ class FundController extends Controller {
       identifier: fundInfo.code,
       name: fundInfo.name,
       type: fundInfo.fundtype,
-      netValue: await ctx.service.fund.fetchNetValueByIdentifier(identifier),
+      accumulatedNetValue: await ctx.service.fund.fetchNetValueByIdentifier(identifier),
     };
     const existedFund = await ctx.model.Fund.findOne({
       where: {
