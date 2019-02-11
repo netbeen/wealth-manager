@@ -4,6 +4,7 @@
   "description": "Statistics for foundation investment.",
   "private": true,
   "dependencies": {
+    "async-request": "^1.2.0",
     "egg": "^2.3.0",
     "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.5.1",
