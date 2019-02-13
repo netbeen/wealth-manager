@@ -21,7 +21,11 @@ module.exports = {
       accumulated_net_value: {
         type: TEXT,
         allowNull: false,
-      }, // 基金净值
+      }, // 累计净值, 数组stringify后的结果
+      unit_net_value: {
+        type: TEXT,
+        allowNull: false,
+      }, // 单位净值，数组stringify后的结果
       created_at: DATE,
       updated_at: DATE,
     });

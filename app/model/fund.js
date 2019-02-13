@@ -20,6 +20,11 @@ module.exports = (app) => {
       field: 'accumulated_net_value',
       allowNull: false,
     }, // 基金净值
+    unitNetValue: {
+      field: 'unit_net_value',
+      type: TEXT,
+      allowNull: false,
+    }, // 单位净值
     created_at: DATE,
     updated_at: DATE,
   });

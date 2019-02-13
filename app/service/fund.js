@@ -14,9 +14,19 @@ class FundService extends Service {
     }
   }
 
-  async fetchNetValueByIdentifier(fundIdentifier) {
+  async fetchAccumulatedNetValueByIdentifier(fundIdentifier) {
     try {
-      const response = await request(`https://fund.10jqka.com.cn/${fundIdentifier}/json/jsondwjz.json`);
+      const response = await request(`https://fund.10jqka.com.cn/${fundIdentifier}/json/jsonljjz.json`);
+      return response.body.split('=')[1];
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
+  async fetchUnitNetValueByIdentifier(fundIdentifier) {
+    try {
+      const response = await request(`http://fund.10jqka.com.cn/${fundIdentifier}/json/jsondwjz.json`);
       return response.body.split('=')[1];
     } catch (e) {
       console.log(e);

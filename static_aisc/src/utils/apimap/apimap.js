@@ -31,6 +31,10 @@ const apimap = [
     id: 'deleteWealthRecord',
     url: '/wealthRecord/{{id}}',
     method: HTTP_METHOD.DELETE,
+  }, {
+    id: 'getFundData',
+    url: '/fundData/{{identifier}}',
+    method: HTTP_METHOD.GET,
   },
 ];
 

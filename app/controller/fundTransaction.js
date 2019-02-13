@@ -7,7 +7,7 @@ function toInt(str) {
   return parseInt(str, 10) || 0;
 }
 
-class FundController extends Controller {
+class FundTransactionController extends Controller {
   async index() {
     const { ctx } = this;
     const query = { limit: toInt(ctx.query.limit), offset: toInt(ctx.query.offset) };
@@ -25,14 +25,6 @@ class FundController extends Controller {
         identifier: ctx.params.id,
       },
     });
-    if (!existedFund) {
-      ctx.body = {
-        code: 404,
-        message: '',
-        result: null,
-      };
-      return;
-    }
     ctx.body = {
       code: 200,
       message: '',
@@ -49,7 +41,6 @@ class FundController extends Controller {
       name: fundInfo.name,
       type: fundInfo.fundtype,
       accumulatedNetValue: await ctx.service.fund.fetchAccumulatedNetValueByIdentifier(identifier),
-      unitNetValue: await ctx.service.fund.fetchUnitNetValueByIdentifier(identifier),
     };
     const existedFund = await ctx.model.Fund.findOne({
       where: {
@@ -72,4 +63,4 @@ class FundController extends Controller {
   }
 }
 
-module.exports = FundController;
+module.exports = FundTransactionController;

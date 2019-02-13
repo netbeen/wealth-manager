@@ -5,6 +5,7 @@ module.exports = (app) => {
   router.resources('/user', '/user', controller.user);
   router.resources('fundData', '/fundData', controller.fundData);
   router.resources('/wealthCategory', '/wealthCategory', controller.wealthCategory);
+  router.resources('fundTransaction', '/fundTransaction', controller.fundTransaction);
   router.resources('/wealthRecord', '/wealthRecord', controller.wealthRecord);
   router.get('/login/compete', controller.loginCompete.index);
   router.get('/login/logout', controller.loginCompete.logout);
