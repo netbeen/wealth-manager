@@ -37,7 +37,7 @@ const apimap = [
     method: HTTP_METHOD.GET,
   }, {
     id: 'postFundTransaction',
-    url: '/fundTransaction',
+    url: '/fund/{{identifier}}/transaction',
     method: HTTP_METHOD.POST,
   },
 ];

@@ -1,34 +1,13 @@
 // app/controller/user.js
 const { Controller } = require('egg');
 
-function toInt(str) {
-  if (typeof str === 'number') return str;
-  if (!str) return str;
-  return parseInt(str, 10) || 0;
-}
-
 class FundTransactionController extends Controller {
   async index() {
     const { ctx } = this;
-    const query = { limit: toInt(ctx.query.limit), offset: toInt(ctx.query.offset) };
     ctx.body = {
       code: 200,
       message: '',
-      result: await ctx.model.Fund.findAll(query),
-    };
-  }
-
-  async show() {
-    const { ctx } = this;
-    const existedFund = await ctx.model.Fund.findOne({
-      where: {
-        identifier: ctx.params.id,
-      },
-    });
-    ctx.body = {
-      code: 200,
-      message: '',
-      result: existedFund,
+      result: '????',
     };
   }
 
@@ -64,6 +43,27 @@ class FundTransactionController extends Controller {
       code: 200,
       message: '',
       result: newFundTransaction,
+    };
+  }
+
+  async getTransactionByFundIdentifier() {
+    const { ctx } = this;
+    const { identifier } = ctx.params;
+    const fundInfo = await ctx.model.Fund.findOne({
+      where: {
+        identifier,
+      },
+    });
+    const existedFundTransactions = await ctx.model.FundTransaction.findAll({
+      where: {
+        fundId: fundInfo.id,
+        userId: ctx.locals.user.id,
+      },
+    });
+    ctx.body = {
+      code: 200,
+      message: '',
+      result: existedFundTransactions,
     };
   }
 }

@@ -177,6 +177,9 @@ class FundDashboard extends Component {
                       };
                       exceed.fetch({
                         api: 'postFundTransaction',
+                        params: {
+                          identifier: fundData.identifier,
+                        },
                         data: {
                           identifier: fundData.identifier,
                           date: formatTimeStampToYYYYMMDD(fundTransactionDate),
