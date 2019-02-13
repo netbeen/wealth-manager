@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button, Form, Input, DatePicker, Card, Grid, Dropdown, Menu, Field, Checkbox } from '@alife/aisc';
+import { Button, Form, Input, DatePicker, Feedback, Card, Grid, Dropdown, Menu, Field, Checkbox } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { datePlus } from 'utils';
+import { datePlus, formatTimeStampToYYYYMMDD } from 'utils';
 import exceed from 'utils/apimap';
 
 import * as actions from '../actions/index';
@@ -159,7 +159,38 @@ class FundDashboard extends Component {
                   />
                 </Form.Item>
                 <Form.Item label="" {...formItemLayout} >
-                  <Button type="primary" onClick={() => {}}>确定</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      if (!fundData) {
+                        return Feedback.toast.error('无法获取基金信息');
+                      } else if (!this.field.getValue('value')) {
+                        return Feedback.toast.error('未填写交易金额');
+                      } else if (!this.field.getValue('handingFee')) {
+                        return Feedback.toast.error('未填写申购费用');
+                      }
+                      const sendData = {
+                        identifier: fundData.identifier,
+                        date: formatTimeStampToYYYYMMDD(fundTransactionDate),
+                        value: this.field.getValue('value'),
+                        handingFee: this.field.getValue('handingFee'),
+                      };
+                      exceed.fetch({
+                        api: 'postFundTransaction',
+                        data: {
+                          identifier: fundData.identifier,
+                          date: formatTimeStampToYYYYMMDD(fundTransactionDate),
+                          value: this.field.getValue('value'),
+                          handingFee: this.field.getValue('handingFee'),
+                        },
+                      }).then((res) => {
+                        console.log(res);
+                      });
+                      console.log(sendData);
+                    }}
+                  >
+                    确定
+                  </Button>
                 </Form.Item>
               </Form>
             </Col>

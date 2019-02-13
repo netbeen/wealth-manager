@@ -34,31 +34,36 @@ class FundTransactionController extends Controller {
 
   async create() {
     const { ctx } = this;
-    const { identifier } = ctx.request.body;
-    const fundInfo = await ctx.service.fund.fetchByIdentifier(identifier);
-    const formattedFundInfo = {
-      identifier: fundInfo.code,
-      name: fundInfo.name,
-      type: fundInfo.fundtype,
-      accumulatedNetValue: await ctx.service.fund.fetchAccumulatedNetValueByIdentifier(identifier),
-    };
-    const existedFund = await ctx.model.Fund.findOne({
+    const {
+      identifier, date, value, handingFee,
+    } = ctx.request.body;
+    const fundInfo = await ctx.model.Fund.findOne({
       where: {
-        identifier: formattedFundInfo.identifier,
+        identifier,
       },
     });
-    if (existedFund) {
-      console.log('fund update:', formattedFundInfo);
-      await existedFund.update(formattedFundInfo);
-    } else {
-      console.log('fund insert:', formattedFundInfo);
-      await ctx.model.Fund.create(formattedFundInfo);
+    if (!fundInfo) {
+      ctx.status = 201;
+      ctx.body = {
+        code: 400,
+        message: '基金信息不存在',
+        result: null,
+      };
+      return;
     }
+    const newFundTransaction = await ctx.model.FundTransaction.create({
+      fundId: fundInfo.id,
+      date: new Date(date),
+      value,
+      handlingFee: handingFee,
+      isValid: true,
+      userId: ctx.locals.user.id,
+    });
     ctx.status = 201;
     ctx.body = {
       code: 200,
       message: '',
-      result: formattedFundInfo,
+      result: newFundTransaction,
     };
   }
 }

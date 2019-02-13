@@ -3,7 +3,7 @@ module.exports = (app) => {
     DECIMAL, INTEGER, DATE, BOOLEAN,
   } = app.Sequelize;
 
-  return app.model.define('fund', {
+  return app.model.define('fundTransaction', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true }, // ID
     fundId: {
       type: INTEGER,
