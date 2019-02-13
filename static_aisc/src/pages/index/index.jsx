@@ -14,6 +14,7 @@ import WealthRecordList from './routePages/wealthRecordList';
 import Index from './routePages/index';
 import Error404 from './routePages/error404';
 import FundDashboard from './routePages/fundDashboard';
+import FundDetail from './routePages/fundDetail';
 import FundPurchase from './routePages/fundPurchase';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './index.scss';
@@ -33,6 +34,7 @@ ReactDom.render(
           <Route exact path="/login" component={Login} />
           <Route exact path="/fund" component={FundDashboard} />
           <Route exact path="/fund/purchase" component={FundPurchase} />
+          <Route exact path="/fund/:identifier" component={FundDetail} />
           <Route component={Error404} />
         </Switch>
       </div>
