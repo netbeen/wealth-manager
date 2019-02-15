@@ -7,3 +7,4 @@ run/*
 /config/secretConfig.js
 .DS_Store
 readme/.DS_Store
+typings/*

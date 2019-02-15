@@ -60,5 +60,8 @@
     "url": ""
   },
   "author": "YANG Yang",
-  "license": "GPL v3"
+  "license": "GPL v3",
+  "egg": {
+    "declarations": true
+  }
 }
