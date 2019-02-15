@@ -2,8 +2,15 @@
 const { Service } = require('egg');
 const request = require('async-request');
 
-
+/**
+ *
+ */
 class FundService extends Service {
+  /**
+   *
+   * @param fundIdentifier
+   * @returns {Promise<*>}
+   */
   async fetchByIdentifier(fundIdentifier) {
     try {
       const response = await request(`https://fund.10jqka.com.cn/data/client/myfund/${fundIdentifier}`);
@@ -14,6 +21,11 @@ class FundService extends Service {
     }
   }
 
+  /**
+   *
+   * @param fundIdentifier
+   * @returns {Promise<*>}
+   */
   async fetchAccumulatedNetValueByIdentifier(fundIdentifier) {
     try {
       const response = await request(`https://fund.10jqka.com.cn/${fundIdentifier}/json/jsonljjz.json`);
