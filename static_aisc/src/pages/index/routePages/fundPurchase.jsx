@@ -169,27 +169,27 @@ class FundDashboard extends Component {
                       } else if (!this.field.getValue('handingFee')) {
                         return Feedback.toast.error('未填写申购费用');
                       }
+                      console.log();
                       const sendData = {
                         identifier: fundData.identifier,
                         date: formatTimeStampToYYYYMMDD(fundTransactionDate),
-                        value: this.field.getValue('value'),
+                        value: (parseFloat(this.field.getValue('value')) - parseFloat(this.field.getValue('handingFee')))
+                          / parseFloat(this.getNetValue(
+                            fundData && fundData && fundData.unitNetValue,
+                            fundTransactionDate
+                          )), // 这里换算为交易份数
                         handingFee: this.field.getValue('handingFee'),
                       };
+                      console.log(sendData);
                       exceed.fetch({
                         api: 'postFundTransaction',
                         params: {
                           identifier: fundData.identifier,
                         },
-                        data: {
-                          identifier: fundData.identifier,
-                          date: formatTimeStampToYYYYMMDD(fundTransactionDate),
-                          value: this.field.getValue('value'),
-                          handingFee: this.field.getValue('handingFee'),
-                        },
+                        data: sendData,
                       }).then((res) => {
                         console.log(res);
                       });
-                      console.log(sendData);
                     }}
                   >
                     确定

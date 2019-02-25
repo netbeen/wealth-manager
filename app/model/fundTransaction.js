@@ -1,6 +1,6 @@
 module.exports = (app) => {
   const {
-    DECIMAL, INTEGER, DATE, BOOLEAN,
+    DECIMAL, INTEGER, DATE, DOUBLE,
   } = app.Sequelize;
 
   return app.model.define('fundTransaction', {
@@ -15,18 +15,18 @@ module.exports = (app) => {
       allowNull: false,
     }, // 交易日期
     value: {
-      type: DECIMAL(10, 2),
+      type: DOUBLE,
       allowNull: false,
-    }, // 交易金额
+    }, // 交易份数
     handlingFee: {
       field: 'handling_fee',
       type: DECIMAL(10, 2),
       allowNull: false,
     }, // 交易手续费
-    isValid: {
-      field: 'is_valid',
-      type: BOOLEAN,
-      allowNull: false,
+    redemptionDate: {
+      field: 'redemption_date',
+      type: DATE,
+      allowNull: true,
     }, // 是否已被卖出
     userId: {
       field: 'user_id',

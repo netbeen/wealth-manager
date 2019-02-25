@@ -9,7 +9,6 @@ import { wealthUtils } from 'utils';
 import exceed from 'utils/apimap';
 
 import * as actions from '../actions/index';
-import { SET_WEALTH_RECORD_ARRAY } from '../actions/index';
 
 
 // import { datePlus } from 'utils';
@@ -19,7 +18,10 @@ const { Row, Col } = Grid;
 class FundDashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      accumulatedNetValueArray: [],
+      transactionArray: [],
+    };
   }
 
   componentDidMount() {
@@ -49,7 +51,12 @@ class FundDashboard extends Component {
         identifier,
       },
     }).then((res) => {
-      console.log('res', res);
+      this.setState({
+        accumulatedNetValueArray: JSON.parse(res.result.accumulatedNetValue).map(item => [
+          new Date(`${item[0].slice(0, 4)}-${item[0].slice(4, 6)}-${item[0].slice(6, 8)}`),
+          parseFloat(item[1]),
+        ]),
+      });
     });
   }
 
@@ -61,6 +68,17 @@ class FundDashboard extends Component {
       },
     }).then((res) => {
       console.log('res', res);
+      this.setState({
+        transactionArray: res.result.map(item => {
+          return {
+            id: item.id,
+            date: new Date(item.date),
+            handlingFee: parseFloat(item.handlingFee),
+            redemptionDate: item.redemptionDate ? new Date(item.redemptionDate) : null,
+            value: item.value,
+          };
+        }).sort((a, b) => { return b.valueOf() - a.valueOf(); }),
+      });
     });
   }
 
@@ -81,6 +99,10 @@ class FundDashboard extends Component {
   // }
 
   render() {
+    const { accumulatedNetValueArray, transactionArray } = this.state;
+    console.log('accumulatedNetValueArray', accumulatedNetValueArray);
+    console.log('transactionArray', transactionArray);
+
     const lineChartConfig = {
       padding: [40, 30, 24, 35],
       spline: true,
@@ -88,20 +110,35 @@ class FundDashboard extends Component {
         type: 'time',
         mask: 'YYYY-MM-DD',
       },
-      // guide: {
-      //   area: guideAreas,
-      // },
     };
 
-    const data = [
-      {
-        name: '机房1',
-        data: [[1483372800000, 1892], [1483459200000, 7292], [1483545600000, 5714], [1483632000000, 5354], [1483718400000, 2014], [1483804800000, 22], [1483891200000, 11023], [1483977600000, 5218], [1484064000000, 8759], [1484150400000, 9981], [1484236800000, 4533], [1484323200000, 11398], [1484409600000, 1064], [1484496000000, 6494]],
-      }, {
-        name: '机房2',
-        data: [[1483372800000, 11751], [1483459200000, 4078], [1483545600000, 2175], [1483632000000, 12048], [1483718400000, 1748], [1483804800000, 10494], [1483891200000, 9597], [1483977600000, 4788], [1484064000000, 2085], [1484150400000, 492], [1484236800000, 2965], [1484323200000, 4246], [1484409600000, 2160], [1484496000000, 11877]],
-      },
-    ];
+    let data = [];
+    if (transactionArray.length !== 0 && accumulatedNetValueArray.length !== 0) {
+      data = [
+        {
+          name: '累计净值',
+          data: accumulatedNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]]),
+        },
+      ];
+
+      console.log('data', data);
+      const averageCostArray = [];
+      let totalCost = 0; // 总成本
+      let totalCount = 0; // 总份数
+      data[0].data.forEach(item => {
+        const transactionOnThatDay = transactionArray.filter(transaction => transaction.date.valueOf() === item[0].valueOf());
+        if (transactionOnThatDay.length !== 0) {
+          console.log(transactionOnThatDay[0]);
+          totalCost += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
+          totalCount += transactionOnThatDay[0].value;
+        }
+        averageCostArray.push([item[0], totalCount === 0 ? 0 : totalCost / totalCount]);
+      });
+      data.push({
+        name: '平均成本',
+        data: averageCostArray,
+      });
+    }
 
     return (
       <div>

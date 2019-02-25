@@ -2,7 +2,7 @@ module.exports = {
   // 在执行数据库升级时调用的函数，创建 fundTransactions 表
   up: async (queryInterface, Sequelize) => {
     const {
-      INTEGER, DATE, DECIMAL, BOOLEAN,
+      INTEGER, DATE, DECIMAL, DOUBLE,
     } = Sequelize;
     await queryInterface.createTable('fundTransactions', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true }, // ID
@@ -15,15 +15,15 @@ module.exports = {
         allowNull: false,
       }, // 交易日期
       value: {
-        type: DECIMAL(10, 2),
+        type: DOUBLE,
         allowNull: false,
       }, // 交易金额
       handling_fee: {
         type: DECIMAL(10, 2),
         allowNull: false,
       }, // 交易手续费
-      is_valid: {
-        type: BOOLEAN,
+      redemption_date: {
+        type: DATE,
         allowNull: false,
       }, // 是否已被卖出
       user_id: {
