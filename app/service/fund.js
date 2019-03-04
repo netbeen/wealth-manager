@@ -6,6 +6,25 @@ const request = require('async-request');
  *
  */
 class FundService extends Service {
+  async saveFundDataToDB(formattedFundInfo) {
+    const existedFund = await this.ctx.model.Fund.findOne({
+      where: {
+        identifier: formattedFundInfo.identifier,
+      },
+    });
+    if (existedFund) {
+      console.log('fund update:', {
+        ...formattedFundInfo,
+        accumulatedNetValue: `[${formattedFundInfo.accumulatedNetValue.length}]`,
+        unitNetValue: `[${formattedFundInfo.accumulatedNetValue.length}]`,
+      });
+      await existedFund.update(formattedFundInfo);
+    } else {
+      console.log('fund insert:', { ...formattedFundInfo, accumulatedNetValue: 'more...', unitNetValue: 'more...' });
+      await this.ctx.model.Fund.create(formattedFundInfo);
+    }
+  }
+
   /**
    *
    * @param fundIdentifier

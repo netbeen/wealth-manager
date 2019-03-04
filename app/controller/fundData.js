@@ -51,18 +51,7 @@ class FundController extends Controller {
       accumulatedNetValue: await ctx.service.fund.fetchAccumulatedNetValueByIdentifier(identifier),
       unitNetValue: await ctx.service.fund.fetchUnitNetValueByIdentifier(identifier),
     };
-    const existedFund = await ctx.model.Fund.findOne({
-      where: {
-        identifier: formattedFundInfo.identifier,
-      },
-    });
-    if (existedFund) {
-      console.log('fund update:', formattedFundInfo);
-      await existedFund.update(formattedFundInfo);
-    } else {
-      console.log('fund insert:', formattedFundInfo);
-      await ctx.model.Fund.create(formattedFundInfo);
-    }
+    await ctx.service.fund.saveFundDataToDB(formattedFundInfo);
     ctx.status = 201;
     ctx.body = {
       code: 200,
