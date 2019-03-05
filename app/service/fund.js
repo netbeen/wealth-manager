@@ -19,14 +19,14 @@ class FundService extends Service {
     });
     let result = null;
     if (existedFund) {
-      console.log('fund update:', {
+      this.ctx.logger.info('fund update:', {
         ...formattedFundInfo,
         accumulatedNetValue: `[${formattedFundInfo.accumulatedNetValue.length}]`,
         unitNetValue: `[${formattedFundInfo.accumulatedNetValue.length}]`,
       });
       result = await existedFund.update(formattedFundInfo);
     } else {
-      console.log('fund insert:', { ...formattedFundInfo, accumulatedNetValue: 'more...', unitNetValue: 'more...' });
+      this.ctx.logger.info('fund insert:', { ...formattedFundInfo, accumulatedNetValue: 'more...', unitNetValue: 'more...' });
       result = await this.ctx.model.Fund.create(formattedFundInfo);
     }
     return result;
