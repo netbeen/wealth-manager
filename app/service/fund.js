@@ -6,27 +6,34 @@ const request = require('async-request');
  *
  */
 class FundService extends Service {
+  /**
+   * 保存基金信息
+   * @param formattedFundInfo 格式化后的基金信息
+   * @returns {Promise<*>}
+   */
   async saveFundDataToDB(formattedFundInfo) {
     const existedFund = await this.ctx.model.Fund.findOne({
       where: {
         identifier: formattedFundInfo.identifier,
       },
     });
+    let result = null;
     if (existedFund) {
       console.log('fund update:', {
         ...formattedFundInfo,
         accumulatedNetValue: `[${formattedFundInfo.accumulatedNetValue.length}]`,
         unitNetValue: `[${formattedFundInfo.accumulatedNetValue.length}]`,
       });
-      await existedFund.update(formattedFundInfo);
+      result = await existedFund.update(formattedFundInfo);
     } else {
       console.log('fund insert:', { ...formattedFundInfo, accumulatedNetValue: 'more...', unitNetValue: 'more...' });
-      await this.ctx.model.Fund.create(formattedFundInfo);
+      result = await this.ctx.model.Fund.create(formattedFundInfo);
     }
+    return result;
   }
 
   /**
-   *
+   * 根据基金id爬取基金净值等信息
    * @param fundIdentifier
    * @returns {Promise<*>}
    */

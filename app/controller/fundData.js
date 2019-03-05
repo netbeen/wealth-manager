@@ -51,12 +51,12 @@ class FundController extends Controller {
       accumulatedNetValue: await ctx.service.fund.fetchAccumulatedNetValueByIdentifier(identifier),
       unitNetValue: await ctx.service.fund.fetchUnitNetValueByIdentifier(identifier),
     };
-    await ctx.service.fund.saveFundDataToDB(formattedFundInfo);
+    const result = await ctx.service.fund.saveFundDataToDB(formattedFundInfo);
     ctx.status = 201;
     ctx.body = {
       code: 200,
       message: '',
-      result: formattedFundInfo,
+      result,
     };
   }
 }
