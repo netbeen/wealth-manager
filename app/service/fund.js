@@ -42,7 +42,7 @@ class FundService extends Service {
       const response = await request(`https://fund.10jqka.com.cn/data/client/myfund/${fundIdentifier}`);
       return JSON.parse(response.body).data[0];
     } catch (e) {
-      console.log(e);
+      this.ctx.logger.info(e);
       return null;
     }
   }
@@ -57,7 +57,7 @@ class FundService extends Service {
       const response = await request(`https://fund.10jqka.com.cn/${fundIdentifier}/json/jsonljjz.json`);
       return response.body.split('=')[1];
     } catch (e) {
-      console.log(e);
+      this.ctx.logger.info(e);
       return null;
     }
   }
@@ -67,7 +67,7 @@ class FundService extends Service {
       const response = await request(`http://fund.10jqka.com.cn/${fundIdentifier}/json/jsondwjz.json`);
       return response.body.split('=')[1];
     } catch (e) {
-      console.log(e);
+      this.ctx.logger.info(e);
       return null;
     }
   }

@@ -169,7 +169,6 @@ class FundDashboard extends Component {
                       } else if (!this.field.getValue('handingFee')) {
                         return Feedback.toast.error('未填写申购费用');
                       }
-                      console.log();
                       const sendData = {
                         identifier: fundData.identifier,
                         date: formatTimeStampToYYYYMMDD(fundTransactionDate),
