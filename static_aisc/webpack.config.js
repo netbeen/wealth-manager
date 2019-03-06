@@ -4,7 +4,6 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const TerserPlugin = require('terser-webpack-plugin');
 const _ = require('lodash');

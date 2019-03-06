@@ -63,7 +63,6 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.1.0",
     "sass-loader": "^7.1.0",
-    "uglifyjs-webpack-plugin": "^2.1.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
