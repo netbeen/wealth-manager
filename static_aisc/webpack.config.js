@@ -4,8 +4,9 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
+const TerserPlugin = require('terser-webpack-plugin');
 const _ = require('lodash');
 
 const cwd = process.cwd();
@@ -90,23 +91,47 @@ module.exports = function (env) {
       '@alife/aisc': 'var Aisc',
       '@alife/aisc-widgets': 'var AiscWidgets',
     },
+    optimization: {
+      minimizer: [new TerserPlugin()],
+      // splitChunks: {
+      //   chunks: 'async',
+      //   minSize: 30000,
+      //   maxSize: 0,
+      //   minChunks: 1,
+      //   maxAsyncRequests: 5,
+      //   maxInitialRequests: 3,
+      //   automaticNameDelimiter: '~',
+      //   name: true,
+      //   cacheGroups: {
+      //     vendors: {
+      //       test: /[\\/]node_modules[\\/]/,
+      //       priority: -10,
+      //     },
+      //     default: {
+      //       minChunks: 2,
+      //       priority: -20,
+      //       reuseExistingChunk: true,
+      //     },
+      //   },
+      // },
+    },
     plugins: [
       new ExtractTextPlugin({
         filename: '[name].bundle.css',
         allChunks: true,
       }),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        // minChunks: 3
-        minChunks: (module, count) => {
-          // This prevents stylesheet resources with the .css or .scss extension
-          // from being moved from their original chunk to the vendor chunk
-          if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
-            return false;
-          }
-          return count >= 3;
-        },
-      }),
+      // new webpack.optimize.CommonsChunkPlugin({
+      //   name: 'vendor',
+      //   // minChunks: 3
+      //   minChunks: (module, count) => {
+      //     // This prevents stylesheet resources with the .css or .scss extension
+      //     // from being moved from their original chunk to the vendor chunk
+      //     if (module.resource && /^.*\.(css|scss)$/.test(module.resource)) {
+      //       return false;
+      //     }
+      //     return count >= 3;
+      //   },
+      // }),
       // 进度插件
       new webpack.ProgressPlugin((percentage, msg) => {
         const stream = process.stderr;
@@ -132,15 +157,15 @@ module.exports = function (env) {
 
   if (env.production) {
     config.plugins.push(
-      new UglifyJsPlugin({
-        sourceMap: true,
-        minimize: true,
-        compress: {
-          unused: true,
-          warnings: true,
-        },
-        // beautify: true // 控制是否压缩
-      })
+      // new UglifyJsPlugin({
+      //   sourceMap: true,
+      //   minimize: true,
+      //   compress: {
+      //     unused: true,
+      //     warnings: true,
+      //   },
+      //   // beautify: true // 控制是否压缩
+      // })
     );
     config.plugins.push(
       new webpack.DefinePlugin({
