@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button, Card, Grid, Dropdown, Menu } from '@alife/aisc';
+import { Button, Grid } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
-import { Wline, Wpie } from '@alife/aisc-widgets';
+import { Wline } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { wealthUtils } from 'utils';
+// import { wealthUtils } from 'utils';
 import exceed from 'utils/apimap';
 
 import * as actions from '../actions/index';
@@ -62,7 +62,7 @@ class FundDashboard extends Component {
 
   fetchFundTransaction = (identifier) => {
     exceed.fetch({
-      api: 'getFundTransaction',
+      api: 'getFundTransactionByIdentifier',
       params: {
         identifier,
       },
@@ -154,15 +154,6 @@ class FundDashboard extends Component {
               >
                 记录申购
               </Button>
-              <span>切换视角</span>
-              <Dropdown triggerButton={<Button type="normal">下拉菜单</Button>} triggerType="click">
-                <Menu>
-                  <Menu.Item key="1">基金投资概览</Menu.Item>
-                  <Menu.Item disabled key="2">选项 2</Menu.Item>
-                  <Menu.Item >选项 3</Menu.Item>
-                  <Menu.Item >选项 4</Menu.Item>
-                </Menu>
-              </Dropdown>
             </Col>
           </Row>
           <Row type="wrap" >

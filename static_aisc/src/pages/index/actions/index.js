@@ -4,6 +4,7 @@ export const SET_WEALTH_RECORD_ARRAY = 'SET_WEALTH_RECORD_ARRAY';
 export const SET_WEALTH_CATEGORY_FLAT_ARRAY = 'SET_WEALTH_CATEGORY_FLAT_ARRAY';
 export const SET_WEALTH_CATEGORY_TREE_ARRAY = 'SET_WEALTH_CATEGORY_TREE_ARRAY';
 export const SET_WEALTH_CATEGORY_ORDER_ARRAY = 'SET_WEALTH_CATEGORY_ORDER_ARRAY';
+export const SET_EXISTED_FUND = 'SET_EXISTED_FUND';
 
 /**
  * 广度优先遍历树，获得展开顺序
@@ -30,6 +31,26 @@ export const fetchWealthRecordArray = () => {
         type: SET_WEALTH_RECORD_ARRAY,
         data: res,
       });
+    }).fail(console.log);
+  };
+};
+
+/**
+ * 获取当前用户所有的基金交易记录
+ * @returns {Function}
+ */
+export const getFundByTransaction = () => {
+  return (dispatch) => {
+    exceed.fetch({
+      api: 'getFundByTransaction',
+    }).then((res) => {
+      console.log(res.result);
+      if (res.code === 200) {
+        dispatch({
+          type: SET_EXISTED_FUND,
+          data: res.result,
+        });
+      }
     }).fail(console.log);
   };
 };

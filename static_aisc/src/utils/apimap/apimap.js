@@ -36,8 +36,12 @@ const apimap = [
     url: '/fundData/{{identifier}}',
     method: HTTP_METHOD.GET,
   }, {
-    id: 'getFundTransaction',
+    id: 'getFundTransactionByIdentifier',
     url: '/fund/{{identifier}}/transaction',
+    method: HTTP_METHOD.GET,
+  }, {
+    id: 'getFundByTransaction',
+    url: '/fund/getFundByTransaction',
     method: HTTP_METHOD.GET,
   }, {
     id: 'postFundTransaction',

@@ -14,7 +14,7 @@
     "eslint-output": "./node_modules/eslint/bin/eslint.js -f html --ext .jsx,.js ./src/ > eslint-result.html",
     "ci-eslint": "./node_modules/.bin/eslint -o eslint.json -f json ./",
     "ci-log:eslint": "./node_modules/.bin/ci-log -r eslint -p ./eslint.json",
-    "precommit": "lint-staged"
+    "precommit": ""
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": "eslint-check"

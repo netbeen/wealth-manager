@@ -46,6 +46,26 @@ class FundTransactionController extends Controller {
     };
   }
 
+  async getFundByTransaction() {
+    const { ctx } = this;
+    const existedFundTransactions = await ctx.model.FundTransaction.findAll({
+      where: {
+        userId: ctx.locals.user.id,
+      },
+    });
+    const fundIds = Array.from(new Set((existedFundTransactions).map(item => item.fundId)));
+    const fundInfoArray = await ctx.model.Fund.findAll({
+      where: {
+        id: fundIds,
+      },
+    });
+    ctx.body = {
+      code: 200,
+      message: '',
+      result: fundInfoArray,
+    };
+  }
+
   async getTransactionByFundIdentifier() {
     const { ctx } = this;
     const { identifier } = ctx.params;
