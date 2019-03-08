@@ -73,17 +73,25 @@ function FundDashboard(props) {
   };
 
   const calcChartData = () => {
-    if (transactionArray.length !== 0 && accumulatedNetValueArray.length !== 0 && unitNetValueArray.length !== 0) {
-      const _accumulatedNetValueArrayChartData = accumulatedNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]]);
+    if (transactionArray.length !== 0
+      && accumulatedNetValueArray.length !== 0
+      && unitNetValueArray.length !== 0
+    ) {
+      const _accumulatedNetValueArrayChartData = accumulatedNetValueArray
+        .filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf())
+        .map(item => [item[0].valueOf(), item[1]]);
       setAccumulatedNetValueArrayChartData(_accumulatedNetValueArrayChartData);
-      const _unitNetValueArrayFromFirstTransactionDay = unitNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]]);
+      const _unitNetValueArrayFromFirstTransactionDay = unitNetValueArray
+        .filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf())
+        .map(item => [item[0].valueOf(), item[1]]);
 
       const averageCostArray = [];
       let _totalCost = 0; // 总成本
       let _totalCostWithAccumulatedNetValue = 0;
       let _totalCount = 0; // 总份数
       _accumulatedNetValueArrayChartData.forEach((item, index) => {
-        const transactionOnThatDay = transactionArray.filter(transaction => transaction.date.valueOf() === item[0].valueOf());
+        const transactionOnThatDay = transactionArray
+          .filter(transaction => transaction.date.valueOf() === item[0].valueOf());
         const unitValueItemOnThatDay = _unitNetValueArrayFromFirstTransactionDay[index];
 
         if (transactionOnThatDay.length !== 0) {
@@ -91,7 +99,9 @@ function FundDashboard(props) {
           _totalCostWithAccumulatedNetValue += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
           _totalCount += transactionOnThatDay[0].value;
         }
-        averageCostArray.push([item[0], _totalCostWithAccumulatedNetValue === 0 ? 0 : _totalCostWithAccumulatedNetValue / _totalCount]);
+        averageCostArray.push([item[0], _totalCostWithAccumulatedNetValue === 0
+          ? 0
+          : _totalCostWithAccumulatedNetValue / _totalCount]);
       });
 
       const _totalNetValue = unitNetValueArray[unitNetValueArray.length - 1][1] * _totalCount;
