@@ -19,13 +19,16 @@ class FundDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      fundName: '',
+      fundIdentifier: this.props.match.params.identifier,
+      fundType: '',
       accumulatedNetValueArray: [],
       transactionArray: [],
     };
   }
 
   componentDidMount() {
-    this.initPage(this.props.match.params.identifier);
+    this.initPage(this.state.fundIdentifier);
   }
 
   componentWillMount() {
@@ -99,9 +102,7 @@ class FundDashboard extends Component {
   // }
 
   render() {
-    const { accumulatedNetValueArray, transactionArray } = this.state;
-    console.log('accumulatedNetValueArray', accumulatedNetValueArray);
-    console.log('transactionArray', transactionArray);
+    const { accumulatedNetValueArray, transactionArray, fundIdentifier } = this.state;
 
     const lineChartConfig = {
       padding: [40, 30, 24, 35],
@@ -121,7 +122,6 @@ class FundDashboard extends Component {
         },
       ];
 
-      console.log('data', data);
       const averageCostArray = [];
       let totalCost = 0; // 总成本
       let totalCount = 0; // 总份数
@@ -149,7 +149,7 @@ class FundDashboard extends Component {
               <Button
                 type="primary"
                 onClick={() => {
-                  this.props.history.push('/fund/purchase');
+                  this.props.history.push(`/fund/${fundIdentifier}/purchase`);
                 }}
               >
                 记录申购

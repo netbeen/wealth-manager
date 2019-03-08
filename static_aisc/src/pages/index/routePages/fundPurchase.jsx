@@ -20,9 +20,30 @@ class FundDashboard extends Component {
       fundTransactionDate: datePlus(new Date(), -1),
     };
     this.field = new Field(this);
+    if (this.props.match.params.identifier) {
+      this.field.setValue('identifier', this.props.match.params.identifier);
+    }
   }
 
   componentDidMount() {
+    if (this.props.match.params.identifier) {
+      exceed.fetch({
+        api: 'getFundData',
+        params: {
+          identifier: this.props.match.params.identifier,
+        },
+      }).then((res) => {
+        if (res.code !== 200) {
+          this.setState({
+            fundData: null,
+          });
+          return;
+        }
+        this.setState({
+          fundData: res.result,
+        });
+      });
+    }
   }
 
   componentWillMount() {
@@ -87,7 +108,7 @@ class FundDashboard extends Component {
 
   render() {
     const { fundData, fundTransactionDate } = this.state;
-    const init = this.field.init;
+    const { init } = this.field;
 
     const formItemLayout = {
       labelCol: {
@@ -107,6 +128,7 @@ class FundDashboard extends Component {
               <Form size="large" direction="ver" field={this.field}>
                 <Form.Item required hasFeedback label="基金代码" {...formItemLayout}>
                   <Input
+                    disabled={typeof this.props.match.params.identifier !== 'undefined'}
                     {...init(
                       'identifier',
                       {
@@ -179,7 +201,6 @@ class FundDashboard extends Component {
                           )), // 这里换算为交易份数
                         handingFee: this.field.getValue('handingFee'),
                       };
-                      console.log(sendData);
                       exceed.fetch({
                         api: 'postFundTransaction',
                         params: {
@@ -188,10 +209,52 @@ class FundDashboard extends Component {
                         data: sendData,
                       }).then((res) => {
                         console.log(res);
+                        if (res.code === 200) {
+                          if (this.props.match.params.identifier) {
+                            this.props.history.push(`/fund/${this.props.match.params.identifier}`);
+                          } else {
+                            this.props.history.push('/fund');
+                          }
+                        }
                       });
                     }}
                   >
                     确定
+                  </Button>
+                  <Button
+                    type="normal"
+                    onClick={() => {
+                      if (!fundData) {
+                        return Feedback.toast.error('无法获取基金信息');
+                      } else if (!this.field.getValue('value')) {
+                        return Feedback.toast.error('未填写交易金额');
+                      } else if (!this.field.getValue('handingFee')) {
+                        return Feedback.toast.error('未填写申购费用');
+                      }
+                      const sendData = {
+                        identifier: fundData.identifier,
+                        date: formatTimeStampToYYYYMMDD(fundTransactionDate),
+                        value: (parseFloat(this.field.getValue('value')) - parseFloat(this.field.getValue('handingFee')))
+                          / parseFloat(this.getNetValue(
+                            fundData && fundData && fundData.unitNetValue,
+                            fundTransactionDate
+                          )), // 这里换算为交易份数
+                        handingFee: this.field.getValue('handingFee'),
+                      };
+                      exceed.fetch({
+                        api: 'postFundTransaction',
+                        params: {
+                          identifier: fundData.identifier,
+                        },
+                        data: sendData,
+                      }).then((res) => {
+                        if (res.code === 200) {
+                          return Feedback.toast.success('操作成功');
+                        }
+                      });
+                    }}
+                  >
+                    再记一笔
                   </Button>
                 </Form.Item>
               </Form>

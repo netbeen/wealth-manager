@@ -34,6 +34,7 @@ ReactDom.render(
           <Route exact path="/login" component={Login} />
           <Route exact path="/fund" component={FundDashboard} />
           <Route exact path="/fund/purchase" component={FundPurchase} />
+          <Route exact path="/fund/:identifier/purchase" component={FundPurchase} />
           <Route exact path="/fund/:identifier" component={FundDetail} />
           <Route component={Error404} />
         </Switch>
