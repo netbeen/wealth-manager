@@ -80,6 +80,7 @@ function FundDashboard(props) {
 
       const averageCostArray = [];
       let _totalCost = 0; // 总成本
+      let _totalCostWithAccumulatedNetValue = 0;
       let _totalCount = 0; // 总份数
       _accumulatedNetValueArrayChartData.forEach((item, index) => {
         const transactionOnThatDay = transactionArray.filter(transaction => transaction.date.valueOf() === item[0].valueOf());
@@ -87,9 +88,10 @@ function FundDashboard(props) {
 
         if (transactionOnThatDay.length !== 0) {
           _totalCost += transactionOnThatDay[0].value * unitValueItemOnThatDay[1] + transactionOnThatDay[0].handlingFee;
+          _totalCostWithAccumulatedNetValue += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
           _totalCount += transactionOnThatDay[0].value;
         }
-        averageCostArray.push([item[0], _totalCount === 0 ? 0 : _totalCost / _totalCount]);
+        averageCostArray.push([item[0], _totalCostWithAccumulatedNetValue === 0 ? 0 : _totalCostWithAccumulatedNetValue / _totalCount]);
       });
 
       const _totalNetValue = unitNetValueArray[unitNetValueArray.length - 1][1] * _totalCount;
