@@ -65,25 +65,13 @@ function FundDashboard(props) {
                 }}
               />
               <Table.Column
-                title="当前净值"
+                title="总净值"
                 align="center"
                 width={80}
                 cell={() => {
                   return (
                     <div>
                       -
-                    </div>
-                  );
-                }}
-              />
-              <Table.Column
-                title="累计收益"
-                align="center"
-                width={80}
-                cell={() => {
-                  return (
-                    <div>
-                        -
                     </div>
                   );
                 }}
