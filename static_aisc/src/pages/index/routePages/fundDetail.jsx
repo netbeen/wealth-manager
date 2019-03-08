@@ -11,13 +11,19 @@ import * as actions from '../actions/index';
 
 const { Row, Col } = Grid;
 
+const MILLISECOND_PER_DAY = 1000 * 3600 * 24;
 
 function FundDashboard(props) {
   const [fundName, setFundName] = useState('');
-  const [fundIdentifier, setFundIdentifier] = useState(props.match.params.identifier);
+  const [fundIdentifier] = useState(props.match.params.identifier);
   const [fundType, setFundType] = useState('');
   const [totalCost, setTotalCost] = useState(0);
+  const [totalProfit, setTotalProfit] = useState(0);
+  const [profitRate, setProfitRate] = useState(0);
+  const [profitRatePerYear, setProfitRatePerYear] = useState(0);
+  const [totalNetValue, setTotalNetValue] = useState(0);
   const [accumulatedNetValueArray, setAccumulatedNetValueArray] = useState([]);
+  const [unitNetValueArray, setUnitNetValueArray] = useState([]);
   const [transactionArray, setTransactionArray] = useState([]);
   const [accumulatedNetValueArrayChartData, setAccumulatedNetValueArrayChartData] = useState([]);
   const [averageCostArrayChartData, setAverageCostArrayChartData] = useState([]);
@@ -37,6 +43,10 @@ function FundDashboard(props) {
       setFundName(res.result.name);
       setFundType(res.result.type);
       setAccumulatedNetValueArray(JSON.parse(res.result.accumulatedNetValue).map(item => [
+        new Date(`${item[0].slice(0, 4)}-${item[0].slice(4, 6)}-${item[0].slice(6, 8)}`),
+        parseFloat(item[1]),
+      ]));
+      setUnitNetValueArray(JSON.parse(res.result.unitNetValue).map(item => [
         new Date(`${item[0].slice(0, 4)}-${item[0].slice(4, 6)}-${item[0].slice(6, 8)}`),
         parseFloat(item[1]),
       ]));
@@ -63,24 +73,34 @@ function FundDashboard(props) {
   };
 
   const calcChartData = () => {
-    if (transactionArray.length !== 0 && accumulatedNetValueArray.length !== 0) {
-
-      const _accumulatedNetValueArrayChartData = accumulatedNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]])
+    if (transactionArray.length !== 0 && accumulatedNetValueArray.length !== 0 && unitNetValueArray.length !== 0) {
+      const _accumulatedNetValueArrayChartData = accumulatedNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]]);
       setAccumulatedNetValueArrayChartData(_accumulatedNetValueArrayChartData);
+      const _unitNetValueArrayFromFirstTransactionDay = unitNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]]);
 
       const averageCostArray = [];
       let _totalCost = 0; // 总成本
       let _totalCount = 0; // 总份数
-      _accumulatedNetValueArrayChartData.forEach(item => {
+      _accumulatedNetValueArrayChartData.forEach((item, index) => {
         const transactionOnThatDay = transactionArray.filter(transaction => transaction.date.valueOf() === item[0].valueOf());
+        const unitValueItemOnThatDay = _unitNetValueArrayFromFirstTransactionDay[index];
+
         if (transactionOnThatDay.length !== 0) {
-          _totalCost += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
+          _totalCost += transactionOnThatDay[0].value * unitValueItemOnThatDay[1] + transactionOnThatDay[0].handlingFee;
           _totalCount += transactionOnThatDay[0].value;
         }
         averageCostArray.push([item[0], _totalCount === 0 ? 0 : _totalCost / _totalCount]);
       });
+
+      const _totalNetValue = unitNetValueArray[unitNetValueArray.length - 1][1] * _totalCount;
+      const investYears = (new Date() - new Date(transactionArray[0].date)) / MILLISECOND_PER_DAY / 365;
+
       setAverageCostArrayChartData(averageCostArray);
       setTotalCost(_totalCost);
+      setTotalNetValue(_totalNetValue);
+      setTotalProfit(_totalNetValue - _totalCost);
+      setProfitRate((_totalNetValue - _totalCost) / _totalCost);
+      setProfitRatePerYear((_totalNetValue - _totalCost) / _totalCost / investYears);
     }
   };
 
@@ -90,7 +110,7 @@ function FundDashboard(props) {
 
   useEffect(() => {
     calcChartData();
-  }, [transactionArray, accumulatedNetValueArray]);
+  }, [transactionArray, accumulatedNetValueArray, unitNetValueArray]);
 
   const lineChartConfig = {
     padding: [40, 30, 24, 35],
@@ -131,19 +151,19 @@ function FundDashboard(props) {
                 </div>
                 <div>
                     总净值：
-                  {fundType}
+                  {totalNetValue}
                 </div>
                 <div>
                     持仓收益：
-                  {fundType}
+                  {totalProfit}
                 </div>
                 <div>
                     持仓收益率：
-                  {fundType}
+                  {profitRate}
                 </div>
                 <div>
                     持仓年化收益率：
-                  {fundType}
+                  {profitRatePerYear}
                 </div>
               </div>
             </Card>
