@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button, Grid } from '@alife/aisc';
+import { Button, Grid, Card } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
@@ -55,6 +55,8 @@ class FundDashboard extends Component {
       },
     }).then((res) => {
       this.setState({
+        fundName: res.result.name,
+        fundType: res.result.type,
         accumulatedNetValueArray: JSON.parse(res.result.accumulatedNetValue).map(item => [
           new Date(`${item[0].slice(0, 4)}-${item[0].slice(4, 6)}-${item[0].slice(6, 8)}`),
           parseFloat(item[1]),
@@ -102,7 +104,7 @@ class FundDashboard extends Component {
   // }
 
   render() {
-    const { accumulatedNetValueArray, transactionArray, fundIdentifier } = this.state;
+    const { accumulatedNetValueArray, transactionArray, fundIdentifier, fundName, fundType } = this.state;
 
     const lineChartConfig = {
       padding: [40, 30, 24, 35],
@@ -143,7 +145,7 @@ class FundDashboard extends Component {
     return (
       <div>
         <Nav />
-        <div className="page-wealth-wrap">
+        <div className="page-fund-detail">
           <Row type="wrap" >
             <Col span="24">
               <Button
@@ -157,8 +159,40 @@ class FundDashboard extends Component {
             </Col>
           </Row>
           <Row type="wrap" >
+            <Col span="24">
+              <Card style={{ marginTop: 20, width: '100%' }} className="fund-detail-overview-card">
+                <div className="basic-info">
+                  <div>{fundName}</div>
+                  <div>{fundType}</div>
+                </div>
+                <div className="benefit-relative-info">
+                  <div>
+                    总成本：
+                    {fundType}
+                  </div>
+                  <div>
+                    总净值：
+                    {fundType}
+                  </div>
+                  <div>
+                    持仓收益：
+                    {fundType}
+                  </div>
+                  <div>
+                    持仓收益率：
+                    {fundType}
+                  </div>
+                  <div>
+                    持仓年化收益率：
+                    {fundType}
+                  </div>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+          <Row type="wrap" >
             <Col span="24" >
-              <div className="chart-title">资产分布</div>
+              <div className="chart-title">成本净值对比</div>
               <Wline
                 ref={line => this.line1 = line}
                 event={this.event1}

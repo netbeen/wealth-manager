@@ -104,3 +104,26 @@
     }
   }
 }
+
+.page-fund-detail{
+  margin: 45px 0 0 0;
+  padding: 20px;
+  .fund-detail-overview-card{
+    .next-card-content{
+      .basic-info{
+        display: flex;
+        flex-wrap: wrap;
+        & > div{
+          margin-right: 20px;
+        }
+      }
+      .benefit-relative-info{
+        display: flex;
+        flex-wrap: wrap;
+        & > div{
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+}
