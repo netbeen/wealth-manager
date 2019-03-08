@@ -19,6 +19,8 @@ function FundDashboard(props) {
   const [totalCost, setTotalCost] = useState(0);
   const [accumulatedNetValueArray, setAccumulatedNetValueArray] = useState([]);
   const [transactionArray, setTransactionArray] = useState([]);
+  const [accumulatedNetValueArrayChartData, setAccumulatedNetValueArrayChartData] = useState([]);
+  const [averageCostArrayChartData, setAverageCostArrayChartData] = useState([]);
 
   const initPage = (identifier) => {
     fetchFundData(identifier);
@@ -60,6 +62,35 @@ function FundDashboard(props) {
     });
   };
 
+  const calcChartData = () => {
+    if (transactionArray.length !== 0 && accumulatedNetValueArray.length !== 0) {
+
+      const _accumulatedNetValueArrayChartData = accumulatedNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]])
+      setAccumulatedNetValueArrayChartData(_accumulatedNetValueArrayChartData);
+
+      const averageCostArray = [];
+      let _totalCost = 0; // 总成本
+      let _totalCount = 0; // 总份数
+      _accumulatedNetValueArrayChartData.forEach(item => {
+        const transactionOnThatDay = transactionArray.filter(transaction => transaction.date.valueOf() === item[0].valueOf());
+        if (transactionOnThatDay.length !== 0) {
+          _totalCost += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
+          _totalCount += transactionOnThatDay[0].value;
+        }
+        averageCostArray.push([item[0], _totalCount === 0 ? 0 : _totalCost / _totalCount]);
+      });
+      setAverageCostArrayChartData(averageCostArray);
+    }
+  };
+
+  useEffect(() => {
+    initPage(fundIdentifier);
+  }, []);
+
+  useEffect(() => {
+    calcChartData();
+  }, [transactionArray, accumulatedNetValueArray]);
+
   const lineChartConfig = {
     padding: [40, 30, 24, 35],
     spline: true,
@@ -68,37 +99,6 @@ function FundDashboard(props) {
       mask: 'YYYY-MM-DD',
     },
   };
-
-  let data = [];
-  if (transactionArray.length !== 0 && accumulatedNetValueArray.length !== 0) {
-    data = [
-      {
-        name: '累计净值',
-        data: accumulatedNetValueArray.filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf()).map(item => [item[0].valueOf(), item[1]]),
-      },
-    ];
-
-    const averageCostArray = [];
-    let _totalCost = 0; // 总成本
-    let _totalCount = 0; // 总份数
-    data[0].data.forEach(item => {
-      const transactionOnThatDay = transactionArray.filter(transaction => transaction.date.valueOf() === item[0].valueOf());
-      if (transactionOnThatDay.length !== 0) {
-        console.log(transactionOnThatDay[0]);
-        _totalCost += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
-        _totalCount += transactionOnThatDay[0].value;
-      }
-      averageCostArray.push([item[0], _totalCount === 0 ? 0 : _totalCost / _totalCount]);
-    });
-    data.push({
-      name: '平均成本',
-      data: averageCostArray,
-    });
-  }
-
-  useEffect(() => {
-    initPage(fundIdentifier);
-  }, []);
 
   return (
     <div>
@@ -160,7 +160,16 @@ function FundDashboard(props) {
                     ...lineChartConfig,
                   }
                 }
-              data={data}
+              data={[
+                {
+                  name: '累计净值',
+                  data: accumulatedNetValueArrayChartData,
+                },
+                {
+                  name: '平均成本',
+                  data: averageCostArrayChartData,
+                },
+              ]}
             />
           </Col>
         </Row>
