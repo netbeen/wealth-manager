@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { Table, Button, Grid } from '@alife/aisc';
 import { withRouter, Link } from 'react-router-dom';
-// import { Wline, Wpie } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-// import { wealthUtils } from 'utils';
 import Nav from '../../../components/nav';
 
 import * as actions from '../actions/index';

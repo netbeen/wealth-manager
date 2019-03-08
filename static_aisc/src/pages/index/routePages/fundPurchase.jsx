@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
-import { Button, Form, Input, DatePicker, Feedback, Card, Grid, Dropdown, Menu, Field, Checkbox } from '@alife/aisc';
+import { Button, Form, Input, DatePicker, Feedback, Grid, Field } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
-import { Wline, Wpie } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { datePlus, formatTimeStampToYYYYMMDD } from 'utils';
