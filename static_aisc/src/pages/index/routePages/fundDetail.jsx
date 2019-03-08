@@ -80,6 +80,7 @@ function FundDashboard(props) {
         averageCostArray.push([item[0], _totalCount === 0 ? 0 : _totalCost / _totalCount]);
       });
       setAverageCostArrayChartData(averageCostArray);
+      setTotalCost(_totalCost);
     }
   };
 
@@ -126,7 +127,7 @@ function FundDashboard(props) {
               <div className="benefit-relative-info">
                 <div>
                     总成本：
-                  {fundType}
+                  {totalCost}
                 </div>
                 <div>
                     总净值：
