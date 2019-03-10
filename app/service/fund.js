@@ -6,6 +6,23 @@ const request = require('async-request');
  *
  */
 class FundService extends Service {
+  async getFundByTransaction({ userId }) {
+    const whereQuery = {};
+    if (userId) {
+      whereQuery.userId = userId;
+    }
+    const existedFundTransactions = await this.ctx.model.FundTransaction.findAll({
+      where: whereQuery,
+    });
+    const fundIds = Array.from(new Set((existedFundTransactions).map(item => item.fundId)));
+    const fundInfoArray = await this.ctx.model.Fund.findAll({
+      where: {
+        id: fundIds,
+      },
+    });
+    return fundInfoArray;
+  }
+
   /**
    * 保存基金信息
    * @param formattedFundInfo 格式化后的基金信息
