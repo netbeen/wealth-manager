@@ -37,6 +37,19 @@ export default ({
     }
   } else if (color === CURRENCY_COLOR.WEALTH) {
     //
+    let wealthColor = '#969696';
+    if (value >= 1000 && value < 10000) {
+      wealthColor = '#ffffff';
+    } else if (value >= 10000 && value < 100000) {
+      wealthColor = '#4AD051';
+    } else if (value >= 100000 && value < 1000000) {
+      wealthColor = '#52D7FF';
+    } else if (value >= 1000000 && value < 10000000) {
+      wealthColor = '#FAB34F';
+    } else if (value >= 10000000 && value < 100000000) {
+      wealthColor = '#FF656B';
+    }
+    style.color = wealthColor;
   }
   let displayValue = value;
   if (percentage) {

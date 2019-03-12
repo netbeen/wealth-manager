@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Nav from '../../../components/nav';
+import FormattedCurrency, { CURRENCY_COLOR } from '../../../components/formattedCurrency';
+
 import { Table, Icon, Dialog } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { formatTimeStampToYYYYMMDD, wealthUtils } from 'utils';
@@ -20,31 +22,6 @@ class WealthRecordList extends Component {
   componentDidMount() {
     this.props.fetchWealthRecordArray();
     this.props.fetchWealthCategoryArray();
-  }
-
-  currencyFormatDiv = (value) => {
-    if (typeof value === 'undefined' || value === 0) {
-      return <div />;
-    }
-    let color = '#969696';
-    if (value >= 1000 && value < 10000) {
-      color = '#ffffff';
-    } else if (value >= 10000 && value < 100000) {
-      color = '#4AD051';
-    } else if (value >= 100000 && value < 1000000) {
-      color = '#52D7FF';
-    } else if (value >= 1000000 && value < 10000000) {
-      color = '#FAB34F';
-    } else if (value >= 10000000 && value < 100000000) {
-      color = '#FF656B';
-    }
-    let currencyString = parseFloat(value.toFixed(2)).toLocaleString('en-US');
-    if (!currencyString.includes('.')) {
-      currencyString += '.00';
-    } else if (currencyString.length - currencyString.indexOf('.') === 2) {
-      currencyString += '0';
-    }
-    return <div style={{ color }}>{currencyString}</div>;
   }
 
   deleteRecord = (id) => {
@@ -116,9 +93,10 @@ class WealthRecordList extends Component {
               align="center"
               width={100}
               cell={(value, index, record) => {
-                return this.currencyFormatDiv(
-                  wealthUtils.sumAsset(record, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.NET_ASSET),
-                );
+                return (<FormattedCurrency
+                  color={CURRENCY_COLOR.WEALTH}
+                  value={wealthUtils.sumAsset(record, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.NET_ASSET)}
+                />);
               }}
             />
             {wealthCategoryOrderArray.map((category) => {
@@ -137,7 +115,10 @@ class WealthRecordList extends Component {
                   const relativeRecordItem = record.wealthRecordItems
                     .filter(item => item.categoryId === category.id);
                   if (relativeRecordItem.length > 0) {
-                    return this.currencyFormatDiv(parseFloat(relativeRecordItem[0].value));
+                    return (<FormattedCurrency
+                      value={parseFloat(relativeRecordItem[0].value)}
+                      color={CURRENCY_COLOR.WEALTH}
+                    />);
                   }
                   return <div />;
                 }}
