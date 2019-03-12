@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Nav from '../../../components/nav';
+import FormattedCurrency, { CURRENCY_COLOR } from '../../../components/formattedCurrency';
 import { Button, Grid, Card } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline } from '@alife/aisc-widgets';
@@ -158,24 +159,39 @@ function FundDashboard(props) {
               </div>
               <div className="benefit-relative-info">
                 <div>
-                    总成本：
-                  {totalCost}
+                  <span>总成本：</span>
+                  <FormattedCurrency
+                    value={totalCost}
+                  />
                 </div>
                 <div>
-                    总净值：
-                  {totalNetValue}
+                  <span>总净值：</span>
+                  <FormattedCurrency
+                    value={totalNetValue}
+                  />
                 </div>
                 <div>
-                    持仓收益：
-                  {totalProfit}
+                  <span>持仓收益：</span>
+                  <FormattedCurrency
+                    value={totalProfit}
+                    color={CURRENCY_COLOR.STOCK}
+                  />
                 </div>
                 <div>
-                    持仓收益率：
-                  {profitRate}
+                  <span>持仓收益率：</span>
+                  <FormattedCurrency
+                    value={profitRate}
+                    color={CURRENCY_COLOR.STOCK}
+                    percentage
+                  />
                 </div>
                 <div>
-                    持仓年化收益率：
-                  {profitRatePerYear}
+                  <span>持仓年化收益率：</span>
+                  <FormattedCurrency
+                    value={profitRatePerYear}
+                    color={CURRENCY_COLOR.STOCK}
+                    percentage
+                  />
                 </div>
               </div>
             </Card>
