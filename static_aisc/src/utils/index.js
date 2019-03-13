@@ -70,5 +70,26 @@ export const wealthUtils = {
   },
 };
 
+/**
+ * 将string型的数值转换为千分位分隔型的string
+ * @param numString toFixed后的string
+ * @returns {*} 千分位分隔型的string
+ */
+export const toThousands = (numString) => {
+  if (!numString || !parseFloat(numString)) {
+    return null;
+  }
+  const [, sign, integer, decimal] = numString.match(/(-)?(.*)\.(.*)?$/);
+  let integerResult = '';
+  let integerRemain = integer;
+
+  while (integerRemain.length > 3) {
+    integerResult = `,${integerRemain.slice(-3)}${integerResult}`;
+    integerRemain = integerRemain.slice(0, integerRemain.length - 3);
+  }
+  if (integerRemain) { integerResult = integerRemain + integerResult; }
+  return `${sign === '-' ? '-' : ''}${integerResult}.${decimal}`;
+};
+
 export const NameSpace = tools.namespace.bind(tools);
 export default tools;

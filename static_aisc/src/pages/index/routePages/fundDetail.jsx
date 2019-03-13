@@ -4,6 +4,7 @@ import FormattedCurrency, { CURRENCY_COLOR } from '../../../components/formatted
 import { Button, Grid, Card } from '@alife/aisc';
 import { withRouter } from 'react-router-dom';
 import { Wline } from '@alife/aisc-widgets';
+import { toThousands } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import exceed from 'utils/apimap';
@@ -143,6 +144,12 @@ function FundDashboard(props) {
     xAxis: {
       type: 'time',
       mask: 'YYYY-MM-DD',
+    },
+    tooltip: {
+      valueFormatter: (value) => {
+        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+        return toThousands(parseFloat(value).toFixed(4));
+      },
     },
   };
 
