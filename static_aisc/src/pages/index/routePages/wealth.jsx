@@ -186,6 +186,12 @@ class Wealth extends Component {
                         return `${Math.round(input)}%`;
                       },
                     },
+                    tooltip: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return `${(parseFloat(value)).toFixed(1)}%`;
+                      },
+                    },
                   }
                 }
                 data={distributionData.filter(item => item.categoryType === 'asset').map(distributionDataItem => ({
@@ -251,11 +257,16 @@ class Wealth extends Component {
                         return `${toThousands(parseFloat(value).toFixed(2))} / ${(value / (totalAsset + 0.00001) / 0.01).toFixed(1)}%`;
                       },
                     },
+                    legend: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return toThousands(parseFloat(value).toFixed(2));
+                      },
+                    },
                     autoSort: false,
                   }}
                   data={[
                     {
-                      name: '浏览器占比',
                       data: assetDistributionData,
                     },
                   ]}
@@ -276,10 +287,15 @@ class Wealth extends Component {
                         return `${toThousands(parseFloat(value).toFixed(2))} / ${(value / (totalDebt + 0.00001) / 0.01).toFixed(1)}%`;
                       },
                     },
+                    legend: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return toThousands(parseFloat(value).toFixed(2));
+                      },
+                    },
                   }}
                   data={[
                     {
-                      name: '浏览器占比',
                       data: debtDistributionData,
                     },
                   ]}
