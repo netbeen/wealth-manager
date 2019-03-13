@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Wline, Wpie } from '@alife/aisc-widgets';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { wealthUtils } from 'utils';
+import { toThousands, wealthUtils } from 'utils';
 
 import * as actions from '../actions/index';
 
@@ -207,6 +207,12 @@ class Wealth extends Component {
                         return `${Math.round(input / 1000)}K`;
                       },
                     },
+                    tooltip: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return toThousands(parseFloat(value).toFixed(2));
+                      },
+                    }
                   }
                 }
                 data={[
