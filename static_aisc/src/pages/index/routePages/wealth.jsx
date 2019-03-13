@@ -120,12 +120,16 @@ class Wealth extends Component {
 
     const debtDistributionData = [];
     const assetDistributionData = [];
+    let totalAsset = 0;
+    let totalDebt = 0;
 
     distributionData
       .filter(item => item.categoryType === 'asset')
       .forEach(categoryWithValues => {
         if (parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1]) !== 0) {
-          assetDistributionData.push([categoryWithValues.categoryName, parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1])]);
+          const value = parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1]);
+          assetDistributionData.push([categoryWithValues.categoryName, value]);
+          totalAsset += value;
         }
       });
 
@@ -133,7 +137,9 @@ class Wealth extends Component {
       .filter(item => item.categoryType === 'debt')
       .forEach(categoryWithValues => {
         if (parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1]) !== 0) {
-          debtDistributionData.push([categoryWithValues.categoryName, parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1])]);
+          const value = parseFloat(categoryWithValues.values[categoryWithValues.values.length - 1]);
+          debtDistributionData.push([categoryWithValues.categoryName, value]);
+          totalDebt += value;
         }
       });
 
@@ -212,7 +218,7 @@ class Wealth extends Component {
                         // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
                         return toThousands(parseFloat(value).toFixed(2));
                       },
-                    }
+                    },
                   }
                 }
                 data={[
@@ -239,6 +245,13 @@ class Wealth extends Component {
                   height="300"
                   config={{
                     cycle: true,
+                    tooltip: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return `${toThousands(parseFloat(value).toFixed(2))} / ${(value / (totalAsset + 0.00001) / 0.01).toFixed(1)}%`;
+                      },
+                    },
+                    autoSort: false,
                   }}
                   data={[
                     {
@@ -256,6 +269,13 @@ class Wealth extends Component {
                   height="300"
                   config={{
                     cycle: true,
+                    autoSort: false,
+                    tooltip: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return `${toThousands(parseFloat(value).toFixed(2))} / ${(value / (totalDebt + 0.00001) / 0.01).toFixed(1)}%`;
+                      },
+                    },
                   }}
                   data={[
                     {
