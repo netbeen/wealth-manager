@@ -41,13 +41,25 @@ function FundDashboard(props) {
         identifier,
       },
     }).then((res) => {
+      let _accumulatedNetValueArray = [];
+      let _unitNetValueArray = [];
+      try {
+        _accumulatedNetValueArray = JSON.parse(res.result.accumulatedNetValue);
+      } catch (e) {
+        console.error('JSON Parse Error', e, 'value=', res.result.accumulatedNetValue);
+      }
+      try {
+        _unitNetValueArray = JSON.parse(res.result.unitNetValue);
+      } catch (e) {
+        console.error('JSON Parse Error', e, 'value=', res.result.unitNetValue);
+      }
       setFundName(res.result.name);
       setFundType(res.result.type);
-      setAccumulatedNetValueArray(JSON.parse(res.result.accumulatedNetValue).map(item => [
+      setAccumulatedNetValueArray(_accumulatedNetValueArray.map(item => [
         new Date(`${item[0].slice(0, 4)}-${item[0].slice(4, 6)}-${item[0].slice(6, 8)}`),
         parseFloat(item[1]),
       ]));
-      setUnitNetValueArray(JSON.parse(res.result.unitNetValue).map(item => [
+      setUnitNetValueArray(_unitNetValueArray.map(item => [
         new Date(`${item[0].slice(0, 4)}-${item[0].slice(4, 6)}-${item[0].slice(6, 8)}`),
         parseFloat(item[1]),
       ]));

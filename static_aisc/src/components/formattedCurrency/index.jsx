@@ -31,9 +31,9 @@ export default ({
   const style = {};
   if (color === CURRENCY_COLOR.STOCK) {
     if (value > 0) {
-      style.color = 'red';
+      style.color = '#f54545';
     } else if (value < 0) {
-      style.color = 'green';
+      style.color = '#0f990f';
     }
   } else if (color === CURRENCY_COLOR.WEALTH) {
     //
