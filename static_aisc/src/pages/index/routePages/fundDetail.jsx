@@ -29,6 +29,8 @@ function FundDashboard(props) {
   const [transactionArray, setTransactionArray] = useState([]);
   const [accumulatedNetValueArrayChartData, setAccumulatedNetValueArrayChartData] = useState([]);
   const [averageCostArrayChartData, setAverageCostArrayChartData] = useState([]);
+  const [profitRatePerDay, setProfitRatePerDay] = useState([]);
+  const [annualizedProfitRatePerDay, setAnnualizedProfitRatePerDay] = useState([]);
 
   const initPage = (identifier) => {
     fetchFundData(identifier);
@@ -95,32 +97,47 @@ function FundDashboard(props) {
         .filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf())
         .map(item => [item[0].valueOf(), item[1]]);
       setAccumulatedNetValueArrayChartData(_accumulatedNetValueArrayChartData);
+
+      // 从本次交易开始的单位净值列表
       const _unitNetValueArrayFromFirstTransactionDay = unitNetValueArray
         .filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf())
         .map(item => [item[0].valueOf(), item[1]]);
 
-      const averageCostArray = [];
+      // 从本次交易开始的累计净值列表
+      // const _accumulatedNetValueArrayFromFirstTransactionDay = accumulatedNetValueArray
+      //   .filter(item => item[0].valueOf() >= transactionArray[0].date.valueOf())
+      //   .map(item => [item[0].valueOf(), item[1]]);
+
+      const averageCostArray = []; // 平均成本数组
+      const _profitRatePerDay = []; // 收益率
+      const _profitRateYearlyPerDay = []; // 年化收益率
       let _totalCost = 0; // 总成本
       let _totalCostWithAccumulatedNetValue = 0;
       let _totalCount = 0; // 总份数
       _accumulatedNetValueArrayChartData.forEach((item, index) => {
         const transactionOnThatDay = transactionArray
           .filter(transaction => transaction.date.valueOf() === item[0].valueOf());
-        const unitValueItemOnThatDay = _unitNetValueArrayFromFirstTransactionDay[index];
+
+        const unitValueItemOnThatDay = _unitNetValueArrayFromFirstTransactionDay[index][1];
+        // const accumulatedValueItemOnThatDay = _accumulatedNetValueArrayFromFirstTransactionDay[index][1];
 
         if (transactionOnThatDay.length !== 0) {
-          _totalCost += transactionOnThatDay[0].value * unitValueItemOnThatDay[1] + transactionOnThatDay[0].handlingFee;
+          _totalCost += transactionOnThatDay[0].value * unitValueItemOnThatDay + transactionOnThatDay[0].handlingFee;
           _totalCostWithAccumulatedNetValue += transactionOnThatDay[0].value * item[1] + transactionOnThatDay[0].handlingFee;
           _totalCount += transactionOnThatDay[0].value;
         }
-        averageCostArray.push([item[0], _totalCostWithAccumulatedNetValue === 0
-          ? 0
-          : _totalCostWithAccumulatedNetValue / _totalCount]);
+        const _profitRate = (unitValueItemOnThatDay * _totalCount - _totalCost) / _totalCost;
+        const _investYearsOnThatDay = (new Date(item[0]) - new Date(transactionArray[0].date)) / MILLISECOND_PER_DAY / 365;
+        averageCostArray.push([item[0], _totalCostWithAccumulatedNetValue / _totalCount]);
+        _profitRatePerDay.push([item[0], _profitRate]);
+        _profitRateYearlyPerDay.push([item[0], _profitRate / (_investYearsOnThatDay === 0 ? _investYearsOnThatDay + 0.0001 : _investYearsOnThatDay)]);
       });
 
       const _totalNetValue = unitNetValueArray[unitNetValueArray.length - 1][1] * _totalCount;
       const investYears = (new Date() - new Date(transactionArray[0].date)) / MILLISECOND_PER_DAY / 365;
 
+      setAnnualizedProfitRatePerDay(_profitRateYearlyPerDay);
+      setProfitRatePerDay(_profitRatePerDay);
       setAverageCostArrayChartData(averageCostArray);
       setTotalCost(_totalCost);
       setTotalNetValue(_totalNetValue);
@@ -145,12 +162,30 @@ function FundDashboard(props) {
       type: 'time',
       mask: 'YYYY-MM-DD',
     },
-    tooltip: {
-      valueFormatter: (value) => {
-        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
-        return toThousands(parseFloat(value).toFixed(4));
-      },
-    },
+  };
+
+  const handleMove = (key, e) => {
+    if (key === '1' && window.line2) {
+      window.line2.chart.showTooltip(e);
+    } else if (key === '2' && window.line1) {
+      window.line1.chart.showTooltip(e);
+    }
+  };
+  const handleLeave = (key) => {
+    if (key === '1' && window.line2) {
+      window.line2.chart.hideTooltip();
+    } else if (key === '2' && window.line1) {
+      window.line1.chart.hideTooltip();
+    }
+  };
+
+  const event1 = {
+    plotmove: (e) => { handleMove('1', e); },
+    plotleave: () => { handleLeave('1'); },
+  };
+  const event2 = {
+    plotmove: (e) => { handleMove('2', e); },
+    plotleave: () => { handleLeave('2'); },
   };
 
   return (
@@ -218,14 +253,19 @@ function FundDashboard(props) {
         </Row>
         <Row type="wrap" >
           <Col span="24" >
-            {/* <div className="chart-title">成本净值对比</div> */}
             <Wline
-              // ref={line => this.line1 = line}
-              // event={this.event1}
+              ref={line => window.line1 = line}
+              event={event1}
               height="300"
               config={
                   {
                     ...lineChartConfig,
+                    tooltip: {
+                      valueFormatter: (value) => {
+                        // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                        return toThousands(parseFloat(value).toFixed(4));
+                      },
+                    },
                   }
                 }
               data={[
@@ -243,24 +283,36 @@ function FundDashboard(props) {
         </Row>
         <Row type="wrap" >
           <Col span="24" >
-            {/* <div className="chart-title">成本净值对比</div> */}
             <Wline
-              // ref={line => this.line1 = line}
-              // event={this.event1}
+              ref={line => window.line2 = line}
+              event={event2}
               height="300"
               config={
                 {
                   ...lineChartConfig,
+                  tooltip: {
+                    valueFormatter: (value) => {
+                      // tooltip中显示数据的格式化函数，传入参数：value, data, index, rawData，返回新的显示数据
+                      return `${parseFloat(value * 100).toFixed(2)}%`;
+                    },
+                  },
+                  yAxis: {
+                    min: -0.4,
+                    max: 0.8,
+                    labelFormatter: (value) => {
+                      return `${Math.round(value * 100)}%`;
+                    },
+                  },
                 }
               }
               data={[
                 {
-                  name: '收益率',
-                  data: accumulatedNetValueArrayChartData,
+                  name: '收益率%',
+                  data: profitRatePerDay,
                 },
                 {
                   name: '年化收益率',
-                  data: averageCostArrayChartData,
+                  data: annualizedProfitRatePerDay,
                 },
               ]}
             />
