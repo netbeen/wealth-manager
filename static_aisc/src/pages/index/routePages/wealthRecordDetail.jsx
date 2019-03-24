@@ -7,6 +7,7 @@ import { formatTimeStampToYYYYMMDD } from 'utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
+import FormattedCurrency from '../../../components/formattedCurrency';
 
 Feedback.toast.setConfig({
   hasMask: true,
@@ -198,14 +199,14 @@ class WealthRecordDetail extends Component {
             <div style={{ width: '100%', borderTop: '1px dashed #404354' }} />
             <div className="category-type">
               <div style={{ flexGrow: 1 }}>净资产：</div>
-              <div>
-                {`￥${currentEditWealthRecordData.reduce((accumulator, item) => {
+              <FormattedCurrency
+                value={currentEditWealthRecordData.reduce((accumulator, item) => {
                   if (item.category.type === 'debt') {
                     return accumulator - item.value;
                   }
                   return accumulator + item.value;
-                }, 0).toFixed(2)}`}
-              </div>
+                }, 0)}
+              />
             </div>
           </Card>
           <div className="category-type" style={{ marginTop: 20, flexDirection: 'row-reverse' }}>

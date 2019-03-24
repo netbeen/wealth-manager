@@ -26,7 +26,7 @@ function FundDashboard(props) {
   return (
     <div>
       <Nav />
-      <div className="page-wealth-wrap">
+      <div className="page-fund-dashboard">
         <Row type="wrap" >
           <Col span="24">
             <Button
@@ -59,8 +59,8 @@ function FundDashboard(props) {
                 cell={(value, index, record) => {
                   return (
                     <Link to={`/fund/${record.identifier}`}>
-                      {record.type}
-                      {record.name}
+                      <span className="fund-type">{record.type}</span>
+                      <span className="fund-name">{record.name}</span>
                     </Link>);
                 }}
               />
@@ -108,6 +108,18 @@ function FundDashboard(props) {
                   return (
                     <div>
                         -
+                    </div>
+                  );
+                }}
+              />
+              <Table.Column
+                title="更新日期"
+                align="center"
+                width={80}
+                cell={() => {
+                  return (
+                    <div>
+                      -
                     </div>
                   );
                 }}

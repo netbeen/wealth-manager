@@ -76,7 +76,7 @@ export const wealthUtils = {
  * @returns {*} 千分位分隔型的string
  */
 export const toThousands = (numString) => {
-  if (!numString || !parseFloat(numString)) {
+  if (!numString) {
     return null;
   }
   const [, sign, integer, decimal] = numString.match(/(-)?(.*)\.(.*)?$/);

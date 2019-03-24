@@ -218,7 +218,7 @@ function FundDashboard(props) {
         </Row>
         <Row type="wrap" >
           <Col span="24" >
-            <div className="chart-title">成本净值对比</div>
+            {/* <div className="chart-title">成本净值对比</div> */}
             <Wline
               // ref={line => this.line1 = line}
               // event={this.event1}
@@ -235,6 +235,31 @@ function FundDashboard(props) {
                 },
                 {
                   name: '平均成本',
+                  data: averageCostArrayChartData,
+                },
+              ]}
+            />
+          </Col>
+        </Row>
+        <Row type="wrap" >
+          <Col span="24" >
+            {/* <div className="chart-title">成本净值对比</div> */}
+            <Wline
+              // ref={line => this.line1 = line}
+              // event={this.event1}
+              height="300"
+              config={
+                {
+                  ...lineChartConfig,
+                }
+              }
+              data={[
+                {
+                  name: '收益率',
+                  data: accumulatedNetValueArrayChartData,
+                },
+                {
+                  name: '年化收益率',
                   data: averageCostArrayChartData,
                 },
               ]}
