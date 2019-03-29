@@ -114,7 +114,9 @@ class WealthRecordList extends Component {
                 cell={(value, index, record) => {
                   const relativeRecordItem = record.wealthRecordItems
                     .filter(item => item.categoryId === category.id);
-                  if (relativeRecordItem.length > 0) {
+                  if (relativeRecordItem.length > 0 &&
+                    parseFloat(relativeRecordItem[0].value) > 0
+                  ) {
                     return (<FormattedCurrency
                       value={parseFloat(relativeRecordItem[0].value)}
                       color={CURRENCY_COLOR.WEALTH}
