@@ -42,20 +42,20 @@ function FundDashboard(props) {
         <Row type="wrap" >
           <Col span="24">
             <Table
-              maxBodyHeight={window.innerHeight - 600}
+              maxBodyHeight={window.innerHeight - 100}
               dataSource={existedFund}
               fixedHeader
             >
               <Table.Column
                 title="基金代码"
-                align="center"
+                align="left"
                 width={80}
                 dataIndex="identifier"
               />
               <Table.Column
                 title="基金名称"
-                align="center"
-                width={80}
+                align="left"
+                width={150}
                 cell={(value, index, record) => {
                   return (
                     <Link to={`/fund/${record.identifier}`}>
