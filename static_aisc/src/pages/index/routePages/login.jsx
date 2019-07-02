@@ -36,6 +36,14 @@ class Login extends Component {
           >
             周拉斯
           </Button>
+          <Button
+            size="medium"
+            onClick={() => {
+              window.location.href = '/login/compete?uuid=58401b9c-9fb8-4ab2-9cb3-226386dbd32b';
+            }}
+          >
+            家庭账户
+          </Button>
         </div>
       </div>
     );
