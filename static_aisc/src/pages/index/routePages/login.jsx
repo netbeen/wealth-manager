@@ -8,7 +8,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    caches.open('wm-runtime-v1').then((cache) => {
+    typeof caches === 'object' && caches.open('wm-runtime-v1').then((cache) => {
       cache.keys().then((keys) => {
         keys.forEach((request) => {
           cache.delete(request);
