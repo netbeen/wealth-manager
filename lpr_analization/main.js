@@ -44,6 +44,12 @@ option = {
       smooth: true,
       data: window.loanBaseRate5Y,
     },
+    {
+      name: 'FED利率',
+      type: 'line',
+      smooth: true,
+      data: window.fedRate,
+    },
   ],
 };
 
