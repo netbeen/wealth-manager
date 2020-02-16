@@ -61,6 +61,9 @@ class Wealth extends Component {
     wealthRecordArray.forEach((item) => {
       item.netAsset = wealthUtils.sumAsset(item, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.NET_ASSET);
       item.totalAsset = wealthUtils.sumAsset(item, wealthCategoryFlatArray, wealthUtils.SUM_TYPE.TOTAL_ASSET);
+      if (item.totalAsset === 0) {
+        item.totalAsset = 0.01;
+      }
 
       // 把出现过的类目放入数组
       item.wealthRecordItems.forEach((wealthRecordItem) => {
