@@ -11,7 +11,7 @@ option = {
     trigger: 'axis',
   },
   legend: {
-    data: ['贷款基准利率1Y', '贷款基准利率5Y'],
+    data: ['贷款基准利率1Y', '贷款基准利率5Y', 'FED利率'],
   },
   grid: {
     left: '3%',

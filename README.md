@@ -41,7 +41,7 @@ $ npm stop
         3. 支持web端CRUD，支持多用户使用
         4. 全站SPA+PWA实践，提升性能
     - 预览：
-        - ![v3预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v3.png)        
+        - ![v3预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v3.png)
 
 
 - 2.0 发布于 2016-09-30 [项目地址](https://github.com/netbeen/FundManagerWeb)
@@ -53,7 +53,7 @@ $ npm stop
         3. 新增财富大图功能
         4. 新增自动化监控，实现止盈点邮件通知
     - 预览：
-        - ![v2预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v2.png)        
+        - ![v2预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v2.png)
 
 
 - 1.0 发布于 2016-01-12 [项目地址](https://github.com/netbeen/FundManager)
@@ -64,4 +64,4 @@ $ npm stop
         2. 根据持仓信息计算年化收益
         3. 使用`ECharts`绘制可视化趋势图
     - 预览：
-        - ![v1预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v1.jpg)        
+        - ![v1预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v1.jpg)
