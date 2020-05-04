@@ -19,5 +19,3 @@ ENV NODE_PATH /root/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      /root/.nvm/v$NODE_VERSION/bin:$PATH
 
 WORKDIR /wealth-manager
-
-ENTRYPOINT ["npm", "start"]
