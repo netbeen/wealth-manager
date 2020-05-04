@@ -41,16 +41,10 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=wealth-manager --port=7001 --env=prod",
-    "stop": "egg-scripts stop",
+    "start": "npx egg-scripts start --daemon --title=wealth-manager --port=7001 --env=prod",
+    "stop": "npx egg-scripts stop",
     "dev": "egg-bin dev",
-    "debug": "egg-bin debug",
-    "test": "npm run lint -- --fix && npm run test-local",
-    "test-local": "egg-bin test",
-    "cov": "egg-bin cov",
-    "lint": "eslint .",
-    "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "lint": "eslint ."
   },
   "ci": {
     "version": "6, 8"

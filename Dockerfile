@@ -11,7 +11,9 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash 
     && nvm install v$NODE_VERSION \
     && nvm use v$NODE_VERSION \
     && nvm alias default v$NODE_VERSION \
-    && git clone https://github.com/netbeen/wealth-manager.git
+    && git clone https://github.com/netbeen/wealth-manager.git \
+    && cd wealth-manager \
+    && npm install
 
 ENV NODE_PATH /root/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      /root/.nvm/v$NODE_VERSION/bin:$PATH
