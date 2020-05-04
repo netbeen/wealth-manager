@@ -20,4 +20,4 @@ ENV PATH      /root/.nvm/v$NODE_VERSION/bin:$PATH
 
 WORKDIR /wealth-manager
 
-ENTRYPOINT ["sh", "-c", "npm start"]
+ENTRYPOINT npm run start
