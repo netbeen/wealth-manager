@@ -42,6 +42,7 @@
   },
   "scripts": {
     "start": "npx egg-scripts start --daemon --title=wealth-manager --port=7001 --env=prod",
+    "start-docker-prod": "npx egg-scripts start --title=wealth-manager --port=7001 --env=prod",
     "stop": "npx egg-scripts stop",
     "dev": "egg-bin dev",
     "lint": "eslint ."
