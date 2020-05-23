@@ -41,6 +41,7 @@ $ npm stop
         2. 用egg重写后端逻辑，提高可维护性
         3. 支持web端CRUD，支持多用户使用
         4. 全站SPA+PWA实践，提升性能
+        5. Docker化部署
     - 预览：
         - ![v3预览图](https://raw.githubusercontent.com/netbeen/wealth-manager/master/readme/v3.png)
 
