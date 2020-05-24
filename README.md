@@ -33,6 +33,13 @@ $ npm stop
 
 ### Release Note
 
+-4.0 开发中
+    - 技术栈：Node.js、React、Typescript
+    - 框架/库：Midway、Sequelize、React Router、AISC、G2
+    - 新功能/改进点：
+        1. 使用Midway框架，引入TypeScript进行强类型约束
+        2. 面向Serverless架构改造，使之可以运行在FaaS平台上
+
 - 3.0 开发于 2019-01-20 [项目地址](https://github.com/netbeen/wealth-manager)
     - 技术栈：Node.js、React
     - 框架/库：Egg、Sequelize、React Router、AISC、G2
