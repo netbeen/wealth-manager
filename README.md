@@ -33,7 +33,7 @@ $ npm stop
 
 ### Release Note
 
--4.0 开发中
+- 4.0 开发中
     - 技术栈：Node.js、React、Typescript
     - 框架/库：Midway、Sequelize、React Router、AISC、G2
     - 新功能/改进点：
