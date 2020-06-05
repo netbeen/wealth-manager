@@ -214,6 +214,7 @@ class Wealth extends Component {
                 event={this.event2}
                 height="300"
                 config={
+
                   {
                     ...lineChartConfig,
                     yAxis: {
