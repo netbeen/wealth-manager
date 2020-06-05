@@ -219,7 +219,7 @@ class Wealth extends Component {
                     yAxis: {
                       min: 0,
                       labelFormatter: (input) => {
-                        return `${Math.round(input / 1000)}K`;
+                        return `${Math.round(input / 10000)}W`;
                       },
                     },
                     tooltip: {
