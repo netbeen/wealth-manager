@@ -20,4 +20,4 @@ ENV PATH      /root/.nvm/v$NODE_VERSION/bin:$PATH
 
 WORKDIR /wealth-manager
 
-CMD ["/root/.nvm/versions/node/v8.4.0/bin/npm", "run", "start-docker-prod"]
+CMD ["top"]
